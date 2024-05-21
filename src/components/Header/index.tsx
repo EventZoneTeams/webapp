@@ -32,7 +32,6 @@ const menuItems: MenuItem[] = [
 export default function Header() {
   const currentTheme = useTheme().theme;
   const currentPath = usePathname();
-  console.log(currentPath);
 
   return (
     <header className='fixed top-0 flex w-screen justify-center border-b-[1px] border-accent backdrop-blur-3xl'>
@@ -85,8 +84,8 @@ export default function Header() {
           <Link href={'/login'}>
             <Button variant={'ghost'}>Login</Button>
           </Link>
-          <Link href={'/signup'}>
-            <Button variant={'default'}>Sign Up</Button>
+          <Link href={'/register'}>
+            <Button variant={'default'}>Register</Button>
           </Link>
         </div>
       </div>
