@@ -6,19 +6,21 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import React from 'react';
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <div className='flex items-center justify-center py-10'>
-      <Card className='w-[500px]'>
+      <div className={cn('w-[500px] border-none')}>
         <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>
+          <CardTitle className='text-center text-4xl'>Login</CardTitle>
+          {/* <CardDescription>
             Welcome back! Login to your account.
-          </CardDescription>
+          </CardDescription> */}
         </CardHeader>
+
         <CardContent>{children}</CardContent>
         <CardFooter>
           <div className='flex justify-between gap-1'>
@@ -28,7 +30,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
             </Link>
           </div>
         </CardFooter>
-      </Card>
+      </div>
     </div>
   );
 }
