@@ -19,6 +19,10 @@
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
 
+    --tertiary: 202.11, 100%, 59.02%;
+    --tertiary-foreground: 0 0% 98%;
+    --tertiary-dark: 202, 100%, 50%;
+
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
 
@@ -30,7 +34,7 @@
 
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 240 10% 3.9%;
+    --ring: 202.11, 100%, 59.02%;
 
     --radius: 0.5rem;
   }
@@ -51,6 +55,10 @@
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
 
+    --tertiary: 202.11, 100%, 45%;
+    --tertiary-foreground: 0 0% 98%;
+    --tertiary-dark: 202, 100%, 50%;
+
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
 
@@ -62,14 +70,20 @@
 
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --ring: 202.11, 100%, 59.02%;
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+
+    input[type="password"]::-ms-reveal,
+    input[type="password"]::-ms-clear {
+      display: none;
+    }
   }
+
   body {
     @apply bg-background text-foreground;
   }
