@@ -22,11 +22,17 @@ export default function layout({ children }: { children: React.ReactNode }) {
         </CardHeader>
 
         <CardContent>{children}</CardContent>
+
         <CardFooter>
-          <div className='flex justify-between gap-1'>
-            <p>Not a member yet? </p>
-            <Link href='/register' className='text-tertiary underline'>
-              Register
+          <div className='flex w-full justify-between gap-1'>
+            <div className='flex gap-1'>
+              <p>Not a member yet? </p>
+              <Link href='/register' className='text-tertiary underline'>
+                Register
+              </Link>
+            </div>
+            <Link href='/forgot-password' className='text-tertiary underline'>
+              Forgot password?
             </Link>
           </div>
         </CardFooter>

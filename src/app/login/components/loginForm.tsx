@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import PasswordInput from '@/components/PasswordInput';
+import Link from 'next/link';
 
 export default function LoginForm() {
   const loginForm = useForm<LoginFormType>({
@@ -37,11 +38,13 @@ export default function LoginForm() {
           name='email'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <div className='flex items-center gap-2'>
+                <FormLabel className='flex-1'>Email</FormLabel>
+                <FormMessage />
+              </div>
               <FormControl>
                 <Input placeholder='abc123@gmail.com' {...field} />
               </FormControl>
-              <FormMessage />
             </FormItem>
           )}
         />
@@ -50,18 +53,20 @@ export default function LoginForm() {
           name='password'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <div className='flex items-center gap-2'>
+                <FormLabel className='flex-1'>Password</FormLabel>
+                <FormMessage />
+              </div>
               <FormControl>
                 <PasswordInput {...field} placeholder='Your password' />
               </FormControl>
-              <FormMessage />
             </FormItem>
           )}
         />
         <Button
           type='submit'
           className='bg-tertiary text-tertiary-foreground hover:bg-tertiary-dark w-full'
-          disabled={!loginForm.formState.isValid}
+          // disabled={!loginForm.formState.isValid}
         >
           Submit
         </Button>

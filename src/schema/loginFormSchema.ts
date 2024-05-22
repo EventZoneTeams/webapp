@@ -1,8 +1,11 @@
+import { login } from '@/api/login/login';
 import z from 'zod';
+import { toast } from '@/components/ui/use-toast';
+import { LoginResponse } from '@/types/loginResponse';
 
 export const loginFormSchema = z.object({
   email: z.string().email('Please enter a valid email address.'),
-  password: z.string().min(8, 'Password must be at least 8 characters.'),
+  password: z.string().min(6, 'Password must be at least 6 characters.'),
 });
 
 export type LoginFormType = z.infer<typeof loginFormSchema>;
@@ -12,6 +15,28 @@ export const loginFormInitialValues = {
   password: '',
 };
 
-export function onSubmit(data: LoginFormType) {
-  console.log(data);
-}
+export const onSubmit = async (data: LoginFormType) => {
+  await login(data)
+    .then((response: LoginResponse) => {
+      console.log(response);
+      if (response.status) {
+        toast({
+          title: 'Success',
+          description: response.message,
+        });
+      } else {
+        toast({
+          title: 'Error',
+          variant: 'destructive',
+          description: response.message,
+        });
+      }
+    })
+    .catch((error: LoginResponse) => {
+      toast({
+        title: 'Error',
+        variant: 'destructive',
+        description: error.message,
+      });
+    });
+};
