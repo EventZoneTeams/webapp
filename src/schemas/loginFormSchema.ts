@@ -1,7 +1,8 @@
-import { login } from '@/api/login/login';
+import { login } from '@/api/auth/login';
 import z from 'zod';
 import { toast } from '@/components/ui/use-toast';
 import { LoginResponse } from '@/types/loginResponse';
+import { AxiosError } from 'axios';
 
 export const loginFormSchema = z.object({
   email: z.string().email('Please enter a valid email address.'),
@@ -33,11 +34,11 @@ export const onSubmit = async (data: LoginFormType) => {
         });
       }
     })
-    .catch((error: LoginResponse) => {
+    .catch((error: AxiosError) => {
       toast({
         title: 'Error',
         variant: 'destructive',
-        description: error.message,
+        description: (error?.response?.data as LoginResponse).message,
       });
     });
 };

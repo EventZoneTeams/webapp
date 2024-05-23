@@ -66,9 +66,9 @@ export default function LoginForm() {
         <Button
           type='submit'
           className='w-full bg-tertiary text-tertiary-foreground hover:bg-tertiary-dark'
-          // disabled={!loginForm.formState.isValid}
+          disabled={!loginForm.formState.isValid}
         >
-          Submit
+          Login
         </Button>
       </form>
     </Form>
