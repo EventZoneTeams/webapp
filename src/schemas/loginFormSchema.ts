@@ -1,7 +1,7 @@
 import { login } from '@/api/auth/login';
 import z from 'zod';
 import { toast } from '@/components/ui/use-toast';
-import { LoginResponse } from '@/types/loginFunction';
+import { LoginResponseFromBackendServer } from '@/types/loginFunction';
 import { AxiosError } from 'axios';
 
 export const loginFormSchema = z.object({
