@@ -1,6 +1,6 @@
 import { register } from '@/api/auth/register';
 import { toast } from '@/components/ui/use-toast';
-import { RegisterResponse } from '@/types/registerResponse';
+import { RegisterResponse } from '@/types/registerFunction';
 import { AxiosError } from 'axios';
 import z from 'zod';
 
@@ -48,23 +48,5 @@ export const registerFormInitialValues = {
 };
 
 export const onSubmit = async (data: RegisterFormType) => {
-  await register(data)
-    .then((response: RegisterResponse) => {
-      console.log(response);
-      if (response.status) {
-        toast({
-          variant: 'success',
-          title: 'Success',
-          description: response.message,
-        });
-      }
-    })
-    .catch((error: AxiosError) => {
-      toast({
-        title: 'Error',
-        variant: 'destructive',
-        description:
-          (error.response?.data as RegisterResponse).message || error.message,
-      });
-    });
+  console.log(data);
 };

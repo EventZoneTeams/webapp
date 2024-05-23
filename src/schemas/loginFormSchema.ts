@@ -1,7 +1,7 @@
 import { login } from '@/api/auth/login';
 import z from 'zod';
 import { toast } from '@/components/ui/use-toast';
-import { LoginResponse } from '@/types/loginResponse';
+import { LoginResponse } from '@/types/loginFunction';
 import { AxiosError } from 'axios';
 
 export const loginFormSchema = z.object({
@@ -17,28 +17,5 @@ export const loginFormInitialValues = {
 };
 
 export const onSubmit = async (data: LoginFormType) => {
-  await login(data)
-    .then((response: LoginResponse) => {
-      console.log(response);
-      if (response.status) {
-        toast({
-          variant: 'success',
-          title: 'Success',
-          description: response.message,
-        });
-      } else {
-        toast({
-          title: 'Error',
-          variant: 'destructive',
-          description: response.message,
-        });
-      }
-    })
-    .catch((error: AxiosError) => {
-      toast({
-        title: 'Error',
-        variant: 'destructive',
-        description: (error?.response?.data as LoginResponse).message,
-      });
-    });
+  console.log(data);
 };

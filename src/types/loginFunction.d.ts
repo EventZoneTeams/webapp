@@ -1,4 +1,4 @@
-export type LoginResponse = {
+export type LoginResponseFromBackendServer = {
   status: boolean;
   message: string;
   jwt: string;
