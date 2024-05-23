@@ -1,5 +1,5 @@
 import axiosClient from '@/api/axiosClient';
-import { LoginFormType } from '@/schema/loginFormSchema';
+import { LoginFormType } from '@/schemas/loginFormSchema';
 
 export const login = async (data: LoginFormType) => {
   try {

@@ -21,6 +21,7 @@ export const onSubmit = async (data: LoginFormType) => {
       console.log(response);
       if (response.status) {
         toast({
+          variant: 'success',
           title: 'Success',
           description: response.message,
         });

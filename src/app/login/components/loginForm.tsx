@@ -6,7 +6,7 @@ import {
   LoginFormType,
   onSubmit,
   loginFormInitialValues,
-} from '@/schema/loginFormSchema';
+} from '@/schemas/loginFormSchema';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -65,7 +65,7 @@ export default function LoginForm() {
         />
         <Button
           type='submit'
-          className='bg-tertiary text-tertiary-foreground hover:bg-tertiary-dark w-full'
+          className='w-full bg-tertiary text-tertiary-foreground hover:bg-tertiary-dark'
           // disabled={!loginForm.formState.isValid}
         >
           Submit
