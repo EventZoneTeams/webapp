@@ -1,4 +1,4 @@
-import LoginForm from '@/app/login/components/loginForm';
+import LoginForm from '@/app/login/components/LoginForm';
 
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
@@ -9,9 +9,9 @@ export default function Login() {
     <div>
       <LoginForm />
       <div className='my-4 flex w-full items-center gap-8'>
-        <div className='h-[1px] flex-1 bg-muted'></div>
+        <div className='h-[1px] flex-1 bg-input'></div>
         <p className='text-sm font-normal text-primary'>Or continute with</p>
-        <div className='h-[1px] flex-1 bg-muted'></div>
+        <div className='h-[1px] flex-1 bg-input'></div>
       </div>
       <div className='my-2'>
         <Button variant='outline' className='w-full'>
