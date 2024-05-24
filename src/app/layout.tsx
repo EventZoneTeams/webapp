@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/themeProvider";
 import { ThemeToggle } from "@/components/ui/themeToggle";
+import Navbar from "@/components/Navbar";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -34,7 +35,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <div className="flex min-h-screen w-full flex-col bg-muted/40">
+            <Navbar />
+            <div className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4  p-4 md:gap-8 md:p-10 container">
+              {children}
+            </div>
+          </div>
         </ThemeProvider>
       </body>
     </html>
