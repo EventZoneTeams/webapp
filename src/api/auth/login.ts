@@ -1,5 +1,3 @@
-'use server';
-
 import axiosClient from '@/api/axiosClient';
 import { LoginFormType } from '@/schemas/loginFormSchema';
 import { LoginResponse } from '@/types/loginFunction';

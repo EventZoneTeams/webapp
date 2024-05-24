@@ -4,7 +4,6 @@ import React from 'react';
 import {
   registerFormSchema,
   RegisterFormType,
-  onSubmit,
   registerFormInitialValues,
 } from '@/schemas/registerFormSchema';
 import { useForm } from 'react-hook-form';
@@ -34,12 +33,40 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
+import { register } from '@/api/auth/register';
+import { myToast } from '@/lib/toast';
+import { RegisterResponse } from '@/types/registerFunction';
+import { AxiosError } from 'axios';
+import { navigate } from '@/lib/navigate';
 
 export default function RegisterForm() {
   const RegisterForm = useForm<RegisterFormType>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: registerFormInitialValues,
   });
+
+  const onSubmit = async (data: RegisterFormType) => {
+    await register(data)
+      .then((response: RegisterResponse) => {
+        if (response.status) {
+          myToast.success(response.message, 'Success');
+          navigate('/login');
+        } else {
+          myToast.error(response.message, 'Error');
+        }
+      })
+      .catch((error: AxiosError) => {
+        console.log(error.response);
+        if (error.response?.data) {
+          myToast.error(
+            (error.response.data as RegisterResponse).message,
+            'Error'
+          );
+        } else {
+          myToast.error('An error occurred', 'Error');
+        }
+      });
+  };
 
   return (
     <Form {...RegisterForm}>

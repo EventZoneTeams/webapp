@@ -1,7 +1,3 @@
-import { register } from '@/api/auth/register';
-import { toast } from '@/components/ui/use-toast';
-import { RegisterResponse } from '@/types/registerFunction';
-import { AxiosError } from 'axios';
 import z from 'zod';
 
 export const registerFormSchema = z
@@ -45,8 +41,4 @@ export const registerFormInitialValues = {
   gender: 'Male',
   confirmPassword: '',
   agree: false,
-};
-
-export const onSubmit = async (data: RegisterFormType) => {
-  console.log(data);
 };

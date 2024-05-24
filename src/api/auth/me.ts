@@ -3,7 +3,7 @@ import { UserResponse } from '@/types/loginFunction';
 
 export async function me() {
   try {
-    return (await axiosClient.post('/users/me')).data as UserResponse;
+    return (await axiosClient.get('/users/me')).data as UserResponse;
   } catch (error) {
     throw error;
   }
