@@ -1,6 +1,6 @@
 import { register } from '@/api/auth/register';
 import { toast } from '@/components/ui/use-toast';
-import { RegisterResponseFromBackendServer } from '@/types/registerFunction';
+import { RegisterResponse } from '@/types/registerFunction';
 import { AxiosError } from 'axios';
 import z from 'zod';
 

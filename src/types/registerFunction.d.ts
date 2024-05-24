@@ -1,4 +1,4 @@
-export type RegisterResponseFromBackendServer = {
+export type RegisterResponse = {
   status: boolean;
   message: string;
   data?: any;
