@@ -22,6 +22,8 @@ import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/ui/password-input";
 import { CustomDatePicker } from "@/components/ui/custom-date-picker";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import Link from "next/link";
 
 export default function RegisterForm() {
   const registerForm = useForm<registerFormType>({
@@ -65,13 +67,16 @@ export default function RegisterForm() {
             </FormItem>
           )}
         />
-        <div className="flex gap-2 items-start">
+        <div className="flex gap-4 items-center">
           <FormField
             control={registerForm.control}
             name="dob"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Date of birth</FormLabel>
+                <div className="flex items-center gap-2">
+                  <FormLabel className="">Date of birth</FormLabel>
+                  <FormDescription>( over 18 years old )</FormDescription>
+                </div>
                 <FormControl>
                   <CustomDatePicker field={field} />
                 </FormControl>
@@ -83,13 +88,13 @@ export default function RegisterForm() {
             control={registerForm.control}
             name="gender"
             render={({ field }) => (
-              <FormItem className="flex flex-col items-start">
+              <FormItem className="">
                 <FormLabel>Gender</FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    className="flex space-y-1 h-10"
+                    className="flex gap-4 justify-center items-center h-10"
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <RadioGroupItem value="male" />
@@ -115,7 +120,12 @@ export default function RegisterForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <div className="flex gap-4 items-center">
+                  <FormLabel>Password</FormLabel>
+                  <FormDescription>
+                    ( must be at least 6 characters )
+                  </FormDescription>
+                </div>
                 <FormControl>
                   <PasswordInput {...field} placeholder="Your password" />
                 </FormControl>
@@ -139,6 +149,32 @@ export default function RegisterForm() {
             )}
           />
         </div>
+        <FormField
+          control={registerForm.control}
+          name="agree"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <FormLabel>
+                  Agreement to the terms and conditions of the website
+                </FormLabel>
+                <FormDescription>
+                  You can read the terms and conditions on the{" "}
+                  <Link href="/examples/forms" className="text-blue-500">
+                    terms and conditions
+                  </Link>{" "}
+                  page.
+                </FormDescription>
+              </div>
+            </FormItem>
+          )}
+        />
         <Button
           type="submit"
           className="w-full"
