@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/themeProvider";
 import Navbar from "@/components/Navbar";
 import ReactQueryProvider from "@/providers/reactQueryProvider";
+import ToastProvider from "@/providers/toastProvider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -36,12 +37,14 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="flex min-h-screen w-full flex-col bg-background">
-              <Navbar />
-              <div className="flex min-h-[calc(100vh_-_theme(spacing.20))] flex-1 flex-col gap-4  p-4 md:gap-8 md:p-10">
-                {children}
+            <ToastProvider>
+              <div className="flex min-h-screen w-full flex-col bg-background ">
+                <Navbar />
+                <div className="flex min-h-[calc(100vh_-_theme(spacing.20))] flex-1 flex-col gap-4  p-4 md:gap-8 md:p-10">
+                  {children}
+                </div>
               </div>
-            </div>
+            </ToastProvider>
           </ThemeProvider>
         </ReactQueryProvider>
       </body>

@@ -26,9 +26,12 @@ import { LoginResponse } from "@/types/loginFunction";
 import { AxiosError } from "axios";
 import { GetMeResponse } from "@/types/authuser";
 import { useAuthStore } from "@/stores/auth";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const { setJwt, setJwtRefreshToken, setAuthUser } = useAuthStore();
+  const router = useRouter();
 
   const loginFrom = useForm<LoginFormType>({
     resolver: zodResolver(loginFormSchema),
@@ -38,13 +41,12 @@ export default function LoginForm() {
   const loginMutation = useMutation({
     mutationFn: (data: LoginFormType) => login(data),
     onSuccess: (data: LoginResponse) => {
-      console.log(data);
       setJwt(data.jwt);
       setJwtRefreshToken(data.jwtRefreshToken);
       getMeMutation.mutate();
     },
     onError: (error: AxiosError<LoginResponse>) => {
-      console.log(error);
+      toast.error(error.response?.data.message);
     },
   });
 
@@ -53,6 +55,8 @@ export default function LoginForm() {
     onSuccess: (data: GetMeResponse) => {
       if (data.data) {
         setAuthUser(data.data);
+        toast.success("Login success");
+        router.push("/");
       }
     },
   });
@@ -93,7 +97,7 @@ export default function LoginForm() {
         <Button
           type="submit"
           className="w-full"
-          disabled={!loginFrom.formState.isValid}
+          disabled={!loginFrom.formState.isValid || loginMutation.isPending}
         >
           {loginMutation.isPending ? "Loading..." : "Login"}
         </Button>
