@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -13,7 +13,7 @@ export default function layout({
 
   return (
     <div className="w-full grid justify-items-center">
-      <Tabs defaultValue={pathname} className="w-[500px] ">
+      <Tabs defaultValue={pathname} className="w-[500px]" value={pathname}>
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger
             value="login"

@@ -39,98 +39,63 @@ import { useTheme } from "next-themes";
 import { useAuthStore } from "@/stores/auth";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export function UserMenu() {
   const { theme, setTheme } = useTheme();
   const { authUser, logout } = useAuthStore();
 
   return (
-    <div>
+    <div className="">
       {authUser ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="rounded-full flex items-center gap-2  px-1 py-1 pr-4  bg-muted hover:cursor-pointer hover:bg-muted/80">
-              <Avatar>
-                <AvatarImage src={authUser.image} alt="@shadcn" />
-                <AvatarFallback className="bg-background">
+            <div className="rounded-lg flex items-center gap-2  px-3 py-2 pr-4 bg-muted hover:cursor-pointer hover:bg-muted/80">
+              <Avatar className="size-10">
+                <AvatarImage src={authUser.image} alt={authUser.fullName} />
+                <AvatarFallback className="bg-tertiary text-white">
                   {authUser.fullName.charAt(0)}
                 </AvatarFallback>
               </Avatar>
-              <p>{authUser.fullName}</p>
+              <div className="flex flex-col items-start">
+                <span className="text-sm font-semibold ">
+                  {authUser.fullName}
+                </span>
+                <span className="text-xs">{authUser.email}</span>
+              </div>
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>{authUser.roleName}</DropdownMenuLabel>
+          <DropdownMenuContent className="w-96 mr-6">
+            <DropdownMenuLabel className="text-orange-500">
+              <Badge
+                className={cn({
+                  "bg-orange-500 text-orange-50 hover:bg-orange-600 hover:text-orange-100":
+                    authUser.roleName === "ADMIN",
+                })}
+              >
+                {authUser.roleName}
+              </Badge>
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
-                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard className="mr-2 h-4 w-4" />
                 <span>Billing</span>
-                <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>
-                <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Keyboard className="mr-2 h-4 w-4" />
-                <span>Keyboard shortcuts</span>
-                <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Users className="mr-2 h-4 w-4" />
-                <span>Team</span>
-              </DropdownMenuItem>
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>
-                  <UserPlus className="mr-2 h-4 w-4" />
-                  <span>Invite users</span>
-                </DropdownMenuSubTrigger>
-                <DropdownMenuPortal>
-                  <DropdownMenuSubContent>
-                    <DropdownMenuItem>
-                      <Mail className="mr-2 h-4 w-4" />
-                      <span>Email</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <MessageSquare className="mr-2 h-4 w-4" />
-                      <span>Message</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <PlusCircle className="mr-2 h-4 w-4" />
-                      <span>More...</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuSubContent>
-                </DropdownMenuPortal>
-              </DropdownMenuSub>
-              <DropdownMenuItem>
-                <Plus className="mr-2 h-4 w-4" />
-                <span>New Team</span>
-                <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Github className="mr-2 h-4 w-4" />
-              <span>GitHub</span>
-            </DropdownMenuItem>
             <DropdownMenuItem>
               <LifeBuoy className="mr-2 h-4 w-4" />
               <span>Support</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem disabled>
-              <Cloud className="mr-2 h-4 w-4" />
-              <span>API</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
@@ -145,6 +110,7 @@ export function UserMenu() {
                 <Switch
                   id="airplane-mode"
                   checked={theme === "dark" ? true : false}
+                  className="bg-tertiary"
                 />
               </div>
             </DropdownMenuItem>
@@ -152,7 +118,6 @@ export function UserMenu() {
             <DropdownMenuItem onClick={logout}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
-              <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

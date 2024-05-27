@@ -59,6 +59,9 @@ export default function LoginForm() {
         router.push("/");
       }
     },
+    onError: (error: AxiosError<GetMeResponse>) => {
+      toast.error(error.response?.data.message);
+    },
   });
 
   const onSubmit = async (data: LoginFormType) => {
