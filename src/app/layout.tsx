@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/themeProvider";
 import Navbar from "@/components/Navbar";
+import ReactQueryProvider from "@/providers/reactQueryProvider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -28,19 +29,21 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="flex min-h-screen w-full flex-col bg-background">
-            <Navbar />
-            <div className="flex min-h-[calc(100vh_-_theme(spacing.20))] flex-1 flex-col gap-4  p-4 md:gap-8 md:p-10">
-              {children}
+        <ReactQueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="flex min-h-screen w-full flex-col bg-background">
+              <Navbar />
+              <div className="flex min-h-[calc(100vh_-_theme(spacing.20))] flex-1 flex-col gap-4  p-4 md:gap-8 md:p-10">
+                {children}
+              </div>
             </div>
-          </div>
-        </ThemeProvider>
+          </ThemeProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

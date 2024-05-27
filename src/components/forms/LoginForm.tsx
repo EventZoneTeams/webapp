@@ -20,15 +20,45 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/ui/password-input";
+import { getMe, login } from "@/api/auth";
+import { useMutation } from "@tanstack/react-query";
+import { LoginResponse } from "@/types/loginFunction";
+import { AxiosError } from "axios";
+import { GetMeResponse } from "@/types/authuser";
+import { useAuthStore } from "@/stores/auth";
 
 export default function LoginForm() {
+  const { setJwt, setJwtRefreshToken, setAuthUser } = useAuthStore();
+
   const loginFrom = useForm<LoginFormType>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: loginFormDefaultValues,
   });
 
-  const onSubmit = (data: LoginFormType) => {
-    console.log(data);
+  const loginMutation = useMutation({
+    mutationFn: (data: LoginFormType) => login(data),
+    onSuccess: (data: LoginResponse) => {
+      console.log(data);
+      setJwt(data.jwt);
+      setJwtRefreshToken(data.jwtRefreshToken);
+      getMeMutation.mutate();
+    },
+    onError: (error: AxiosError<LoginResponse>) => {
+      console.log(error);
+    },
+  });
+
+  const getMeMutation = useMutation({
+    mutationFn: () => getMe(),
+    onSuccess: (data: GetMeResponse) => {
+      if (data.data) {
+        setAuthUser(data.data);
+      }
+    },
+  });
+
+  const onSubmit = async (data: LoginFormType) => {
+    loginMutation.mutate(data);
   };
 
   return (
@@ -65,7 +95,7 @@ export default function LoginForm() {
           className="w-full"
           disabled={!loginFrom.formState.isValid}
         >
-          Login
+          {loginMutation.isPending ? "Loading..." : "Login"}
         </Button>
       </form>
     </Form>
