@@ -25,7 +25,11 @@ export const registerFormSchema = z
       message: "You must be at least 18 years old",
       path: ["dob"],
     }
-  );
+  )
+  .refine((data) => data.agree, {
+    message: "You must agree to the terms and conditions",
+    path: ["agree"],
+  });
 
 export type registerFormType = z.infer<typeof registerFormSchema>;
 

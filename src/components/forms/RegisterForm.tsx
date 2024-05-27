@@ -5,7 +5,7 @@ import {
   registerFormDefaultValues,
   registerFormSchema,
   registerFormType,
-} from "@/schemas/RegisterFromSchema";
+} from "@/schemas/registerFormSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,11 @@ import { CustomDatePicker } from "@/components/ui/custom-date-picker";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
+import { useMutation } from "@tanstack/react-query";
+import { register } from "@/api/auth";
+import { RegisterResponse } from "@/types/registerFunction";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export default function RegisterForm() {
   const registerForm = useForm<registerFormType>({
@@ -31,8 +36,20 @@ export default function RegisterForm() {
     defaultValues: registerFormDefaultValues,
   });
 
+  const registerMutation = useMutation({
+    mutationFn: (data: registerFormType) => register(data),
+    onSuccess: (data: RegisterResponse) => {
+      console.log(data);
+      toast.success(data.message);
+    },
+    onError: (error: AxiosError<RegisterResponse>) => {
+      console.log(error.response?.data.message);
+      toast.error(error.response?.data.message);
+    },
+  });
+
   const onSubmit = (data: registerFormType) => {
-    console.log(data);
+    registerMutation.mutate(data);
   };
 
   return (
@@ -178,9 +195,11 @@ export default function RegisterForm() {
         <Button
           type="submit"
           className="w-full"
-          disabled={!registerForm.formState.isValid}
+          disabled={
+            !registerForm.formState.isValid || registerMutation.isPending
+          }
         >
-          Regist
+          {registerMutation.isPending ? "Loading..." : "Register"}
         </Button>
       </form>
     </Form>
