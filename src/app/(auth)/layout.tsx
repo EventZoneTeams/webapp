@@ -12,7 +12,7 @@ export default function layout({
   const router = useRouter();
 
   return (
-    <div className="w-full grid justify-items-center">
+    <div className="w-full grid justify-items-center pt-10">
       <Tabs defaultValue={pathname} className="w-[500px]" value={pathname}>
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger
