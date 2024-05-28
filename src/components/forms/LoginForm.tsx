@@ -115,7 +115,7 @@ export default function LoginForm() {
             getMeMutation.isPending
           }
         >
-          {loginMutation.isPending && getMeMutation.isPending
+          {loginMutation.isPending || getMeMutation.isPending
             ? "Loading..."
             : "Login"}
         </Button>

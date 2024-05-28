@@ -30,7 +30,7 @@ export function MyBreadcrumb() {
         {splitPath.map((path, index) => {
           const isLast = index === splitPath.length - 1;
           return (
-            <>
+            <div key={index}>
               <BreadcrumbItem key={path}>
                 <BreadcrumbLink>
                   {isLast ? (
@@ -43,7 +43,7 @@ export function MyBreadcrumb() {
                 </BreadcrumbLink>
               </BreadcrumbItem>
               {!isLast && <BreadcrumbSeparator />}
-            </>
+            </div>
           );
         })}
       </BreadcrumbList>

@@ -11,5 +11,9 @@ export default function layout({
   admin: React.ReactNode;
 }) {
   const { authUser } = useAuthStore();
-  return <div>{authUser?.roleName !== "ADMIN" ? organizer : admin}</div>;
+  return (
+    <div>
+      {authUser?.roleName.toUpperCase() !== "ADMIN" ? organizer : admin}
+    </div>
+  );
 }

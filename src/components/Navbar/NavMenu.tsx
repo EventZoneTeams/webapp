@@ -116,7 +116,7 @@ export default function NavMenu() {
             )}
           </div>
         ))}
-        {authUser?.roleName === "ADMIN" && (
+        {authUser?.roleName.toLocaleUpperCase() === "ADMIN" && (
           <Link
             href="/dashboard"
             className={cn("text-muted-foreground hover:text-foreground", {

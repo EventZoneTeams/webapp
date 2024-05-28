@@ -55,7 +55,7 @@ export function UserMenu() {
               <Avatar className="size-10">
                 <AvatarImage src={authUser.image} alt={authUser.fullName} />
                 <AvatarFallback className="bg-tertiary text-white">
-                  {authUser.fullName.charAt(0)}
+                  {authUser?.fullName?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col items-start">
