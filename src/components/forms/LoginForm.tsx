@@ -78,7 +78,12 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="abc@gmail.com" {...field} className="" />
+                <Input
+                  placeholder="abc@gmail.com"
+                  {...field}
+                  className=""
+                  disabled={loginMutation.isPending || getMeMutation.isPending}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -91,7 +96,11 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <PasswordInput {...field} placeholder="Your password" />
+                <PasswordInput
+                  {...field}
+                  placeholder="Your password"
+                  disabled={loginMutation.isPending || getMeMutation.isPending}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -100,9 +109,15 @@ export default function LoginForm() {
         <Button
           type="submit"
           className="w-full"
-          disabled={!loginFrom.formState.isValid || loginMutation.isPending}
+          disabled={
+            !loginFrom.formState.isValid ||
+            loginMutation.isPending ||
+            getMeMutation.isPending
+          }
         >
-          {loginMutation.isPending ? "Loading..." : "Login"}
+          {loginMutation.isPending && getMeMutation.isPending
+            ? "Loading..."
+            : "Login"}
         </Button>
       </form>
     </Form>

@@ -1,11 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  registerFormDefaultValues,
-  registerFormSchema,
-  registerFormType,
-} from "@/schemas/registerFormSchema";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -29,8 +25,16 @@ import { register } from "@/api/auth";
 import { RegisterResponse } from "@/types/registerFunction";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import {
+  registerFormDefaultValues,
+  registerFormSchema,
+  registerFormType,
+} from "@/schemas/registerFromSchema";
+import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
+  const router = useRouter();
+
   const registerForm = useForm<registerFormType>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: registerFormDefaultValues,
@@ -40,10 +44,10 @@ export default function RegisterForm() {
     mutationFn: (data: registerFormType) => register(data),
     onSuccess: (data: RegisterResponse) => {
       console.log(data);
-      toast.success(data.message);
+      toast.success("Register successfully, please login to continue");
+      router.push("/login");
     },
     onError: (error: AxiosError<RegisterResponse>) => {
-      console.log(error.response?.data.message);
       toast.error(error.response?.data.message);
     },
   });
@@ -65,7 +69,12 @@ export default function RegisterForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="abc@gmail.com" {...field} className="" />
+                <Input
+                  placeholder="abc@gmail.com"
+                  {...field}
+                  className=""
+                  disabled={registerMutation.isPending}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -78,7 +87,12 @@ export default function RegisterForm() {
             <FormItem>
               <FormLabel>Full Name</FormLabel>
               <FormControl>
-                <Input placeholder="Nguyen Van A" {...field} className="" />
+                <Input
+                  placeholder="Nguyen Van A"
+                  {...field}
+                  className=""
+                  disabled={registerMutation.isPending}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -112,6 +126,7 @@ export default function RegisterForm() {
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                     className="flex gap-4 justify-center items-center h-10"
+                    disabled={registerMutation.isPending}
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <RadioGroupItem value="male" />
@@ -144,7 +159,11 @@ export default function RegisterForm() {
                   </FormDescription>
                 </div>
                 <FormControl>
-                  <PasswordInput {...field} placeholder="Your password" />
+                  <PasswordInput
+                    {...field}
+                    placeholder="Your password"
+                    disabled={registerMutation.isPending}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -159,6 +178,7 @@ export default function RegisterForm() {
                   <PasswordInput
                     {...field}
                     placeholder="Confirm your password"
+                    disabled={registerMutation.isPending}
                   />
                 </FormControl>
                 <FormMessage />
@@ -175,6 +195,7 @@ export default function RegisterForm() {
                 <Checkbox
                   checked={field.value}
                   onCheckedChange={field.onChange}
+                  disabled={registerMutation.isPending}
                 />
               </FormControl>
               <div className="space-y-1 leading-none">

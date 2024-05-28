@@ -1,6 +1,6 @@
 "use client";
 
-import { useCounterStore } from "@/app/store/counterStore";
+import { useCounterStore } from "@/stores/counterStore";
 import React from "react";
 
 export default function Counter() {
