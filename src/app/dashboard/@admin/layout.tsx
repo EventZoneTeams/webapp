@@ -33,6 +33,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Sidebar from "@/components/SideBar/Sidebar";
+import { MyBreadcrumb } from "@/components/Breadcrumb";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
@@ -40,6 +41,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
       <Sidebar />
       <div className="flex flex-col">
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+          <MyBreadcrumb />
           {children}
         </main>
       </div>
