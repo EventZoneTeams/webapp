@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import React from "react";
 
 import {
   Breadcrumb,
@@ -30,7 +31,7 @@ export function MyBreadcrumb() {
         {splitPath.map((path, index) => {
           const isLast = index === splitPath.length - 1;
           return (
-            <div key={index}>
+            <React.Fragment key={index}>
               <BreadcrumbItem key={path}>
                 <BreadcrumbLink>
                   {isLast ? (
@@ -43,7 +44,7 @@ export function MyBreadcrumb() {
                 </BreadcrumbLink>
               </BreadcrumbItem>
               {!isLast && <BreadcrumbSeparator />}
-            </div>
+            </React.Fragment>
           );
         })}
       </BreadcrumbList>
