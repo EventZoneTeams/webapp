@@ -3,4 +3,5 @@ export type MenuItem = {
   href?: string;
   children?: MenuItem[];
   description?: string;
+  icon?: React.ReactNode;
 };
