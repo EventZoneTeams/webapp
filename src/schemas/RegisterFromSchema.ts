@@ -10,6 +10,7 @@ export const registerFormSchema = z
     fullName: z.string().min(2, "Full name must be at least 2 characters"),
     dob: z.date(),
     gender: z.string(),
+    agree: z.boolean(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -24,7 +25,11 @@ export const registerFormSchema = z
       message: "You must be at least 18 years old",
       path: ["dob"],
     }
-  );
+  )
+  .refine((data) => data.agree, {
+    message: "You must agree to the terms and conditions",
+    path: ["agree"],
+  });
 
 export type registerFormType = z.infer<typeof registerFormSchema>;
 
@@ -35,4 +40,5 @@ export const registerFormDefaultValues: registerFormType = {
   fullName: "",
   dob: new Date(),
   gender: "male",
+  agree: false,
 };

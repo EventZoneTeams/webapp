@@ -1,126 +1,143 @@
 "use client";
 
-import * as React from "react";
+import React from "react";
 import Link from "next/link";
+import { ChevronDown, CircleUser, Menu, Package2, Search } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { MenuItem } from "@/types/navMenu";
 import {
   NavigationMenu,
   NavigationMenuContent,
+  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
+  NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
-import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
-const components: { title: string; href: string; description: string }[] = [
+const NavMenuItems: MenuItem[] = [
   {
-    title: "Alert Dialog",
-    href: "/docs/primitives/alert-dialog",
-    description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
+    title: "Home",
+    href: "/",
   },
   {
-    title: "Hover Card",
-    href: "/docs/primitives/hover-card",
-    description:
-      "For sighted users to preview content available behind a link.",
+    title: "Events",
+    href: "/events",
   },
   {
-    title: "Progress",
-    href: "/docs/primitives/progress",
-    description:
-      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+    title: "Pricing",
+    href: "/pricing",
   },
   {
-    title: "Scroll-area",
-    href: "/docs/primitives/scroll-area",
-    description: "Visually or semantically separates content.",
-  },
-  {
-    title: "Tabs",
-    href: "/docs/primitives/tabs",
-    description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
-  },
-  {
-    title: "Tooltip",
-    href: "/docs/primitives/tooltip",
-    description:
-      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+    title: "Other",
+    children: [
+      {
+        title: "About",
+        href: "/about",
+        description: "Learn more about us, our mission and vision and more",
+      },
+      {
+        title: "Contact",
+        href: "/contact",
+        description:
+          "Get in touch with us for any queries or feedback or support requests",
+      },
+      {
+        title: "FAQ",
+        href: "/faq",
+        description:
+          "Frequently asked questions and answers about our service and products and more",
+      },
+      {
+        title: "Terms of Service",
+        href: "/terms",
+        description:
+          "Our terms and conditions of service and use of our products and services",
+      },
+      {
+        title: "Privacy Policy",
+        href: "/privacy",
+        description: "Our privacy policy and how we handle your data and more",
+      },
+    ],
   },
 ];
-
-export function NavMenu() {
+export default function NavMenu() {
+  const pathName = usePathname();
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Infomation</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <a
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                    href="/"
-                  >
-                    {/* <Icons.logo className="h-6 w-6" /> */}
-                    <Image
-                      src="/images/logo-noText.svg"
-                      alt="Event Zone Logo"
-                      width={100}
-                      height={100}
-                    />
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      Event Zone
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      A simple event management app built using Next.js and
-                      Tailwind CSS.
-                    </p>
-                  </a>
-                </NavigationMenuLink>
-              </li>
-              <ListItem href="/about" title="About us and the project">
-                Learn more about the project and the team behind it all here.
-              </ListItem>
-              <ListItem href="/contact" title="Contact us and get started.">
-                Get in touch with us and start using Event Zone today.
-              </ListItem>
-              <ListItem href="/pricing" title="Pricing and plans.">
-                Learn more about the pricing and plans for Event Zone.
-              </ListItem>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-              {components.map((component) => (
-                <ListItem
-                  key={component.title}
-                  title={component.title}
-                  href={component.href}
+    <div>
+      <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+        {NavMenuItems.map((item) => (
+          <div key={item.title}>
+            {item.children ? (
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger className={cn("")}>
+                      <p>{item.title}</p>
+                    </NavigationMenuTrigger>
+
+                    <NavigationMenuContent>
+                      <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                        {item.children.map((item) => (
+                          <ListItem
+                            key={item.title}
+                            title={item.title}
+                            href={item.href}
+                            className={cn({
+                              "bg-accent": pathName === item.href,
+                            })}
+                          >
+                            {item.description}
+                          </ListItem>
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
+            ) : (
+              <Link
+                href={item.href || "#"}
+                className={cn("text-muted-foreground hover:text-foreground", {
+                  "text-foreground": pathName === item.href,
+                })}
+              >
+                {item.title}
+              </Link>
+            )}
+          </div>
+        ))}
+      </nav>
+
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="outline" size="icon" className="shrink-0 md:hidden">
+            <Menu className="h-5 w-5" />
+            <span className="sr-only">Toggle navigation menu</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left">
+          <nav className="grid gap-6 text-lg font-medium">
+            {NavMenuItems.map((item) => (
+              <div key={item.title}>
+                <Link
+                  href={item.href || "#"}
+                  className="text-muted-foreground hover:text-foreground"
                 >
-                  {component.description}
-                </ListItem>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <Link href="/events" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Browse Event
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
+                  {item.title}
+                </Link>
+              </div>
+            ))}
+          </nav>
+        </SheetContent>
+      </Sheet>
+    </div>
   );
 }
 

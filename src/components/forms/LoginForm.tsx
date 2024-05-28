@@ -20,15 +20,52 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/ui/password-input";
+import { getMe, login } from "@/api/auth";
+import { useMutation } from "@tanstack/react-query";
+import { LoginResponse } from "@/types/loginFunction";
+import { AxiosError } from "axios";
+import { GetMeResponse } from "@/types/authuser";
+import { useAuthStore } from "@/stores/auth";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
+  const { setJwt, setJwtRefreshToken, setAuthUser } = useAuthStore();
+  const router = useRouter();
+
   const loginFrom = useForm<LoginFormType>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: loginFormDefaultValues,
   });
 
-  const onSubmit = (data: LoginFormType) => {
-    console.log(data);
+  const loginMutation = useMutation({
+    mutationFn: (data: LoginFormType) => login(data),
+    onSuccess: (data: LoginResponse) => {
+      setJwt(data.jwt);
+      setJwtRefreshToken(data.jwtRefreshToken);
+      getMeMutation.mutate();
+    },
+    onError: (error: AxiosError<LoginResponse>) => {
+      toast.error(error.response?.data.message);
+    },
+  });
+
+  const getMeMutation = useMutation({
+    mutationFn: () => getMe(),
+    onSuccess: (data: GetMeResponse) => {
+      if (data.data) {
+        setAuthUser(data.data);
+        toast.success("Login success");
+        router.push("/");
+      }
+    },
+    onError: (error: AxiosError<GetMeResponse>) => {
+      toast.error(error.response?.data.message);
+    },
+  });
+
+  const onSubmit = async (data: LoginFormType) => {
+    loginMutation.mutate(data);
   };
 
   return (
@@ -41,7 +78,12 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="abc@gmail.com" {...field} className="" />
+                <Input
+                  placeholder="abc@gmail.com"
+                  {...field}
+                  className=""
+                  disabled={loginMutation.isPending || getMeMutation.isPending}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -54,7 +96,11 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <PasswordInput {...field} placeholder="Your password" />
+                <PasswordInput
+                  {...field}
+                  placeholder="Your password"
+                  disabled={loginMutation.isPending || getMeMutation.isPending}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -63,9 +109,15 @@ export default function LoginForm() {
         <Button
           type="submit"
           className="w-full"
-          disabled={!loginFrom.formState.isValid}
+          disabled={
+            !loginFrom.formState.isValid ||
+            loginMutation.isPending ||
+            getMeMutation.isPending
+          }
         >
-          Login
+          {loginMutation.isPending && getMeMutation.isPending
+            ? "Loading..."
+            : "Login"}
         </Button>
       </form>
     </Form>
