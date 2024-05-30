@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { Home, LineChart, Package, ShoppingCart, Users } from "lucide-react";
@@ -13,6 +15,8 @@ import {
 } from "@/components/ui/card";
 import { LockKeyhole } from "lucide-react";
 import { SidebarItem } from "@/types/sidebar";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const SidebarItems: SidebarItem[] = [
   {
@@ -33,6 +37,8 @@ const SidebarItems: SidebarItem[] = [
 ];
 
 export default function Sidebar() {
+  const pathname = usePathname();
+
   return (
     <div className="hidden border-r bg-background md:block">
       <div className="flex h-full max-h-screen flex-col gap-2">
@@ -51,7 +57,13 @@ export default function Sidebar() {
               <Link
                 key={item.title}
                 href={`/dashboard${item.href}` || "#"}
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                  {
+                    "text-primary bg-muted":
+                      pathname === `/dashboard${item.href}`,
+                  }
+                )}
               >
                 {item.icon}
                 {item.title}
