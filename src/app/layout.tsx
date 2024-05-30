@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/providers/themeProvider";
 import Navbar from "@/components/Navbar";
 import ReactQueryProvider from "@/providers/reactQueryProvider";
 import ToastProvider from "@/providers/toastProvider";
+import PublicProvider from "@/providers/publicProvider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -40,9 +41,11 @@ export default function RootLayout({
             <ToastProvider>
               <div className="flex min-h-screen w-full flex-col bg-muted/40">
                 <Navbar />
-                <div className="flex min-h-[calc(100vh_-_theme(spacing.20))] flex-1 flex-col gap-4 ">
-                  {children}
-                </div>
+                <PublicProvider>
+                  <div className="flex min-h-[calc(100vh_-_theme(spacing.20))] flex-1 flex-col gap-4 ">
+                    {children}
+                  </div>
+                </PublicProvider>
               </div>
             </ToastProvider>
           </ThemeProvider>

@@ -41,10 +41,16 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useUserStore } from "@/stores/user";
 
 export function UserMenu() {
   const { theme, setTheme } = useTheme();
-  const { authUser, logout } = useAuthStore();
+  const { authUser } = useUserStore();
+
+  const logout = () => {
+    useAuthStore.setState({ jwt: null, jwtRefreshToken: null });
+    useUserStore.setState({ authUser: null });
+  };
 
   return (
     <div className="">

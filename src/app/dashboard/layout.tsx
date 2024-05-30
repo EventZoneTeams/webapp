@@ -1,6 +1,8 @@
 "use client";
 
-import { useAuthStore } from "@/stores/auth";
+import FullpageLoader from "@/components/Loading/fullpage-loader";
+import PrivateProvider from "@/providers/privateProvider";
+import { useUserStore } from "@/stores/user";
 import React from "react";
 
 export default function layout({
@@ -10,10 +12,19 @@ export default function layout({
   organizer: React.ReactNode;
   admin: React.ReactNode;
 }) {
-  const { authUser } = useAuthStore();
+  const { authUser } = useUserStore();
+
   return (
-    <div>
-      {authUser?.roleName.toUpperCase() !== "ADMIN" ? organizer : admin}
-    </div>
+    <PrivateProvider>
+      {authUser ? (
+        authUser.roleName.toUpperCase() === "ADMIN" ? (
+          admin
+        ) : (
+          organizer
+        )
+      ) : (
+        <FullpageLoader />
+      )}
+    </PrivateProvider>
   );
 }

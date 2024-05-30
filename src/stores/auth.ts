@@ -1,30 +1,30 @@
-import { User } from "@/types/authuser";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 interface AuthStore {
   jwt: string | null;
   jwtRefreshToken: string | null;
-  authUser: User | null;
   setJwt: (jwt: string) => void;
   setJwtRefreshToken: (jwtRefreshToken: string) => void;
-  setAuthUser: (authUser: User) => void;
-  logout: () => void;
+  reset: () => void;
 }
+
+const initialState: AuthStore = {
+  jwt: null,
+  jwtRefreshToken: null,
+  setJwt: () => {},
+  setJwtRefreshToken: () => {},
+  reset: () => {},
+};
 
 export const useAuthStore = create<AuthStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       jwt: null,
       jwtRefreshToken: null,
-      authUser: null,
       setJwt: (jwt) => set({ jwt }),
       setJwtRefreshToken: (jwtRefreshToken) => set({ jwtRefreshToken }),
-      setAuthUser: (authUser) => set({ authUser }),
-      logout: () => {
-        set({ jwt: null, jwtRefreshToken: null, authUser: null });
-        localStorage.removeItem("auth");
-      },
+      reset: () => set(initialState),
     }),
     {
       name: "auth-storage",

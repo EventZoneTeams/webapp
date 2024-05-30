@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { Home, TicketSlash, CircleDollarSign } from "lucide-react";
 import { useAuthStore } from "@/stores/auth";
+import { useUserStore } from "@/stores/user";
 
 const NavMenuItems: MenuItem[] = [
   {
@@ -71,7 +72,7 @@ const NavMenuItems: MenuItem[] = [
 ];
 export default function NavMenu() {
   const pathName = usePathname();
-  const { authUser } = useAuthStore();
+  const { authUser } = useUserStore();
   return (
     <div>
       <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
