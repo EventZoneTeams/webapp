@@ -25,12 +25,10 @@ import { useMutation } from "@tanstack/react-query";
 import { LoginResponse } from "@/types/loginFunction";
 import { AxiosError } from "axios";
 import { GetMeResponse } from "@/types/authuser";
-import { useAuthStore } from "@/stores/auth";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
-  const { setJwt, setJwtRefreshToken } = useAuthStore();
   const router = useRouter();
 
   const loginFrom = useForm<LoginFormType>({
@@ -41,8 +39,9 @@ export default function LoginForm() {
   const loginMutation = useMutation({
     mutationFn: (data: LoginFormType) => login(data),
     onSuccess: (data: LoginResponse) => {
-      setJwt(data.jwt);
-      setJwtRefreshToken(data.jwtRefreshToken);
+      localStorage.setItem("jwt", data.jwt);
+      localStorage.setItem("jwtRefreshToken", data.jwtRefreshToken);
+      toast.success("Login successful");
       router.push("/");
     },
     onError: (error: AxiosError<LoginResponse>) => {

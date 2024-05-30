@@ -19,8 +19,6 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import { Home, TicketSlash, CircleDollarSign } from "lucide-react";
-import { useAuthStore } from "@/stores/auth";
 import { useUserStore } from "@/stores/user";
 
 const NavMenuItems: MenuItem[] = [
@@ -117,7 +115,7 @@ export default function NavMenu() {
             )}
           </div>
         ))}
-        {authUser?.roleName.toLocaleUpperCase() === "ADMIN" && (
+        {authUser && (
           <Link
             href="/dashboard"
             className={cn("text-muted-foreground hover:text-foreground", {

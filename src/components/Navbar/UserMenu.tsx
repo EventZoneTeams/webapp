@@ -36,7 +36,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "next-themes";
-import { useAuthStore } from "@/stores/auth";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -48,7 +47,8 @@ export function UserMenu() {
   const { authUser } = useUserStore();
 
   const logout = () => {
-    useAuthStore.setState({ jwt: null, jwtRefreshToken: null });
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("jwtRefreshToken");
     useUserStore.setState({ authUser: null });
   };
 
@@ -60,15 +60,17 @@ export function UserMenu() {
             <div className="rounded-lg flex items-center gap-2  px-3 py-2 pr-4 bg-muted hover:cursor-pointer hover:bg-muted/80">
               <Avatar className="size-10">
                 <AvatarImage src={authUser.image} alt={authUser.fullName} />
-                <AvatarFallback className="bg-tertiary text-white">
+                <AvatarFallback className="bg-tertiary text-white ">
                   {authUser?.fullName?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col items-start">
-                <span className="text-sm font-semibold ">
+                <span className="text-sm font-semibold max-w-40 truncate">
                   {authUser.fullName}
                 </span>
-                <span className="text-xs">{authUser.email}</span>
+                <span className="text-xs max-w-40 truncate">
+                  {authUser.email}
+                </span>
               </div>
             </div>
           </DropdownMenuTrigger>

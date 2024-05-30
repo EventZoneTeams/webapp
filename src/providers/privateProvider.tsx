@@ -1,16 +1,16 @@
 "use client";
 
 import { getMe } from "@/api/auth";
-import { useAuthStore } from "@/stores/auth";
 import { useUserStore } from "@/stores/user";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import { toast } from "react-toastify";
 
 export default function PrivateProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const { jwt } = useAuthStore();
+  const pathname = usePathname();
+  const jwt = typeof window !== "undefined" && localStorage.getItem("jwt");
   const { authUser } = useUserStore();
   const getMeMutation = useMutation({
     mutationFn: () => getMe(),
@@ -26,7 +26,7 @@ export default function PrivateProvider({ children }: { children: ReactNode }) {
     } else if (jwt && !authUser) {
       getMeMutation.mutate();
     }
-  }, []);
+  }, [jwt, authUser, pathname]);
 
   return <div>{children}</div>;
 }

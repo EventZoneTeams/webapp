@@ -16,7 +16,6 @@ import { usePathname } from "next/navigation";
 export function MyBreadcrumb() {
   const pathname = usePathname();
   const splitPath = pathname.split("/").filter((path) => path !== "");
-  console.log(splitPath);
 
   const uppercaseFirstLetter = (path: string) => {
     if (path.includes("-")) {

@@ -18,25 +18,13 @@ import { SidebarItem } from "@/types/sidebar";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-const SidebarItems: SidebarItem[] = [
-  {
-    title: "Dashboard",
-    href: "",
-    icon: <Home className="h-4 w-4" />,
-  },
-  {
-    title: "Users",
-    href: "/users",
-    icon: <Users className="h-4 w-4" />,
-  },
-  {
-    title: "Event Categories",
-    href: "/event-categories",
-    icon: <Package className="h-4 w-4" />,
-  },
-];
+interface Props {
+  sidebarTitle: string;
+  sidebarItems: SidebarItem[];
+  isPro?: boolean;
+}
 
-export default function Sidebar() {
+export default function Sidebar({ sidebarItems, sidebarTitle, isPro }: Props) {
   const pathname = usePathname();
 
   return (
@@ -48,12 +36,12 @@ export default function Sidebar() {
             className="flex items-center gap-2 font-semibold"
           >
             <LockKeyhole className="h-6 w-6" />
-            <span className="">Admin Dashboard</span>
+            <span className="">{sidebarTitle}</span>
           </Link>
         </div>
         <div className="flex-1">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-            {SidebarItems.map((item) => (
+            {sidebarItems.map((item) => (
               <Link
                 key={item.title}
                 href={`/dashboard${item.href}` || "#"}
@@ -71,22 +59,24 @@ export default function Sidebar() {
             ))}
           </nav>
         </div>
-        <div className="mt-auto p-4">
-          <Card x-chunk="dashboard-02-chunk-0" className="bg-muted/80">
-            <CardHeader className="p-2 pt-0 md:p-4">
-              <CardTitle>Upgrade to Pro</CardTitle>
-              <CardDescription>
-                Unlock all features and get unlimited access to our support
-                team.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
-              <Button size="sm" className="w-full">
-                Upgrade
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+        {isPro && (
+          <div className="mt-auto p-4">
+            <Card x-chunk="dashboard-02-chunk-0" className="bg-muted/80">
+              <CardHeader className="p-2 pt-0 md:p-4">
+                <CardTitle>Upgrade to Pro</CardTitle>
+                <CardDescription>
+                  Unlock all features and get unlimited access to our support
+                  team.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
+                <Button size="sm" className="w-full">
+                  Upgrade
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );
