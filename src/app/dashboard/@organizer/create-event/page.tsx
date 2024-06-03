@@ -1,5 +1,133 @@
+"use client";
+
+import { StepItem } from "@/components/stepper";
+import { CirclePlus, Info, Landmark, ShieldCheck } from "lucide-react";
 import React from "react";
 
+import { Step, Stepper, useStepper } from "@/components/stepper";
+import BasicDetailsForm from "@/components/forms/BasicDetailsForm";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import FormLayout from "@/app/dashboard/@organizer/create-event/components/FormLayout";
+
+const steps: StepItem[] = [
+  {
+    label: "1. Event Details",
+    icon: Info,
+  },
+  {
+    label: "2. More Details",
+    icon: CirclePlus,
+  },
+  {
+    label: "3. Donation Options",
+    icon: Landmark,
+  },
+  {
+    label: "4. Term & Conditions",
+    icon: ShieldCheck,
+  },
+];
+
 export default function page() {
-  return <div>create event</div>;
+  return (
+    <div className="flex w-full flex-col gap-8 ">
+      <Stepper
+        variant="circle-alt"
+        initialStep={0}
+        steps={steps}
+        styles={{
+          "step-button-container": cn(
+            "ounded-full",
+            "data-[current=true]:border-tertiary data-[current=true]:text-tertiary ",
+            "data-[active=true]:bg-tertiary data-[active=true]:border-tertiary",
+            "data-[completed=true]:bg-tertiary data-[completed=true]:border-tertiary"
+          ),
+        }}
+        variables={{
+          "--step-icon-size": "50px",
+          "--step-gap": "50px",
+        }}
+      >
+        {steps.map((stepProps, index) => {
+          if (index === 0) {
+            return (
+              <Step key={stepProps.label} {...stepProps}>
+                <FormLayout>
+                  <BasicDetailsForm />
+                </FormLayout>
+              </Step>
+            );
+          } else if (index === 1) {
+            return (
+              <Step key={stepProps.label} {...stepProps}>
+                <FormLayout>
+                  <div>More details</div>
+                </FormLayout>
+              </Step>
+            );
+          } else if (index === 2) {
+            return (
+              <Step key={stepProps.label} {...stepProps}>
+                <FormLayout>
+                  <div>Donation options</div>
+                </FormLayout>
+              </Step>
+            );
+          } else if (index === 3) {
+            return (
+              <Step key={stepProps.label} {...stepProps}>
+                <FormLayout>
+                  <div>Terms & Conditions</div>
+                </FormLayout>
+              </Step>
+            );
+          }
+        })}
+        <Footer />
+      </Stepper>
+    </div>
+  );
 }
+
+const Footer = () => {
+  const {
+    nextStep,
+    prevStep,
+    resetSteps,
+    hasCompletedAllSteps,
+    isLastStep,
+    isOptionalStep,
+    isDisabledStep,
+  } = useStepper();
+  return (
+    <>
+      {hasCompletedAllSteps && (
+        <div className="h-40 flex items-center justify-center my-2 border bg-secondary text-primary rounded-md">
+          <h1 className="text-xl">Woohoo! All steps completed! 🎉</h1>
+        </div>
+      )}
+      <div className="w-full flex justify-end gap-2">
+        {hasCompletedAllSteps ? (
+          <Button size="sm" onClick={resetSteps}>
+            Reset
+          </Button>
+        ) : (
+          <>
+            <Button
+              disabled={isDisabledStep}
+              onClick={prevStep}
+              size="sm"
+              variant="secondary"
+            >
+              Prev
+            </Button>
+            <Button size="sm" onClick={nextStep}>
+              {isLastStep ? "Finish" : isOptionalStep ? "Skip" : "Next"}
+            </Button>
+          </>
+        )}
+      </div>
+    </>
+  );
+};

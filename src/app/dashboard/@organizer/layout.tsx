@@ -29,7 +29,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
       <div className="grid min-h-[calc(100vh_-_theme(spacing.20))] w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <Sidebar sidebarItems={sidebarItems} sidebarTitle="Admin dashboard" />
         <div className="flex flex-col">
-          <div className="h-14 gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 flex items-center">
+          <div className="h-14 gap-4 border-b bg-secondary px-4 lg:h-[60px] lg:px-6 flex items-center">
             <MyBreadcrumb />
           </div>
           <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 ">
