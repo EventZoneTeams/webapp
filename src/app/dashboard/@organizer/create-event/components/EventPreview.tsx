@@ -61,9 +61,17 @@ export default function EventPreview() {
                     )}`)}
             </p>
             <p className="italic col-span-1">At: </p>
-            <p className="col-span-4">{BasicInfo?.University}</p>
+            <p className="col-span-4">
+              {BasicInfo?.University
+                ? `${BasicInfo?.University}`
+                : "Your Event University"}
+            </p>
             <p className="italic col-span-1">Location: </p>
-            <p className="col-span-4">{BasicInfo?.Location}</p>
+            <p className="col-span-4">
+              {BasicInfo?.Location
+                ? `${BasicInfo?.Location}`
+                : "Your Event Location"}
+            </p>
           </div>
         </AlertDescription>
       </Alert>

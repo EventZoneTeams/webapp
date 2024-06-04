@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import getCroppedImg from "@/lib/getCroppedImg";
 import { toast } from "react-toastify";
 import { set } from "date-fns";
+import { useTheme } from "next-themes";
 
 export function ImageUpload() {
   const [images, setImages] = useState([]);
@@ -20,6 +21,7 @@ export function ImageUpload() {
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const { theme } = useTheme();
 
   const onCropComplete = (croppedArea: any, croppedAreaPixels: any) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -87,7 +89,7 @@ export function ImageUpload() {
 
       <div
         className={cn(
-          "absolute top-0 right-0 bottom-0 left-0 bg-primary-foreground/80 hidden z-40",
+          "absolute top-0 right-0 bottom-0 left-0 bg-black/80 hidden z-40",
           {
             "flex items-center justify-center flex-col": isDialogOpen,
           }
@@ -107,14 +109,14 @@ export function ImageUpload() {
               onRotationChange={setRotation}
               style={{
                 containerStyle: {
-                  backgroundColor: "black",
+                  backgroundColor: theme === "dark" ? "#000" : "#fff",
                   borderRadius: "8px",
                   overflow: "hidden",
                 },
               }}
             />
           </div>
-          <div className="bg-black w-full px-6 py-4  rounded-md mx-auto grid grid-cols-2 gap-6">
+          <div className="bg-background w-full px-6 py-4  rounded-md mx-auto grid grid-cols-2 gap-6">
             <div className="flex items-center gap-4">
               <p>Zoom</p>
               <input

@@ -25,7 +25,6 @@ export const useCreateEventStore = create<EventState>((set) => ({
   ...initialState,
   setEvent: (state) =>
     set((prev) => {
-      console.log(prev.BasicInfo);
       return {
         BasicInfo: { ...prev.BasicInfo, ...state },
       };

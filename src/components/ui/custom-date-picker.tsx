@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { months } from "@/enums/dateEnum";
-import { forwardRef } from "react";
+import { forwardRef, useCallback } from "react";
 import { ControllerRenderProps } from "react-hook-form";
 
 export const CustomDatePicker = forwardRef<
@@ -36,31 +36,31 @@ export const CustomDatePicker = forwardRef<
   const [hours, setHours] = React.useState<number>(date.getHours());
   const [minutes, setMinutes] = React.useState<number>(date.getMinutes());
 
-  const handleMonthChange = (monthValue: string) => {
+  const handleMonthChange = React.useCallback((monthValue: string) => {
     const newDate = new Date(date);
     newDate.setMonth(parseInt(monthValue));
     setDate(newDate);
-  };
+  }, []);
 
-  const handleYearChange = (yearValue: string) => {
+  const handleYearChange = React.useCallback((yearValue: string) => {
     const newDate = new Date(date);
     newDate.setFullYear(parseInt(yearValue));
     setDate(newDate);
-  };
+  }, []);
 
-  const handleDateChange = (date: Date) => {
+  const handleDateChange = React.useCallback((date: Date) => {
     const newDate = new Date(date);
     newDate.setHours(hours);
     newDate.setMinutes(minutes);
     setDate(newDate);
-  };
+  }, []);
 
-  const handleTimeChange = () => {
+  const handleTimeChange = React.useCallback(() => {
     const newDate = new Date(date);
     newDate.setHours(hours);
     newDate.setMinutes(minutes);
     setDate(newDate);
-  };
+  }, []);
 
   React.useEffect(() => {
     handleTimeChange();
@@ -88,7 +88,7 @@ export const CustomDatePicker = forwardRef<
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="flex w-auto flex-col space-y-2 p-2">
+      <PopoverContent className="flex w-auto flex-col space-y-2 p-2 bg-secondary">
         <div className="flex gap-2 items-center">
           <Select
             onValueChange={handleMonthChange}

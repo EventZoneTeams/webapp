@@ -1,8 +1,9 @@
 import {
+  BasicInfoSchema,
   BasicInfoDefaultValues,
   BasicInfoSchemaType,
 } from "@/schemas/createEventSchema";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -43,30 +44,38 @@ import { ImageUpload } from "@/components/ImageUpload";
 import { useCreateEventStore } from "@/stores/createEvent";
 import { useEffect } from "react";
 import { CustomDatePicker } from "@/components/ui/custom-date-picker";
+import { useStepper } from "@/components/stepper";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function BasicInfoForm() {
+  const { nextStep } = useStepper();
   const { setEvent } = useCreateEventStore();
   const form = useForm<BasicInfoSchemaType>({
+    resolver: zodResolver(BasicInfoSchema),
     defaultValues: BasicInfoDefaultValues,
   });
 
   const onSubmit = (data: BasicInfoSchemaType) => {
     console.log(data);
+    nextStep();
   };
 
-  useEffect(() => {
-    console.log(form.getValues());
-    setEvent(form.getValues());
-  }, [
-    form.getValues().Name,
-    form.getValues().EventStartDate,
-    form.getValues().EventEndDate,
-    form.getValues().Location,
-    form.getValues().University,
-    form.getValues().EventCategoryId,
-  ]);
+  const watchFields = useWatch({
+    control: form.control,
+    name: [
+      "Name",
+      "EventStartDate",
+      "EventEndDate",
+      "Location",
+      "University",
+      "EventCategoryId",
+    ],
+  });
 
-  form.watch(["Name"]);
+  useEffect(() => {
+    setEvent(form.getValues());
+  }, [watchFields, setEvent]);
+
   return (
     <Form {...form}>
       <form
@@ -93,7 +102,7 @@ export default function BasicInfoForm() {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="shadcn"
+                          placeholder="More than 3 characters"
                           {...field}
                           className="bg-secondary"
                           required
@@ -188,15 +197,9 @@ export default function BasicInfoForm() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="m@example.com">
-                            m@example.com
-                          </SelectItem>
-                          <SelectItem value="m@google.com">
-                            m@google.com
-                          </SelectItem>
-                          <SelectItem value="m@support.com">
-                            m@support.com
-                          </SelectItem>
+                          <SelectItem value="1">m@example.com</SelectItem>
+                          <SelectItem value="2">m@google.com</SelectItem>
+                          <SelectItem value="3">m@support.com</SelectItem>
                         </SelectContent>
                       </Select>
                       <div className="w-full truncate">
@@ -283,7 +286,7 @@ export default function BasicInfoForm() {
             <Button
               type="submit"
               className=" w-full"
-              disabled={form.formState.isValid}
+              disabled={!form.formState.isValid}
             >
               Next
               <ArrowRightToLine className="ml-2 h-4 w-4" />
