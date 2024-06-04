@@ -73,7 +73,7 @@ export function ImageUpload() {
           return (
             <div className="upload__image-wrapper h-full w-full ">
               <div
-                className="h-full w-full flex items-center justify-center cursor-pointer border border-secondary rounded-md border-dashed"
+                className="h-full w-full flex items-center justify-center cursor-pointer border border-ring rounded-md border-dashed"
                 style={isDragging ? { color: "red" } : undefined}
                 onClick={onImageUpload}
                 {...dragProps}

@@ -25,9 +25,16 @@ import { ControllerRenderProps } from "react-hook-form";
 
 export const CustomDatePicker = forwardRef<
   HTMLInputElement,
-  { field?: ControllerRenderProps; [key: string]: any }
->(({ field, ...props }, ref) => {
+  {
+    field?: ControllerRenderProps;
+    [key: string]: any;
+    className?: string;
+    showTime?: boolean;
+  }
+>(({ field, className, showTime = false, ...prop }, ref) => {
   const [date, setDate] = React.useState<Date>(new Date());
+  const [hours, setHours] = React.useState<number>(date.getHours());
+  const [minutes, setMinutes] = React.useState<number>(date.getMinutes());
 
   const handleMonthChange = (monthValue: string) => {
     const newDate = new Date(date);
@@ -42,11 +49,24 @@ export const CustomDatePicker = forwardRef<
   };
 
   const handleDateChange = (date: Date) => {
-    setDate(date);
+    const newDate = new Date(date);
+    newDate.setHours(hours);
+    newDate.setMinutes(minutes);
+    setDate(newDate);
+  };
+
+  const handleTimeChange = () => {
+    const newDate = new Date(date);
+    newDate.setHours(hours);
+    newDate.setMinutes(minutes);
+    setDate(newDate);
   };
 
   React.useEffect(() => {
-    console.log(date.toDateString());
+    handleTimeChange();
+  }, [hours, minutes]);
+
+  React.useEffect(() => {
     field?.onChange(date);
   }, [date]);
 
@@ -56,12 +76,16 @@ export const CustomDatePicker = forwardRef<
         <Button
           variant={"outline"}
           className={cn(
-            "justify-start text-left font-normal",
-            !date && "text-muted-foreground"
+            "justify-center w-full",
+            !date && "text-muted-foreground",
+            className
           )}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Pick a date</span>}
+          {date ? (
+            format(date, showTime ? "PPP p" : "PPP")
+          ) : (
+            <span>Pick a date</span>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="flex w-auto flex-col space-y-2 p-2">
@@ -71,7 +95,7 @@ export const CustomDatePicker = forwardRef<
             value={date.getMonth().toString()}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Moth" />
+              <SelectValue placeholder="Month" />
             </SelectTrigger>
             <SelectContent position="popper">
               {months.map((month, index) => (
@@ -101,6 +125,42 @@ export const CustomDatePicker = forwardRef<
             </SelectContent>
           </Select>
         </div>
+        {showTime && (
+          <div className="flex gap-2 items-center">
+            <Select
+              onValueChange={(value) => setHours(parseInt(value))}
+              value={hours.toString()}
+            >
+              <SelectTrigger>
+                <p>Hour:</p>
+                <SelectValue placeholder="Hours" />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                {Array.from({ length: 24 }, (_, i) => (
+                  <SelectItem key={i} value={i.toString()}>
+                    {i.toString().padStart(2, "0")}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select
+              onValueChange={(value) => setMinutes(parseInt(value))}
+              value={minutes.toString()}
+            >
+              <SelectTrigger>
+                <p>Minute:</p>
+                <SelectValue placeholder="Minutes" />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                {Array.from({ length: 60 }, (_, i) => (
+                  <SelectItem key={i} value={i.toString()}>
+                    {i.toString().padStart(2, "0")}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
         <div className="rounded-md border">
           <Calendar
             mode="single"
@@ -116,6 +176,17 @@ export const CustomDatePicker = forwardRef<
               handleDateChange(day || new Date())
             }
           />
+        </div>
+        <div>
+          <Button
+            onClick={() => {
+              setDate(new Date());
+            }}
+            variant="outline"
+            className="w-full"
+          >
+            Today
+          </Button>
         </div>
       </PopoverContent>
     </Popover>

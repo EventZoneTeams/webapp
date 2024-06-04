@@ -42,6 +42,7 @@ import {
 import { ImageUpload } from "@/components/ImageUpload";
 import { useCreateEventStore } from "@/stores/createEvent";
 import { useEffect } from "react";
+import { CustomDatePicker } from "@/components/ui/custom-date-picker";
 
 export default function BasicInfoForm() {
   const { setEvent } = useCreateEventStore();
@@ -58,7 +59,8 @@ export default function BasicInfoForm() {
     setEvent(form.getValues());
   }, [
     form.getValues().Name,
-    form.getValues().EventDateRange,
+    form.getValues().EventStartDate,
+    form.getValues().EventEndDate,
     form.getValues().Location,
     form.getValues().University,
     form.getValues().EventCategoryId,
@@ -80,162 +82,141 @@ export default function BasicInfoForm() {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="Name"
-                render={({ field }) => (
-                  <FormItem className="col-span-1">
-                    <FormLabel>
-                      Event Name <span className="text-destructive">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="shadcn"
-                        {...field}
-                        className="bg-input"
-                        required
-                      />
-                    </FormControl>
-                    <div className="w-full truncate">
-                      {form.formState.errors.Name ? (
-                        <FormMessage>
-                          {form.formState.errors.Name.message}
-                        </FormMessage>
-                      ) : (
-                        <FormDescription>
-                          This is your public display name.
-                        </FormDescription>
-                      )}
-                    </div>
-                  </FormItem>
-                )}
-              />
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="Name"
+                  render={({ field }) => (
+                    <FormItem className="col-span-1">
+                      <FormLabel>
+                        Event Name <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="shadcn"
+                          {...field}
+                          className="bg-secondary"
+                          required
+                        />
+                      </FormControl>
+                      <div className="w-full truncate">
+                        {form.formState.errors.Name ? (
+                          <FormMessage>
+                            {form.formState.errors.Name.message}
+                          </FormMessage>
+                        ) : (
+                          <FormDescription>
+                            This is your public display name.
+                          </FormDescription>
+                        )}
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <div className="grid grid-cols-2 gap-4 ">
+                  <FormField
+                    control={form.control}
+                    name="EventStartDate"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel className="">
+                          Start date <span className="text-destructive">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <CustomDatePicker
+                            field={field}
+                            className="bg-secondary"
+                            showTime={true}
+                          />
+                        </FormControl>
+                        <div className="w-full truncate">
+                          {form.formState.errors.EventStartDate ? (
+                            <FormMessage>
+                              {form.formState.errors.EventStartDate.message}
+                            </FormMessage>
+                          ) : (
+                            <FormDescription>
+                              Start date of the event.
+                            </FormDescription>
+                          )}
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="EventEndDate"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel className="">
+                          End date <span className="text-destructive">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <CustomDatePicker
+                            field={field}
+                            className="bg-secondary"
+                            showTime={true}
+                          />
+                        </FormControl>
+                        <div className="w-full truncate">
+                          {form.formState.errors.EventEndDate ? (
+                            <FormMessage>
+                              {form.formState.errors.EventEndDate.message}
+                            </FormMessage>
+                          ) : (
+                            <FormDescription>
+                              End date of the event.
+                            </FormDescription>
+                          )}
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <FormField
+                  control={form.control}
+                  name="EventCategoryId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Category <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <Select onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger className="bg-secondary">
+                            <SelectValue placeholder="Select a verified email to display" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="m@example.com">
+                            m@example.com
+                          </SelectItem>
+                          <SelectItem value="m@google.com">
+                            m@google.com
+                          </SelectItem>
+                          <SelectItem value="m@support.com">
+                            m@support.com
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="w-full truncate">
+                        {form.formState.errors.EventCategoryId ? (
+                          <FormMessage>
+                            {form.formState.errors.EventCategoryId.message}
+                          </FormMessage>
+                        ) : (
+                          <FormDescription>
+                            Pick a category for your event.
+                          </FormDescription>
+                        )}
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </div>
               <div>
                 <ImageUpload />
               </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="EventDateRange"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Date <span className="text-destructive">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-full justify-start text-left font-normal bg-secondary",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value?.from ? (
-                              field.value.to ? (
-                                <>
-                                  {format(field.value.from, "LLL dd, y")} -{" "}
-                                  {format(field.value.to, "LLL dd, y")}
-                                </>
-                              ) : (
-                                format(field.value.from, "LLL dd, y")
-                              )
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            initialFocus
-                            mode="range"
-                            defaultMonth={field.value?.from}
-                            selected={field.value}
-                            onSelect={(dateRange) => {
-                              if (dateRange?.from && !dateRange.to) {
-                                // If only the from date is selected, set to date the same as from date
-                                field.onChange({
-                                  from: dateRange.from,
-                                  to: dateRange.from,
-                                });
-                              } else if (
-                                dateRange?.from &&
-                                dateRange.to &&
-                                dateRange.from === dateRange.to
-                              ) {
-                                // If from and to dates are the same, set them both to the same date
-                                field.onChange({
-                                  from: dateRange.from,
-                                  to: dateRange.to,
-                                });
-                              } else {
-                                // Otherwise, set the selected range
-                                field.onChange(dateRange);
-                              }
-                            }}
-                            numberOfMonths={2}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </FormControl>
-                    <div className="w-full truncate">
-                      {form.formState.errors.EventDateRange ? (
-                        <FormMessage>
-                          {form.formState.errors.EventDateRange.message}
-                        </FormMessage>
-                      ) : (
-                        <FormDescription>
-                          Pick a date for your event.
-                        </FormDescription>
-                      )}
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="EventCategoryId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Category <span className="text-destructive">*</span>
-                    </FormLabel>
-                    <Select onValueChange={field.onChange}>
-                      <FormControl>
-                        <SelectTrigger className="bg-secondary">
-                          <SelectValue placeholder="Select a verified email to display" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="m@example.com">
-                          m@example.com
-                        </SelectItem>
-                        <SelectItem value="m@google.com">
-                          m@google.com
-                        </SelectItem>
-                        <SelectItem value="m@support.com">
-                          m@support.com
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <div className="w-full truncate">
-                      {form.formState.errors.EventCategoryId ? (
-                        <FormMessage>
-                          {form.formState.errors.EventCategoryId.message}
-                        </FormMessage>
-                      ) : (
-                        <FormDescription>
-                          Pick a category for your event.
-                        </FormDescription>
-                      )}
-                    </div>
-                  </FormItem>
-                )}
-              />
             </div>
             <FormField
               control={form.control}
@@ -249,7 +230,7 @@ export default function BasicInfoForm() {
                     <Input
                       placeholder="shadcn"
                       {...field}
-                      className="bg-input"
+                      className="bg-secondaryt"
                       required
                     />
                   </FormControl>
@@ -279,7 +260,7 @@ export default function BasicInfoForm() {
                     <Input
                       placeholder="shadcn"
                       {...field}
-                      className="bg-input"
+                      className="bg-secondaryt"
                       required
                     />
                   </FormControl>
