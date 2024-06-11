@@ -43,7 +43,7 @@ import { DateTimePicker } from "@/components/ui/my-date-input";
 
 export default function DonationForm() {
   const { nextStep, prevStep } = useStepper();
-  const { BasicInfo } = useCreateEventStore();
+  const { setDonation } = useCreateEventStore();
 
   const form = useForm<DonationFormSchemaType>({
     resolver: zodResolver(DonationFormSchema),
@@ -55,6 +55,8 @@ export default function DonationForm() {
   );
 
   const onSubmit = (data: DonationFormSchemaType) => {
+    setDonation(data);
+    nextStep();
     console.log(data);
   };
 

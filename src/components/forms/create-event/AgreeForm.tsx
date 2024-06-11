@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  DonationFormSchemaType,
-  DonationFormSchema,
-  DonationFormDefaultValues,
   TermAndConditionSchema,
   TermAndConditionSchemaType,
   TermAndConditionDefaultValues,
 } from "@/schemas/createEventSchema";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,9 +13,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -27,32 +22,59 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-
-import { ImageUpload } from "@/components/ImageUpload";
 import { useCreateEventStore } from "@/stores/createEvent";
 import { useStepper } from "@/components/stepper";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getEventCategories } from "@/api/event-categories";
-import { useQuery } from "@tanstack/react-query";
 import { ArrowLeftToLine, ArrowRightToLine } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
-import { cn } from "@/lib/utils";
-import { CustomDatePicker } from "@/components/ui/custom-date-picker";
-import { DateTimePicker } from "@/components/ui/my-date-input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
+import { createEvent, CreateEventSendData } from "@/api/event";
+import { useUserStore } from "@/stores/user";
+import { useMutation } from "@tanstack/react-query";
 
 export default function AgreeToTermAndCondition() {
   const { nextStep, prevStep } = useStepper();
+  const { BasicInfo, MoreInfo, Donation, Thumbnail } = useCreateEventStore();
+  const { authUser } = useUserStore();
 
   const form = useForm<TermAndConditionSchemaType>({
     resolver: zodResolver(TermAndConditionSchema),
     defaultValues: TermAndConditionDefaultValues,
   });
 
+  const createEventMutation = useMutation({
+    mutationFn: (data: CreateEventSendData) => createEvent(data),
+    onSuccess: () => {
+      console.log("Event created successfully");
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   const onSubmit = (data: TermAndConditionSchemaType) => {
-    console.log(data);
+    if (authUser && data.Agree) {
+      const sendData: CreateEventSendData = {
+        Name: BasicInfo.Name,
+        Description: MoreInfo.Description,
+        ThumbnailUrl: Thumbnail,
+        DonationStartDate: Donation.DonationStartDate,
+        DonationEndDate: Donation.DonationEndDate,
+        EventStartDate: BasicInfo.EventStartDate,
+        EventEndDate: BasicInfo.EventEndDate,
+        Note: "ngo gia huan",
+        Location: BasicInfo.Location,
+        UserId: authUser?.id || 0,
+        EventCategoryId: parseInt(BasicInfo.EventCategoryId),
+        University: BasicInfo.University,
+        Status: "PENDING",
+        OriganizationStatus: "PREPARING",
+        IsDonation: Donation.IsDonation,
+        TotalCost: Donation.TotalCost || null,
+      };
+      console.log(sendData);
+      createEventMutation.mutate(sendData);
+    }
   };
 
   return (
@@ -63,9 +85,10 @@ export default function AgreeToTermAndCondition() {
       >
         <Card className="w-[600px]">
           <CardHeader>
-            <CardTitle>More Infomation</CardTitle>
+            <CardTitle>Terms and conditions</CardTitle>
             <CardDescription>
-              Provide more information about your event
+              Please read the terms and conditions of the website before
+              proceeding.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
