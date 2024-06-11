@@ -20,11 +20,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/ui/password-input";
-import { getMe, login } from "@/api/auth";
+import { getMe, login, LoginResponse } from "@/api/auth";
 import { useMutation } from "@tanstack/react-query";
-import { LoginResponse } from "@/types/loginFunction";
 import { AxiosError } from "axios";
-import { GetMeResponse } from "@/types/authuser";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
@@ -40,7 +38,7 @@ export default function LoginForm() {
     mutationFn: (data: LoginFormType) => login(data),
     onSuccess: (data: LoginResponse) => {
       localStorage.setItem("jwt", data.jwt);
-      localStorage.setItem("jwtRefreshToken", data.jwtRefreshToken);
+      localStorage.setItem("jwtRefreshToken", data["jwt-refresh-token"]);
       toast.success("Login successful");
       router.push("/");
     },

@@ -21,8 +21,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
-import { register } from "@/api/auth";
-import { RegisterResponse } from "@/types/registerFunction";
+import { register, RegisterResponse } from "@/api/auth";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import {

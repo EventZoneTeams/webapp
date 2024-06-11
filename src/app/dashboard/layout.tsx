@@ -17,7 +17,7 @@ export default function layout({
   return (
     <PrivateProvider>
       {authUser ? (
-        authUser.roleName.toUpperCase() === "ADMIN" ? (
+        authUser["role-name"].toUpperCase() === "ADMIN" ? (
           admin
         ) : (
           organizer

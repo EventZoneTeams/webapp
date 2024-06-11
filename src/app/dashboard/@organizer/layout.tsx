@@ -27,12 +27,15 @@ export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <PrivateProvider>
       <div className="grid min-h-[calc(100vh_-_theme(spacing.20))] w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-        <Sidebar sidebarItems={sidebarItems} sidebarTitle="Admin dashboard" />
+        <Sidebar
+          sidebarItems={sidebarItems}
+          sidebarTitle="Organizer dashboard"
+        />
         <div className="flex flex-col">
-          <div className="h-14 gap-4 border-b bg-secondary px-4 lg:h-[60px] lg:px-6 flex items-center">
+          <div className="h-14 gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6 flex items-center">
             <MyBreadcrumb />
           </div>
-          <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 ">
+          <main className="flex flex-col gap-4 p-4 lg:gap-6 lg:p-6 overflow-y-scroll h-[calc(100vh_-_theme(spacing.40))]">
             {children}
           </main>
         </div>

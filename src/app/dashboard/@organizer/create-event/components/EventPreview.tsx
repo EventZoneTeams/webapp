@@ -15,7 +15,7 @@ export default function EventPreview() {
     <div className="flex flex-col gap-4 h-[600px] overflow-y-scroll px-4">
       <div>
         {Thumbnail ? (
-          <div className="relative group">
+          <div className="relative">
             <Image
               src={Thumbnail?.dataURL ?? ""}
               width={500}
@@ -23,14 +23,6 @@ export default function EventPreview() {
               alt=""
               className="rounded-md w-full"
             />
-            <div
-              className="absolute top-2 right-2 hover:cursor-pointer text-destructive hidden group-hover:block"
-              onClick={() => {
-                useCreateEventStore.setState({ Thumbnail: null });
-              }}
-            >
-              <Trash2 />
-            </div>
           </div>
         ) : (
           <div className="bg-secondary w-full aspect-video rounded-md">

@@ -5,10 +5,12 @@ import { CirclePlus, Info, Landmark, ShieldCheck } from "lucide-react";
 import React from "react";
 
 import { Step, Stepper, useStepper } from "@/components/stepper";
-import BasicDetailsForm from "@/components/forms/BasicDetailsForm";
+import BasicDetailsForm from "@/components/forms/create-event/BasicDetailsForm";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import FormLayout from "@/app/dashboard/@organizer/create-event/components/FormLayout";
+import MoreInfoForm from "@/components/forms/create-event/MoreInfoForm";
+import DonationForm from "@/components/forms/create-event/DonationForm";
+import AgreeToTermAndCondition from "@/components/forms/create-event/AgreeForm";
 
 const steps: StepItem[] = [
   {
@@ -31,7 +33,7 @@ const steps: StepItem[] = [
 
 export default function page() {
   return (
-    <div className="flex w-full flex-col gap-8 ">
+    <div className="flex w-full flex-col gap-6 h-full">
       <Stepper
         variant="circle-alt"
         initialStep={0}
@@ -53,33 +55,25 @@ export default function page() {
           if (index === 0) {
             return (
               <Step key={stepProps.label} {...stepProps}>
-                <FormLayout>
-                  <BasicDetailsForm />
-                </FormLayout>
+                <BasicDetailsForm />
               </Step>
             );
           } else if (index === 1) {
             return (
               <Step key={stepProps.label} {...stepProps}>
-                <FormLayout>
-                  <div>More details</div>
-                </FormLayout>
+                <MoreInfoForm />
               </Step>
             );
           } else if (index === 2) {
             return (
               <Step key={stepProps.label} {...stepProps}>
-                <FormLayout>
-                  <div>Donation options</div>
-                </FormLayout>
+                <DonationForm />
               </Step>
             );
           } else if (index === 3) {
             return (
               <Step key={stepProps.label} {...stepProps}>
-                <FormLayout>
-                  <div>Terms & Conditions</div>
-                </FormLayout>
+                <AgreeToTermAndCondition />
               </Step>
             );
           }
