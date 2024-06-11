@@ -11,6 +11,7 @@ import getCroppedImg from "@/lib/getCroppedImg";
 import { toast } from "react-toastify";
 import { set } from "date-fns";
 import { useTheme } from "next-themes";
+import Image from "next/image";
 
 export function ImageUpload() {
   const [images, setImages] = useState([]);
@@ -75,12 +76,25 @@ export function ImageUpload() {
           return (
             <div className="upload__image-wrapper h-full w-full ">
               <div
-                className="h-full w-full flex items-center justify-center cursor-pointer border border-ring rounded-md border-dashed"
+                className="w-full aspect-video justify-center items-center flex  cursor-pointer rounded-md border"
                 style={isDragging ? { color: "red" } : undefined}
                 onClick={onImageUpload}
                 {...dragProps}
               >
-                {Thumbnail ? "Change Image" : "Click or Drag Image"}
+                {Thumbnail ? (
+                  <Image
+                    src={Thumbnail.dataURL || Thumbnail.url}
+                    alt="thumbnail"
+                    objectFit="cover"
+                    className="rounded-md w-full h-full"
+                    width={100}
+                    height={100}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full w-full">
+                    <p className="text-center">Upload Image</p>
+                  </div>
+                )}
               </div>
             </div>
           );
@@ -89,13 +103,13 @@ export function ImageUpload() {
 
       <div
         className={cn(
-          "absolute top-0 right-0 bottom-0 left-0 bg-black/80 hidden z-40",
+          "absolute top-0 right-0 bottom-0 left-0 bg-black/80 hidden z-50",
           {
             "flex items-center justify-center flex-col": isDialogOpen,
           }
         )}
       >
-        <div className="w-1/2 h-1/2 flex flex-col gap-4">
+        <div className="w-1/2 h-1/2 flex flex-col gap-4 ">
           <div className="relative h-[400px] min-h-[400px]">
             <Cropper
               image={(images[0] as any)?.dataURL}

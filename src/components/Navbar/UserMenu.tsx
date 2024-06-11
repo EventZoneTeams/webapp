@@ -59,14 +59,14 @@ export function UserMenu() {
           <DropdownMenuTrigger asChild>
             <div className="rounded-lg flex items-center gap-2  px-3 py-2 pr-4 bg-muted hover:cursor-pointer hover:bg-muted/80">
               <Avatar className="size-10">
-                <AvatarImage src={authUser.image} alt={authUser.fullName} />
+                <AvatarImage src={authUser.image} alt={authUser["full-name"]} />
                 <AvatarFallback className="bg-tertiary text-white ">
-                  {authUser?.fullName?.charAt(0)}
+                  {authUser?.["full-name"]?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col items-start">
                 <span className="text-sm font-semibold max-w-40 truncate">
-                  {authUser.fullName}
+                  {authUser["full-name"]}
                 </span>
                 <span className="text-xs max-w-40 truncate">
                   {authUser.email}
@@ -79,10 +79,10 @@ export function UserMenu() {
               <Badge
                 className={cn({
                   "bg-orange-500 text-orange-50 hover:bg-orange-600 hover:text-orange-100":
-                    authUser.roleName === "ADMIN",
+                    authUser["role-name"] === "ADMIN",
                 })}
               >
-                {authUser.roleName}
+                {authUser["role-name"]}
               </Badge>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
