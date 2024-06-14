@@ -31,6 +31,11 @@ export type GetMeResponse = {
   data?: User;
 };
 
+export type RefreshTokenSendData = {
+  "access-token": string;
+  "refresh-token": string;
+};
+
 export const login = async (data: LoginFormType) => {
   try {
     const response = await axiosClient.post("/users/login", data);
@@ -60,6 +65,13 @@ export const getMe = async () => {
   try {
     const response = await axiosClient.get("/users/me");
     return response.data as GetMeResponse;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
+export const refreshToken = async () => {
+  try {
   } catch (error) {
     throw new Error(error as string);
   }
