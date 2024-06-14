@@ -97,7 +97,7 @@ export default function RegisterForm() {
             </FormItem>
           )}
         />
-        <div className="flex gap-4 items-center">
+        <div className="grid grid-cols-2 gap-4">
           <FormField
             control={registerForm.control}
             name="dob"
@@ -124,7 +124,7 @@ export default function RegisterForm() {
                   <RadioGroup
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    className="flex gap-4 justify-center items-center h-10"
+                    className="flex gap-4 justify-start items-center h-10"
                     disabled={registerMutation.isPending}
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
