@@ -54,29 +54,31 @@ export const BasicInfoDefaultValues: BasicInfoSchemaType = {
 //More Info
 export const MoreInfoFormSchema = z.object({
   Description: z.string().min(3, "At least 3 character"),
+  Note: z.string().min(3, "At least 3 character"),
 });
 
 export type MoreInfoFormSchemaType = z.infer<typeof MoreInfoFormSchema>;
 
 export const MoreInfoFormDefaultValues: MoreInfoFormSchemaType = {
   Description: "",
+  Note: "",
 };
 
 //Donation
 export const DonationFormSchema = z.object({
   IsDonation: z.boolean(),
-  DonationStartDate: z.date().nullable().optional(),
-  DonationEndDate: z.date().nullable().optional(),
-  TotalCost: z.number().nullable().optional(),
+  DonationStartDate: z.date(),
+  DonationEndDate: z.date(),
+  TotalCost: z.number(),
 });
 
 export type DonationFormSchemaType = z.infer<typeof DonationFormSchema>;
 
 export const DonationFormDefaultValues: DonationFormSchemaType = {
   IsDonation: false,
-  DonationStartDate: null,
-  DonationEndDate: null,
-  TotalCost: null,
+  DonationStartDate: new Date(),
+  DonationEndDate: new Date(),
+  TotalCost: 0,
 };
 
 //Term and Condition

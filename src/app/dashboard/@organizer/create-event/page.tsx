@@ -1,7 +1,13 @@
 "use client";
 
 import { StepItem } from "@/components/stepper";
-import { CirclePlus, Info, Landmark, ShieldCheck } from "lucide-react";
+import {
+  CirclePlus,
+  Info,
+  Landmark,
+  ShieldCheck,
+  CircleCheck,
+} from "lucide-react";
 import React from "react";
 
 import { Step, Stepper, useStepper } from "@/components/stepper";
@@ -14,11 +20,11 @@ import AgreeToTermAndCondition from "@/components/forms/create-event/AgreeForm";
 
 const steps: StepItem[] = [
   {
-    label: "1. Event Details",
+    label: "1. Event Info",
     icon: Info,
   },
   {
-    label: "2. More Details",
+    label: "2. More Info",
     icon: CirclePlus,
   },
   {
@@ -78,13 +84,13 @@ export default function page() {
             );
           }
         })}
-        <Footer />
+        <Final />
       </Stepper>
     </div>
   );
 }
 
-const Footer = () => {
+const Final = () => {
   const {
     nextStep,
     prevStep,
@@ -98,10 +104,12 @@ const Footer = () => {
     <>
       {hasCompletedAllSteps && (
         <div className="h-40 flex items-center justify-center my-2 border bg-secondary text-primary rounded-md">
-          <h1 className="text-xl">Woohoo! All steps completed! 🎉</h1>
+          <div className="text-xl text-green-500 flex gap-4 items-center">
+            <CircleCheck className="size-10 mr-2 " /> Successfull create event
+          </div>
         </div>
       )}
-      <div className="w-full flex justify-end gap-2">
+      {/* <div className="w-full flex justify-end gap-2">
         {hasCompletedAllSteps ? (
           <Button size="sm" onClick={resetSteps}>
             Reset
@@ -121,7 +129,7 @@ const Footer = () => {
             </Button>
           </>
         )}
-      </div>
+      </div> */}
     </>
   );
 };

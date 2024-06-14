@@ -1,29 +1,27 @@
 import { axiosClientFormData } from "@/api/axiosClient";
 import { OriganizationStatusEnum, StatusEnum } from "@/enums/statusEnum";
-import { ImageType } from "react-images-uploading";
 
 export interface CreateEventSendData {
-  Name: string;
-  Description: string;
-  ThumbnailUrl: ImageType | null;
-  DonationStartDate: Date | null | undefined;
-  DonationEndDate: Date | null | undefined;
-  EventStartDate: Date;
-  EventEndDate: Date;
-  Note: string;
-  Location: string;
-  UserId: number;
-  EventCategoryId: number;
-  University: string;
-  Status: StatusEnum;
-  OriganizationStatus: OriganizationStatusEnum;
-  IsDonation: boolean;
-  TotalCost: number | null | undefined;
+  name: string;
+  description: string;
+  "thumbnail-url": File | null;
+  "donation-start-date": Date | null | undefined;
+  "donation-end-date": Date | null | undefined;
+  "event-start-date": Date;
+  "event-end-date": Date;
+  note: string;
+  location: string;
+  "user-id": number;
+  "event-category-id": number;
+  university: string;
+  status: StatusEnum;
+  "organization-status": OriganizationStatusEnum;
+  "is-donation": boolean;
+  "total-cost": number | null | undefined;
 }
 
 export const createEvent = async (data: CreateEventSendData) => {
   try {
-    console.log(data);
     const response = await axiosClientFormData.post("/events", data);
     console.log(response.data);
   } catch (error) {

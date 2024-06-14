@@ -5,19 +5,22 @@ import {
   MoreInfoFormDefaultValues,
   DonationFormSchemaType,
   DonationFormDefaultValues,
+  TermAndConditionSchemaType,
+  TermAndConditionDefaultValues,
 } from "@/schemas/createEventSchema";
-import { ImageType } from "react-images-uploading";
 import { create } from "zustand";
 
 interface EventState {
   BasicInfo: BasicInfoSchemaType;
-  Thumbnail: ImageType | null;
+  Thumbnail: File | null;
   MoreInfo: MoreInfoFormSchemaType;
   Donation: DonationFormSchemaType;
-  setImage: (image: ImageType) => void;
+  TermAndCons: TermAndConditionSchemaType;
+  setImage: (image: File | null) => void;
   setEvent: (state: Partial<BasicInfoSchemaType>) => void;
   setMoreInfo: (state: Partial<MoreInfoFormSchemaType>) => void;
   setDonation: (state: Partial<DonationFormSchemaType>) => void;
+  setTermAndCons: (state: Partial<TermAndConditionSchemaType>) => void;
   reset: () => void;
 }
 
@@ -26,10 +29,12 @@ const initialState: EventState = {
   Thumbnail: null,
   MoreInfo: MoreInfoFormDefaultValues,
   Donation: DonationFormDefaultValues,
+  TermAndCons: TermAndConditionDefaultValues,
   setEvent: () => {},
   setImage: () => {},
   setMoreInfo: () => {},
   setDonation: () => {},
+  setTermAndCons: () => {},
   reset: () => {},
 };
 
@@ -52,6 +57,12 @@ export const useCreateEventStore = create<EventState>((set) => ({
     set((prev) => {
       return {
         Donation: { ...prev.Donation, ...state },
+      };
+    }),
+  setTermAndCons: (state) =>
+    set((prev) => {
+      return {
+        TermAndCons: { ...prev.TermAndCons, ...state },
       };
     }),
   reset: () => set(initialState),

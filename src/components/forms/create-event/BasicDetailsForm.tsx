@@ -43,7 +43,10 @@ export default function BasicInfoForm() {
   const { setEvent, BasicInfo } = useCreateEventStore();
   const form = useForm<BasicInfoSchemaType>({
     resolver: zodResolver(BasicInfoSchema),
-    defaultValues: BasicInfoDefaultValues,
+    defaultValues: {
+      ...BasicInfoDefaultValues,
+      ...BasicInfo,
+    },
   });
 
   const { isPending, isError, data } = useQuery({
@@ -110,9 +113,13 @@ export default function BasicInfoForm() {
                     <FormLabel>Start date</FormLabel>
                     <FormControl>
                       <DateTimePicker
-                        jsDate={field.value}
+                        jsDate={
+                          BasicInfo.EventStartDate
+                            ? new Date(BasicInfo.EventStartDate)
+                            : new Date()
+                        }
                         onJsDateChange={field.onChange}
-                        hourCycle={24}
+                        hourCycle={12}
                         granularity="minute"
                       />
                     </FormControl>
@@ -127,9 +134,13 @@ export default function BasicInfoForm() {
                     <FormLabel>End date</FormLabel>
                     <FormControl>
                       <DateTimePicker
-                        jsDate={field.value}
+                        jsDate={
+                          BasicInfo.EventEndDate
+                            ? new Date(BasicInfo.EventEndDate)
+                            : new Date()
+                        }
                         onJsDateChange={field.onChange}
-                        hourCycle={24}
+                        hourCycle={12}
                         granularity="minute"
                       />
                     </FormControl>
@@ -143,7 +154,10 @@ export default function BasicInfoForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
-                  <Select onValueChange={field.onChange}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={BasicInfo.EventCategoryId}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a category for your event" />
