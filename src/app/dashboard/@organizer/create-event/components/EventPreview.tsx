@@ -17,7 +17,7 @@ export default function EventPreview() {
         {Thumbnail ? (
           <div className="relative">
             <Image
-              src={Thumbnail?.dataURL ?? ""}
+              src={URL.createObjectURL(Thumbnail) ?? ""}
               width={500}
               height={280}
               alt=""
