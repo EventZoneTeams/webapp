@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/stores/auth";
 import axios from "axios";
 const baseURL = "https://eventzone.azurewebsites.net/api/v1";
 
@@ -10,7 +11,7 @@ export const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use((config) => {
-  const jwt = localStorage.getItem("jwt");
+  const jwt = useAuthStore.getState().jwt;
   if (jwt) {
     config.headers.Authorization = `Bearer ${jwt}`;
   }
@@ -26,7 +27,7 @@ export const axiosClientFormData = axios.create({
 });
 
 axiosClientFormData.interceptors.request.use((config) => {
-  const jwt = localStorage.getItem("jwt");
+  const jwt = useAuthStore.getState().jwt;
   if (jwt) {
     config.headers.Authorization = `Bearer ${jwt}`;
   }

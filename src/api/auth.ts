@@ -2,7 +2,9 @@ import { axiosClient } from "@/api/axiosClient";
 import { LoginFormType } from "@/schemas/loginFormSchema";
 import { registerFormType } from "@/schemas/registerFromSchema";
 import { User } from "@/types/authuser";
+import { AxiosError } from "axios";
 
+//Types
 interface RegisterSendData {
   email: string;
   password: string;
@@ -17,6 +19,7 @@ export type LoginResponse = {
   jwt: string;
   "jwt-refresh-token": string;
   expired: Date;
+  "user-id": number;
 };
 
 export type RegisterResponse = {
@@ -36,12 +39,23 @@ export type RefreshTokenSendData = {
   "refresh-token": string;
 };
 
+export type RefreshTokenResponse = {
+  status: boolean;
+  message: string;
+  jwt: string;
+  expired: Date;
+  "jwt-refresh-token": string;
+  "user-id": number;
+};
+
+//Functions
 export const login = async (data: LoginFormType) => {
   try {
     const response = await axiosClient.post("/users/login", data);
     return response.data as LoginResponse;
-  } catch (error) {
-    throw new Error(error as string);
+  } catch (error: any) {
+    const errorResponse = error as AxiosError<LoginResponse>;
+    throw new Error(errorResponse.response?.data.message);
   }
 };
 
@@ -66,12 +80,15 @@ export const getMe = async () => {
     const response = await axiosClient.get("/users/me");
     return response.data as GetMeResponse;
   } catch (error) {
-    throw new Error(error as string);
+    const errorResponse = error as AxiosError<GetMeResponse>;
+    throw errorResponse;
   }
 };
 
-export const refreshToken = async () => {
+export const refreshToken = async (data: RefreshTokenSendData) => {
   try {
+    const response = await axiosClient.post("/users/refresh-token", data);
+    return response.data as RefreshTokenResponse;
   } catch (error) {
     throw new Error(error as string);
   }

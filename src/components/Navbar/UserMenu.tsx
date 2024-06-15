@@ -41,14 +41,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useUserStore } from "@/stores/user";
+import { useAuthStore } from "@/stores/auth";
 
 export function UserMenu() {
   const { theme, setTheme } = useTheme();
   const { authUser } = useUserStore();
+  const { reset } = useAuthStore();
 
   const logout = () => {
-    localStorage.removeItem("jwt");
-    localStorage.removeItem("jwtRefreshToken");
+    reset();
     useUserStore.setState({ authUser: null });
   };
 

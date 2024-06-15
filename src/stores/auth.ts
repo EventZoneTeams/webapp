@@ -1,3 +1,4 @@
+import { join } from "path";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -20,11 +21,12 @@ const initialState: AuthStore = {
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
-      jwt: null,
-      jwtRefreshToken: null,
+      ...initialState,
       setJwt: (jwt) => set({ jwt }),
       setJwtRefreshToken: (jwtRefreshToken) => set({ jwtRefreshToken }),
-      reset: () => set(initialState),
+      reset: () => {
+        set({ jwt: null, jwtRefreshToken: null });
+      },
     }),
     {
       name: "auth-storage",
