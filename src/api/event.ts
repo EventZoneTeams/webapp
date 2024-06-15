@@ -1,5 +1,6 @@
-import { axiosClientFormData } from "@/api/axiosClient";
-import { OriganizationStatusEnum, StatusEnum } from "@/enums/statusEnum";
+import { axiosClient, axiosClientFormData } from "@/api/axiosClient";
+import { OrganizationStatusEnum, StatusEnum } from "@/enums/statusEnum";
+import { Event } from "@/types/event";
 import { ImageType } from "react-images-uploading";
 
 export interface CreateEventSendData {
@@ -16,7 +17,7 @@ export interface CreateEventSendData {
   EventCategoryId: number;
   University: string;
   Status: StatusEnum;
-  OriganizationStatus: OriganizationStatusEnum;
+  OrganizationStatus: OrganizationStatusEnum;
   IsDonation: boolean;
   TotalCost: number | null | undefined;
 }
@@ -26,6 +27,21 @@ export const createEvent = async (data: CreateEventSendData) => {
     console.log(data);
     const response = await axiosClientFormData.post("/events", data);
     console.log(response.data);
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
+export interface GetEventResponse {
+  data: Event[];
+  success: boolean;
+  message: string;
+}
+
+export const getEvent = async () => {
+  try {
+    const response = await axiosClient.get("/events");
+    return response.data as GetEventResponse;
   } catch (error) {
     throw new Error(error as string);
   }

@@ -68,7 +68,7 @@ export default function AgreeToTermAndCondition() {
         EventCategoryId: parseInt(BasicInfo.EventCategoryId),
         University: BasicInfo.University,
         Status: "PENDING",
-        OriganizationStatus: "PREPARING",
+        OrganizationStatus: "PREPARING",
         IsDonation: Donation.IsDonation,
         TotalCost: Donation.TotalCost || null,
       };
