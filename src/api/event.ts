@@ -1,5 +1,6 @@
-import { axiosClientFormData } from "@/api/axiosClient";
-import { OriganizationStatusEnum, StatusEnum } from "@/enums/statusEnum";
+
+import { axiosClientFormData, axiosClient } from "@/api/axiosClient";
+import { OrganizationStatusEnum, StatusEnum } from "@/enums/statusEnum";
 
 export interface CreateEventSendData {
   name: string;
@@ -15,7 +16,7 @@ export interface CreateEventSendData {
   "event-category-id": number;
   university: string;
   status: StatusEnum;
-  "organization-status": OriganizationStatusEnum;
+  "organization-status": OrganizationStatusEnum;
   "is-donation": boolean;
   "total-cost": number | null | undefined;
 }
@@ -24,6 +25,21 @@ export const createEvent = async (data: CreateEventSendData) => {
   try {
     const response = await axiosClientFormData.post("/events", data);
     console.log(response.data);
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
+export interface GetEventResponse {
+  data: Event[];
+  success: boolean;
+  message: string;
+}
+
+export const getEvent = async () => {
+  try {
+    const response = await axiosClient.get("/events");
+    return response.data as GetEventResponse;
   } catch (error) {
     throw new Error(error as string);
   }

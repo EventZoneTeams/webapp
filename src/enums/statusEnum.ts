@@ -6,7 +6,7 @@ export type StatusEnum =
   | "DONATING"
   | "SUCCESSFUL";
 
-export type OriganizationStatusEnum =
+export type OrganizationStatusEnum =
   | "PREPARING"
   | "ACCOMPLISHED"
   | "DELAYED"
