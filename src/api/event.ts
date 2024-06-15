@@ -1,5 +1,5 @@
 
-import { axiosClientFormData } from "@/api/axiosClient";
+import { axiosClientFormData, axiosClient } from "@/api/axiosClient";
 import { OrganizationStatusEnum, StatusEnum } from "@/enums/statusEnum";
 
 export interface CreateEventSendData {
