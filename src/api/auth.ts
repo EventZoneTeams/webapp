@@ -8,7 +8,7 @@ import { AxiosError } from "axios";
 interface RegisterSendData {
   email: string;
   password: string;
-  fullName: string;
+  "full-name": string;
   dob: Date;
   gender: string;
 }
@@ -75,7 +75,7 @@ export const register = async (data: registerFormType) => {
   const sendData: RegisterSendData = {
     email: data.email,
     password: data.password,
-    fullName: data.fullName,
+    "full-name": data.fullName,
     dob: data.dob,
     gender: data.gender,
   };

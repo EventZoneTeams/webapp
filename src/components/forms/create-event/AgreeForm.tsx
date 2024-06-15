@@ -82,7 +82,7 @@ export default function AgreeToTermAndCondition() {
         "event-end-date": BasicInfo.EventEndDate,
         note: MoreInfo.Note,
         location: BasicInfo.Location,
-        "user-id": authUser.id,
+        "user-id": authUser.Id,
         "event-category-id": parseInt(BasicInfo.EventCategoryId),
         university: BasicInfo.University,
         status: "PENDING",
