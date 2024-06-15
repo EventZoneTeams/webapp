@@ -30,6 +30,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
         <Sidebar
           sidebarItems={sidebarItems}
           sidebarTitle="Organizer dashboard"
+          parentPath="/dashboard"
         />
         <div className="flex flex-col">
           <div className="h-14 gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6 flex items-center">
