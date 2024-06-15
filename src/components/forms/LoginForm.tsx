@@ -25,11 +25,10 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/stores/auth";
+import { setLocalToken } from "@/stores/auth";
 
 export default function LoginForm() {
   const router = useRouter();
-  const { setJwt, setJwtRefreshToken } = useAuthStore();
 
   const loginFrom = useForm<LoginFormType>({
     resolver: zodResolver(loginFormSchema),
@@ -39,9 +38,7 @@ export default function LoginForm() {
   const loginMutation = useMutation({
     mutationFn: (data: LoginFormType) => login(data),
     onSuccess: (data: LoginResponse) => {
-      console.log(data);
-      setJwt(data.jwt);
-      setJwtRefreshToken(data["jwt-refresh-token"]);
+      setLocalToken(data.jwt, data["jwt-refresh-token"]);
       toast.success("Login successful");
       router.push("/");
     },

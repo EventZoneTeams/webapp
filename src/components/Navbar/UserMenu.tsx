@@ -1,22 +1,6 @@
 "use client";
 
-import {
-  CircleUser,
-  Cloud,
-  CreditCard,
-  Github,
-  Keyboard,
-  LifeBuoy,
-  LogOut,
-  Mail,
-  MessageSquare,
-  Plus,
-  PlusCircle,
-  Settings,
-  User,
-  UserPlus,
-  Users,
-} from "lucide-react";
+import { CreditCard, LifeBuoy, LogOut, Settings, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -41,15 +25,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useUserStore } from "@/stores/user";
-import { useAuthStore } from "@/stores/auth";
+import { removeLocalToken } from "@/stores/auth";
 
 export function UserMenu() {
   const { theme, setTheme } = useTheme();
   const { authUser } = useUserStore();
-  const { reset } = useAuthStore();
 
   const logout = () => {
-    reset();
+    removeLocalToken();
     useUserStore.setState({ authUser: null });
   };
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { getMe, refreshToken, RefreshTokenSendData } from "@/api/auth";
-import { useAuthStore } from "@/stores/auth";
+import { getLocalToken, setLocalToken } from "@/stores/auth";
 import { useUserStore } from "@/stores/user";
 import { User } from "@/types/authuser";
 import { useMutation } from "@tanstack/react-query";
@@ -12,8 +12,8 @@ import { toast } from "react-toastify";
 export default function PrivateProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { jwt, setJwt, setJwtRefreshToken } = useAuthStore();
   const { authUser, setAuthUser } = useUserStore();
+  const jwt = getLocalToken().jwt;
 
   const getMeMutation = useMutation({
     mutationFn: () => getMe(),
@@ -40,8 +40,7 @@ export default function PrivateProvider({ children }: { children: ReactNode }) {
   const refreshTokenMutation = useMutation({
     mutationFn: (data: RefreshTokenSendData) => refreshToken(data),
     onSuccess: (data) => {
-      setJwt(data.jwt);
-      setJwtRefreshToken(data["jwt-refresh-token"]);
+      setLocalToken(data.jwt, data["jwt-refresh-token"]);
     },
     onError: (error) => {
       toast.error(error.message);

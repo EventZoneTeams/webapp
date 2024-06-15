@@ -8,21 +8,24 @@ import React from "react";
 export default function layout({
   organizer,
   admin,
+  manager,
 }: {
   organizer: React.ReactNode;
   admin: React.ReactNode;
+  manager: React.ReactNode;
 }) {
   const { authUser } = useUserStore();
-  console.log();
-
+  console.log(authUser);
   return (
     <PrivateProvider>
       {authUser ? (
-        authUser.RoleName.toUpperCase() === "ADMIN" ? (
-          admin
-        ) : (
-          organizer
-        )
+        <React.Fragment>
+          {authUser.RoleName.toUpperCase() === "ADMIN"
+            ? admin
+            : authUser.RoleName.toUpperCase() === "MANAGER"
+            ? manager
+            : organizer}
+        </React.Fragment>
       ) : (
         <FullpageLoader />
       )}

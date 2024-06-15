@@ -1,7 +1,7 @@
 "use client";
 
 import { getMe } from "@/api/auth";
-import { useAuthStore } from "@/stores/auth";
+import { getLocalToken } from "@/stores/auth";
 import { useUserStore } from "@/stores/user";
 import { User } from "@/types/authuser";
 import { useMutation } from "@tanstack/react-query";
@@ -9,9 +9,9 @@ import { usePathname } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
 export default function PublicProvider({ children }: { children: ReactNode }) {
-  const { jwt, setJwt, setJwtRefreshToken } = useAuthStore();
   const pathName = usePathname();
   const { authUser, setAuthUser } = useUserStore();
+  const jwt = getLocalToken().jwt;
   const getMeMutation = useMutation({
     mutationFn: () => getMe(),
     onSuccess: (data) => {
