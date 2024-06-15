@@ -91,9 +91,7 @@ export const CustomDatePicker = forwardRef<
       if (field) {
         field.onChange(date);
       }
-    }, [date, field]);
-
-    console.log(field?.value);
+    }, [date]);
 
     return (
       <Popover>

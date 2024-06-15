@@ -19,12 +19,18 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 interface Props {
+  parentPath?: string;
   sidebarTitle: string;
   sidebarItems: SidebarItem[];
   isPro?: boolean;
 }
 
-export default function Sidebar({ sidebarItems, sidebarTitle, isPro }: Props) {
+export default function Sidebar({
+  sidebarItems,
+  sidebarTitle,
+  isPro,
+  parentPath,
+}: Props) {
   const pathname = usePathname();
 
   return (
@@ -32,7 +38,7 @@ export default function Sidebar({ sidebarItems, sidebarTitle, isPro }: Props) {
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
           <Link
-            href="/dashboard"
+            href={`${parentPath || ""}`}
             className="flex items-center gap-2 font-semibold"
           >
             <LockKeyhole className="h-6 w-6" />
@@ -49,7 +55,7 @@ export default function Sidebar({ sidebarItems, sidebarTitle, isPro }: Props) {
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
                   {
                     "text-primary bg-muted":
-                      pathname === `/dashboard${item.href}`,
+                      pathname === `${parentPath}${item.href}`,
                   }
                 )}
               >

@@ -1,240 +1,125 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useCreateEventStore } from "@/stores/createEvent";
-import React, { useEffect, useState } from "react";
-import ImageUploading, { ImageListType } from "react-images-uploading";
-import Cropper from "react-easy-crop";
 import { Input } from "@/components/ui/input";
-import getCroppedImg from "@/lib/getCroppedImg";
-import { toast } from "react-toastify";
-import { set } from "date-fns";
-import { useTheme } from "next-themes";
-import Image from "next/image";
+import NextImage from "next/image";
+import React, { useEffect, useRef } from "react";
+import { Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useCreateEventStore } from "@/stores/createEvent";
 
-export function ImageUpload() {
-  const [images, setImages] = useState([]);
-  const maxNumber = 69;
+export default function ImageUpload() {
   const { setImage, Thumbnail } = useCreateEventStore();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [rotation, setRotation] = useState(0);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const { theme } = useTheme();
+  const [file, setFile] = React.useState<File | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const onCropComplete = (croppedArea: any, croppedAreaPixels: any) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  };
-
-  const onChange = (
-    imageList: ImageListType,
-    addUpdateIndex: number[] | undefined
-  ) => {
-    setImages(imageList as never[]);
-    setIsDialogOpen(true);
-  };
-
-  const showCroppedImage = async () => {
-    try {
-      const croppedImage = await getCroppedImg(
-        (images[0] as any)?.dataURL,
-        croppedAreaPixels,
-        rotation
-      );
-      setImage({
-        dataURL: croppedImage as string,
-        file: new File([croppedImage as string], "image.png"),
-      });
-      setImages([]);
-      setIsDialogOpen(false);
-      setZoom(1);
-      setRotation(0);
-      setCrop({ x: 0, y: 0 });
-      setCroppedAreaPixels(null);
-    } catch (e) {
-      console.error(e);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      cropImageToAspect(file);
     }
   };
 
-  return (
-    <div className="h-full ">
-      <ImageUploading
-        multiple={false}
-        value={images}
-        onChange={onChange}
-        maxNumber={maxNumber}
-      >
-        {({ onImageUpload, isDragging, dragProps, errors }) => {
-          // write your building UI
-          useEffect(() => {
-            if (errors) {
-              toast.error("Error uploading image, please try again.");
-            }
-          }, [errors]);
-          return (
-            <div className="upload__image-wrapper h-full w-full ">
-              <div
-                className="w-full aspect-video justify-center items-center flex  cursor-pointer rounded-md border"
-                style={isDragging ? { color: "red" } : undefined}
-                onClick={onImageUpload}
-                {...dragProps}
-              >
-                {Thumbnail ? (
-                  <Image
-                    src={Thumbnail.dataURL || Thumbnail.url}
-                    alt="thumbnail"
-                    objectFit="cover"
-                    className="rounded-md w-full h-full"
-                    width={100}
-                    height={100}
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full w-full">
-                    <p className="text-center">Upload Image</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        }}
-      </ImageUploading>
+  const handleFileRemove = () => {
+    setFile(null);
+    setImage(null);
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  };
 
-      <div
-        className={cn(
-          "absolute top-0 right-0 bottom-0 left-0 bg-black/80 hidden z-50",
-          {
-            "flex items-center justify-center flex-col": isDialogOpen,
-          }
-        )}
-      >
-        <div className="w-1/2 h-1/2 flex flex-col gap-4 ">
-          <div className="relative h-[400px] min-h-[400px]">
-            <Cropper
-              image={(images[0] as any)?.dataURL}
-              crop={crop}
-              zoom={zoom}
-              rotation={rotation}
-              aspect={16 / 9}
-              onCropChange={setCrop}
-              onCropComplete={onCropComplete}
-              onZoomChange={setZoom}
-              onRotationChange={setRotation}
-              style={{
-                containerStyle: {
-                  backgroundColor: theme === "dark" ? "#000" : "#fff",
-                  borderRadius: "8px",
-                  overflow: "hidden",
-                },
-              }}
+  const cropImageToAspect = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = document.createElement("img");
+      img.onload = () => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        const aspectRatio = 16 / 9;
+        let { width, height } = img;
+        let newWidth, newHeight;
+
+        if (width / height > aspectRatio) {
+          // Wider than the desired aspect ratio
+          newHeight = height;
+          newWidth = height * aspectRatio;
+        } else {
+          // Taller than the desired aspect ratio
+          newWidth = width;
+          newHeight = width / aspectRatio;
+        }
+
+        const startX = (width - newWidth) / 2;
+        const startY = (height - newHeight) / 2;
+
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        ctx.drawImage(
+          img,
+          startX,
+          startY,
+          newWidth,
+          newHeight,
+          0,
+          0,
+          newWidth,
+          newHeight
+        );
+
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+
+          const croppedFile = new File([blob], file.name, {
+            type: "image/png",
+          });
+          setImage(croppedFile);
+        }, "image/png");
+      };
+      img.src = event.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div className="w-full space-y-4 ">
+      <Input
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        placeholder="Upload Image"
+        multiple={false}
+        className="hover:cursor-pointer"
+        ref={inputRef}
+      />
+      <div>
+        {Thumbnail ? (
+          <div className="w-full h-full relative group aspect-video">
+            <NextImage
+              src={URL.createObjectURL(Thumbnail)}
+              alt="preview"
+              width={100}
+              height={100}
+              className="w-full h-full object-cover rounded-sm"
             />
-          </div>
-          <div className="bg-background w-full px-6 py-4  rounded-md mx-auto grid grid-cols-2 gap-6">
-            <div className="flex items-center gap-4">
-              <p>Zoom</p>
-              <input
-                type="range"
-                className="w-full flex-1"
-                value={zoom}
-                min={1}
-                max={5}
-                step={0.1}
-                onChange={(e) => {
-                  setZoom(Number(e.target.value));
-                }}
-              />
-              <Input
-                className="w-1/4"
-                type="number"
-                value={zoom}
-                min={1}
-                max={3}
-                step={0.1}
-                onChange={(e) => {
-                  setZoom(Number(e.target.value));
-                }}
-              />
-            </div>
-            <div className="flex items-center gap-4">
-              <p>Rotate</p>
-              <input
-                type="range"
-                className="w-full flex-1"
-                value={rotation}
-                min={0}
-                max={180}
-                step={1}
-                onChange={(e) => {
-                  setRotation(Number(e.target.value));
-                }}
-              />
-              <Input
-                className="w-1/4"
-                type="number"
-                value={rotation}
-                min={0}
-                max={180}
-                step={1}
-                onChange={(e) => {
-                  setRotation(Number(e.target.value));
-                }}
-              />
-            </div>
-            <div className="flex gap-4 items-center">
-              <p>X:</p>
-              <Input
-                className="flex-1"
-                type="number"
-                value={crop.x}
-                onChange={(e) => {
-                  setCrop({ ...crop, x: Number(e.target.value) });
-                }}
-              />
-              <p>Y:</p>
-              <Input
-                className="flex-1"
-                type="number"
-                value={crop.y}
-                onChange={(e) => {
-                  setCrop({ ...crop, y: Number(e.target.value) });
-                }}
-              />
-            </div>
-            <div className="flex items-center justify-end gap-4">
-              <Button
-                type="button"
-                variant={"outline"}
-                onClick={() => {
-                  setZoom(1);
-                  setRotation(0);
-                  setCrop({ x: 0, y: 0 });
-                }}
-              >
-                Reset
-              </Button>
+            <div className="absolute top-0 w-full h-full flex justify-center items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/20 rounded-md">
               <Button
                 variant={"outline"}
-                className="hover:bg-destructive hover:text-destructive-foreground hover:border-destructive"
                 type="button"
-                onClick={() => {
-                  setIsDialogOpen(false);
-                }}
+                onClick={handleFileRemove}
               >
-                Cancel
-              </Button>
-              <Button
-                type="button"
-                onClick={() => {
-                  showCroppedImage();
-                }}
-              >
-                Done
+                <Trash />
               </Button>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="w-full h-full relative group border rounded-md aspect-video flex justify-center items-center">
+            <p className="text-border">16x9</p>
+          </div>
+        )}
       </div>
+      <canvas ref={canvasRef} style={{ display: "none" }} />
     </div>
   );
 }

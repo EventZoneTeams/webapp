@@ -1,9 +1,15 @@
-import React from "react";
-import { Home, Package, Users } from "lucide-react";
-import Sidebar from "@/components/SideBar/Sidebar";
 import { MyBreadcrumb } from "@/components/Breadcrumb";
+import Sidebar from "@/components/SideBar/Sidebar";
 import PrivateProvider from "@/providers/privateProvider";
 import { SidebarItem } from "@/types/sidebar";
+import {
+  Home,
+  Package,
+  SquarePlus,
+  Users,
+  MessageSquareQuote,
+} from "lucide-react";
+import React from "react";
 
 const sidebarItems: SidebarItem[] = [
   {
@@ -12,14 +18,9 @@ const sidebarItems: SidebarItem[] = [
     icon: <Home className="h-4 w-4" />,
   },
   {
-    title: "Users",
-    href: "/users",
-    icon: <Users className="h-4 w-4" />,
-  },
-  {
-    title: "Event Categories",
-    href: "/event-categories",
-    icon: <Package className="h-4 w-4" />,
+    title: "Feedbacks",
+    href: "/feedback",
+    icon: <MessageSquareQuote className="h-4 w-4" />,
   },
 ];
 
@@ -29,12 +30,14 @@ export default function layout({ children }: { children: React.ReactNode }) {
       <div className="grid min-h-[calc(100vh_-_theme(spacing.20))] w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <Sidebar
           sidebarItems={sidebarItems}
-          sidebarTitle="Admin dashboard"
+          sidebarTitle="Manager dashboard"
           parentPath="/dashboard"
         />
         <div className="flex flex-col">
-          <main className="flex flex-col gap-4 p-4 lg:gap-6 lg:p-6 overflow-y-scroll h-[calc(100vh_-_theme(spacing.40))] bg-slate-500">
+          <div className="h-14 gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6 flex items-center">
             <MyBreadcrumb />
+          </div>
+          <main className="flex flex-col gap-4 p-4 lg:gap-6 lg:p-6 overflow-y-scroll h-[calc(100vh_-_theme(spacing.40))]">
             {children}
           </main>
         </div>

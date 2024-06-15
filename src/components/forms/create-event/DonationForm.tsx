@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MoreInfoFormSchemaType,
   MoreInfoFormSchema,
@@ -27,9 +27,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-
-import { ImageUpload } from "@/components/ImageUpload";
 import { useCreateEventStore } from "@/stores/createEvent";
 import { useStepper } from "@/components/stepper";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,11 +40,14 @@ import { DateTimePicker } from "@/components/ui/my-date-input";
 
 export default function DonationForm() {
   const { nextStep, prevStep } = useStepper();
-  const { setDonation } = useCreateEventStore();
+  const { setDonation, Donation } = useCreateEventStore();
 
   const form = useForm<DonationFormSchemaType>({
     resolver: zodResolver(DonationFormSchema),
-    defaultValues: DonationFormDefaultValues,
+    defaultValues: {
+      ...DonationFormDefaultValues,
+      ...Donation,
+    },
   });
 
   const [totalCost, setTotalCost] = useState<number | string>(
@@ -57,18 +57,7 @@ export default function DonationForm() {
   const onSubmit = (data: DonationFormSchemaType) => {
     setDonation(data);
     nextStep();
-    console.log(data);
   };
-
-  const DonationStartDate = useWatch({
-    control: form.control,
-    name: "DonationStartDate",
-  });
-
-  const DonationEndDate = useWatch({
-    control: form.control,
-    name: "DonationEndDate",
-  });
 
   return (
     <Form {...form}>
@@ -110,7 +99,7 @@ export default function DonationForm() {
             <div
               className={cn(
                 "space-y-8 p-4 border rounded-md transition-all duration-300 ease-in-out",
-                form.watch("IsDonation") ? "block" : "hidden"
+                form.getValues("IsDonation") ? "block" : "hidden"
               )}
             >
               <FormField

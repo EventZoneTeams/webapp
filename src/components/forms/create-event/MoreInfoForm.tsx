@@ -1,10 +1,10 @@
-import React from "react";
+import React, { use } from "react";
 import {
   MoreInfoFormSchemaType,
   MoreInfoFormSchema,
   MoreInfoFormDefaultValues,
 } from "@/schemas/createEventSchema";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,7 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -26,7 +25,7 @@ import {
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 
-import { ImageUpload } from "@/components/ImageUpload";
+import ImageUpload from "@/components/ImageUpload";
 import { useCreateEventStore } from "@/stores/createEvent";
 import { useStepper } from "@/components/stepper";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,69 +35,71 @@ import { ArrowLeftToLine, ArrowRightToLine } from "lucide-react";
 
 export default function MoreInfoForm() {
   const { nextStep, prevStep } = useStepper();
-  const { setMoreInfo } = useCreateEventStore();
+  const { setMoreInfo, MoreInfo } = useCreateEventStore();
   const form = useForm<MoreInfoFormSchemaType>({
     resolver: zodResolver(MoreInfoFormSchema),
-    defaultValues: MoreInfoFormDefaultValues,
-  });
-
-  const { isPending, isError, data } = useQuery({
-    queryKey: ["event-categories"],
-    queryFn: getEventCategories,
+    defaultValues: {
+      ...MoreInfoFormDefaultValues,
+      ...MoreInfo,
+    },
   });
 
   const onSubmit = (data: MoreInfoFormSchemaType) => {
-    console.log(data);
     setMoreInfo(data);
     nextStep();
   };
 
-  // const watchFields = useWatch({
-  //   control: form.control,
-  //   name: [
-  //     "Name",
-  //     "EventStartDate",
-  //     "EventEndDate",
-  //     "Location",
-  //     "University",
-  //     "EventCategoryId",
-  //   ],
-  // });
-
-  // useEffect(() => {
-  //   setEvent(form.getValues());
-  // }, [watchFields, setEvent]);
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex justify-center"
       >
-        <Card className="w-[600px]">
+        <Card className="sm:w-[600px] lg:w-2/3">
           <CardHeader>
             <CardTitle>More Infomation</CardTitle>
             <CardDescription>
               Provide more information about your event
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className=" grid md:grid-cols-1 lg:grid-cols-2 gap-4">
             <ImageUpload />
-            <FormField
-              control={form.control}
-              name="Description"
-              render={({ field }) => (
-                <FormItem className="col-span-1">
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="More than 3 characters"
-                      {...field}
-                      required
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="Description"
+                render={({ field }) => (
+                  <FormItem className="col-span-1">
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="More than 3 characters"
+                        {...field}
+                        required
+                        rows={6}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="Note"
+                render={({ field }) => (
+                  <FormItem className="col-span-1">
+                    <FormLabel>Note for manager</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="More than 3 characters"
+                        {...field}
+                        required
+                        rows={6}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
           </CardContent>
           <CardFooter className="gap-4">
             <Button

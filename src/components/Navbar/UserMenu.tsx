@@ -1,22 +1,6 @@
 "use client";
 
-import {
-  CircleUser,
-  Cloud,
-  CreditCard,
-  Github,
-  Keyboard,
-  LifeBuoy,
-  LogOut,
-  Mail,
-  MessageSquare,
-  Plus,
-  PlusCircle,
-  Settings,
-  User,
-  UserPlus,
-  Users,
-} from "lucide-react";
+import { CreditCard, LifeBuoy, LogOut, Settings, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -41,14 +25,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useUserStore } from "@/stores/user";
+import { removeLocalToken } from "@/stores/auth";
 
 export function UserMenu() {
   const { theme, setTheme } = useTheme();
   const { authUser } = useUserStore();
 
   const logout = () => {
-    localStorage.removeItem("jwt");
-    localStorage.removeItem("jwtRefreshToken");
+    removeLocalToken();
     useUserStore.setState({ authUser: null });
   };
 
@@ -59,17 +43,17 @@ export function UserMenu() {
           <DropdownMenuTrigger asChild>
             <div className="rounded-lg flex items-center gap-2  px-3 py-2 pr-4 bg-muted hover:cursor-pointer hover:bg-muted/80">
               <Avatar className="size-10">
-                <AvatarImage src={authUser.image} alt={authUser["full-name"]} />
+                <AvatarImage src={authUser.Image} alt={authUser.FullName} />
                 <AvatarFallback className="bg-tertiary text-white ">
-                  {authUser?.["full-name"]?.charAt(0)}
+                  {authUser?.FullName?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col items-start">
                 <span className="text-sm font-semibold max-w-40 truncate">
-                  {authUser["full-name"]}
+                  {authUser.FullName}
                 </span>
                 <span className="text-xs max-w-40 truncate">
-                  {authUser.email}
+                  {authUser.Email}
                 </span>
               </div>
             </div>
@@ -79,10 +63,10 @@ export function UserMenu() {
               <Badge
                 className={cn({
                   "bg-orange-500 text-orange-50 hover:bg-orange-600 hover:text-orange-100":
-                    authUser["role-name"] === "ADMIN",
+                    authUser.RoleName === "ADMIN",
                 })}
               >
-                {authUser["role-name"]}
+                {authUser.RoleName}
               </Badge>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
