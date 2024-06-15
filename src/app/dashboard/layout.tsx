@@ -13,11 +13,12 @@ export default function layout({
   admin: React.ReactNode;
 }) {
   const { authUser } = useUserStore();
+  console.log();
 
   return (
     <PrivateProvider>
       {authUser ? (
-        authUser["role-name"].toUpperCase() === "ADMIN" ? (
+        authUser.RoleName.toUpperCase() === "ADMIN" ? (
           admin
         ) : (
           organizer
