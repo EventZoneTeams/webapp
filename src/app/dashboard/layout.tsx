@@ -15,16 +15,14 @@ export default function layout({
   manager: React.ReactNode;
 }) {
   const { authUser } = useUserStore();
-  console.log(authUser);
+
   return (
     <PrivateProvider>
       {authUser ? (
         <React.Fragment>
-          {authUser.RoleName.toUpperCase() === "ADMIN"
-            ? admin
-            : authUser.RoleName.toUpperCase() === "MANAGER"
-            ? manager
-            : organizer}
+          {authUser.RoleName.toUpperCase() === "ADMIN" && admin}
+          {authUser.RoleName.toUpperCase() === "STUDENT" && organizer}
+          {authUser.RoleName.toUpperCase() === "MANAGER" && manager}
         </React.Fragment>
       ) : (
         <FullpageLoader />
