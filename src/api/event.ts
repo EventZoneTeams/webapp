@@ -1,5 +1,5 @@
 import { axiosClientFormData } from "@/api/axiosClient";
-import { OriganizationStatusEnum, StatusEnum } from "@/enums/statusEnum";
+import { OrganizationStatusEnum, StatusEnum } from "@/enums/statusEnum";
 
 export interface CreateEventSendData {
   name: string;
@@ -15,7 +15,7 @@ export interface CreateEventSendData {
   "event-category-id": number;
   university: string;
   status: StatusEnum;
-  "organization-status": OriganizationStatusEnum;
+  "organization-status": OrganizationStatusEnum;
   "is-donation": boolean;
   "total-cost": number | null | undefined;
 }
