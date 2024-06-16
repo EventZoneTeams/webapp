@@ -19,3 +19,27 @@ export type Event = {
   IsDonation: boolean;
   TotalCost: number | null | undefined;
 };
+
+export type BackendEvent = {
+  id: number;
+  name: string;
+  description: string | null;
+  "thumbnail-url": string | null;
+  "donation-start-date": string | null;
+  "donation-end-date": string | null;
+  "event-start-date": string;
+  "event-end-date": string;
+  note: string;
+  location: string | null;
+  "user-id": number;
+  "event-category": {
+    id: number;
+    title: string;
+    "image-url": string;
+  };
+  university: string | null;
+  status: string;
+  "origanization-status": string;
+  "is-donation": boolean;
+  "total-cost": number | null;
+};

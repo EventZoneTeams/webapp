@@ -32,15 +32,13 @@ export function MyBreadcrumb() {
           return (
             <React.Fragment key={index}>
               <BreadcrumbItem key={path}>
-                <BreadcrumbLink>
-                  {isLast ? (
-                    <span className="text-primary">
-                      {uppercaseFirstLetter(path)}
-                    </span>
-                  ) : (
-                    <Link href={`/${path}`}>{uppercaseFirstLetter(path)}</Link>
-                  )}
-                </BreadcrumbLink>
+                {isLast ? (
+                  <span className="text-primary">
+                    {uppercaseFirstLetter(path)}
+                  </span>
+                ) : (
+                  <Link href={`/${path}`}>{uppercaseFirstLetter(path)}</Link>
+                )}
               </BreadcrumbItem>
               {!isLast && <BreadcrumbSeparator />}
             </React.Fragment>

@@ -7,10 +7,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Calendar } from "lucide-react";
 
 export default function EventCard() {
-  const { isPending, isError, data } = useQuery({
-    queryKey: ["event-categories"],
-    queryFn: getEvent,
-  });
+  // const { isPending, isError, data } = useQuery({
+  //   queryKey: ["event-categories"],
+  //   queryFn: getEvent,
+  // });
 
   return (
     <Card className="w-[350px] flex border-none bg-transparent shadow-none">

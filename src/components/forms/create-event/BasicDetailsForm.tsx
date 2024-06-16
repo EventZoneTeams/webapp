@@ -164,13 +164,13 @@ export default function BasicInfoForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="space-y-4">
-                      {data?.data?.map((category) => (
+                      {data?.map((category) => (
                         <SelectItem
-                          key={category.id}
-                          value={category.id.toString()}
+                          key={category.Id}
+                          value={category.Id.toString()}
                           className="relative"
                         >
-                          {category.title}
+                          {category.Title}
                         </SelectItem>
                       ))}
                     </SelectContent>

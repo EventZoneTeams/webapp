@@ -1,8 +1,9 @@
 import { axiosClient } from "@/api/axiosClient";
-import { EventCategory } from "@/types/event-categories";
+import { mapBackendEventCatesToEventCates } from "@/lib/event-category";
+import { BackEndEventCategory, EventCategory } from "@/types/event-categories";
 
 export interface GetEventCategoriesResponse {
-  data: EventCategory[];
+  data: BackEndEventCategory[];
   success: boolean;
   message: string;
 }
@@ -10,7 +11,8 @@ export interface GetEventCategoriesResponse {
 export const getEventCategories = async () => {
   try {
     const response = await axiosClient.get("/event-categories");
-    return response.data as GetEventCategoriesResponse;
+    const backendData = response.data as GetEventCategoriesResponse;
+    return mapBackendEventCatesToEventCates(backendData.data);
   } catch (error) {
     throw new Error(error as string);
   }

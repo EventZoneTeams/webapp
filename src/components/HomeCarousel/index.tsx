@@ -21,15 +21,15 @@ export default function HomeCarousel() {
     <div className="flex justify-center">
       <Carousel>
         <CarouselContent className="w-[1000px] h-[400px]">
-          {data?.data?.map((event, index) => (
+          {data?.map((event, index) => (
             <CarouselItem key={index}>
               <div className="p-1">
                 <Card className="flex justify-center items-center">
                   <CardContent className="flex aspect-square items-center justify-center p-0 w-[1000px] h-[400px]">
                     <img
                       className="w-full h-full object-cover"
-                      src={event["image-url"]}
-                      alt={event.title}
+                      src={event.ImageUrl}
+                      alt={event.Title}
                     />
                   </CardContent>
                 </Card>

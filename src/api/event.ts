@@ -1,6 +1,7 @@
-
 import { axiosClientFormData, axiosClient } from "@/api/axiosClient";
 import { OrganizationStatusEnum, StatusEnum } from "@/enums/statusEnum";
+import { mapBackendEventsToEvents } from "@/lib/event";
+import { BackendEvent } from "@/types/event";
 
 export interface CreateEventSendData {
   name: string;
@@ -30,16 +31,40 @@ export const createEvent = async (data: CreateEventSendData) => {
   }
 };
 
-export interface GetEventResponse {
-  data: Event[];
-  success: boolean;
-  message: string;
+//get event
+export interface GetEventSendData {
+  SearchTerm?: string;
+  EventCategoryId?: number;
+  IsDonation?: boolean;
+  DonationStartDate?: Date;
+  DonationEndDate?: Date;
+  EventStartDate?: Date;
+  EventEndDate?: Date;
+  Location?: string;
+  University?: string;
+  Status?: StatusEnum;
+  OrganizationStatus?: OrganizationStatusEnum;
+  PageNumber: number;
+  PageSize: number;
 }
 
-export const getEvent = async () => {
+export const getEvent = async (data: GetEventSendData) => {
   try {
-    const response = await axiosClient.get("/events");
-    return response.data as GetEventResponse;
+    let baseUrl = "/events";
+    const params = new URLSearchParams();
+    Object.keys(data).forEach((key) => {
+      const value = data[key as keyof GetEventSendData];
+      if (value !== null && value !== undefined) {
+        params.append(key, value.toString());
+      }
+    });
+    const queryString = params.toString();
+    if (queryString) {
+      baseUrl = baseUrl.concat(`?${queryString}`);
+    }
+    const response = await axiosClient.get(baseUrl);
+    const backendData = response.data as BackendEvent[];
+    return mapBackendEventsToEvents(backendData);
   } catch (error) {
     throw new Error(error as string);
   }
