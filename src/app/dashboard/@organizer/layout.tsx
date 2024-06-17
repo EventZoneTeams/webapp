@@ -1,5 +1,6 @@
 import { MyBreadcrumb } from "@/components/Breadcrumb";
 import Sidebar from "@/components/SideBar/Sidebar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import PrivateProvider from "@/providers/privateProvider";
 import { SidebarItem } from "@/types/sidebar";
 import { Home, Package, SquarePlus, Users } from "lucide-react";
@@ -36,9 +37,11 @@ export default function layout({ children }: { children: React.ReactNode }) {
           <div className="h-14 gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6 flex items-center">
             <MyBreadcrumb />
           </div>
-          <main className="flex flex-col gap-4 p-4 lg:gap-6 lg:p-6 overflow-y-scroll h-[calc(100vh_-_theme(spacing.40))]">
-            {children}
-          </main>
+          <ScrollArea className="h-[calc(100vh_-_theme(spacing.40))]">
+            <main className="flex flex-col gap-4 p-4 lg:gap-6 lg:p-6 h-full">
+              {children}
+            </main>
+          </ScrollArea>
         </div>
       </div>
     </PrivateProvider>

@@ -6,9 +6,7 @@ export const mapBackendEventToEvent = (backendEvent: BackendEvent): Event => {
     Id: backendEvent.id,
     Name: backendEvent.name,
     Description: backendEvent.description || "",
-    ThumbnailUrl: backendEvent["thumbnail-url"]
-      ? { url: backendEvent["thumbnail-url"] }
-      : null,
+    ThumbnailUrl: backendEvent["thumbnail-url"],
     DonationStartDate: backendEvent["donation-start-date"]
       ? new Date(backendEvent["donation-start-date"])
       : null,

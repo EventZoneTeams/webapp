@@ -2,9 +2,9 @@ import { GetEventSendData } from "@/api/event";
 import EventList from "@/components/EventList";
 import React from "react";
 
-export default function PendingEvents() {
+export default function IsFeedbackEvents() {
   const queryObj: GetEventSendData = {
-    Status: "PENDING",
+    Status: "ISFEEDBACK",
     PageSize: 10,
     PageNumber: 1,
   };

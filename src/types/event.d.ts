@@ -4,7 +4,7 @@ export type Event = {
   Id: number;
   Name: string;
   Description: string;
-  ThumbnailUrl: ImageType | null;
+  ThumbnailUrl: string | null;
   DonationStartDate: Date | null | undefined;
   DonationEndDate: Date | null | undefined;
   EventStartDate: Date;

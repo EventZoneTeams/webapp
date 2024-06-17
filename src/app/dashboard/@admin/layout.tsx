@@ -4,6 +4,7 @@ import Sidebar from "@/components/SideBar/Sidebar";
 import { MyBreadcrumb } from "@/components/Breadcrumb";
 import PrivateProvider from "@/providers/privateProvider";
 import { SidebarItem } from "@/types/sidebar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const sidebarItems: SidebarItem[] = [
   {
@@ -33,10 +34,11 @@ export default function layout({ children }: { children: React.ReactNode }) {
           parentPath="/dashboard"
         />
         <div className="flex flex-col">
-          <main className="flex flex-col gap-4 p-4 lg:gap-6 lg:p-6 overflow-y-scroll h-[calc(100vh_-_theme(spacing.40))] bg-slate-500">
-            <MyBreadcrumb />
-            {children}
-          </main>
+          <ScrollArea className="h-[calc(100vh_-_theme(spacing.40))]">
+            <main className="flex flex-col gap-4 p-4 lg:gap-6 lg:p-6 h-full">
+              {children}
+            </main>
+          </ScrollArea>
         </div>
       </div>
     </PrivateProvider>
