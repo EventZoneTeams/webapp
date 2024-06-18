@@ -31,6 +31,7 @@ export const mapBackendEventToEvent = (backendEvent: BackendEvent): Event => {
     OrganizationStatus: backendEvent[
       "origanization-status"
     ] as OrganizationStatusEnum,
+    CreatedAt: new Date(backendEvent["created-at"]),
     IsDonation: backendEvent["is-donation"],
     TotalCost: backendEvent["total-cost"],
   };

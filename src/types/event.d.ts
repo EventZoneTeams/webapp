@@ -18,6 +18,7 @@ export type Event = {
   University: string;
   Status: StatusEnum;
   OrganizationStatus: OrganizationStatusEnum;
+  CreatedAt: Date;
   IsDonation: boolean;
   TotalCost: number | null | undefined;
 };
@@ -43,6 +44,7 @@ export type BackendEvent = {
   university: string | null;
   status: string;
   "origanization-status": string;
+  "created-at": Date;
   "is-donation": boolean;
   "total-cost": number | null;
 };

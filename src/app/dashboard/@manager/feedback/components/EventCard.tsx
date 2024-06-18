@@ -10,7 +10,7 @@ import {
 import { isValidImageUrl } from "@/lib/image";
 
 import { Event } from "@/types/event";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
