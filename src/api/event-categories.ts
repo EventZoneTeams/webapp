@@ -10,9 +10,10 @@ export interface GetEventCategoriesResponse {
 
 export const getEventCategories = async () => {
   try {
-    const response = await axiosClient.get("/event-categories");
-    const backendData = response.data as GetEventCategoriesResponse;
-    return mapBackendEventCatesToEventCates(backendData.data);
+    const response = (
+      await axiosClient.get<GetEventCategoriesResponse>("/event-categories")
+    ).data;
+    return mapBackendEventCatesToEventCates(response.data);
   } catch (error) {
     throw new Error(error as string);
   }

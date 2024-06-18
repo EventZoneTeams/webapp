@@ -1,17 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { MessageSquareMore, MessageSquareText } from "lucide-react";
 import PendingEvents from "@/app/dashboard/@manager/feedback/components/PendingEvents";
 import FilterBar from "@/app/dashboard/@manager/feedback/components/FilterBar";
 import IsFeedbackEvents from "@/app/dashboard/@manager/feedback/components/IsFeedbackEvents";
+import CurrentEvent from "@/app/dashboard/@manager/feedback/components/CurrentEvent";
+import { useMutation } from "@tanstack/react-query";
+import { getEventById } from "@/api/event";
+import { useCurrentEvent } from "@/stores/manager/current-event";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type tabs = "pending" | "isFeedback";
 
@@ -19,18 +19,35 @@ export default function page() {
   const searchParams = useSearchParams();
   const tabsEnum = ["pending", "isFeedback"];
   const tab = searchParams.get("tab");
+  const eventId = searchParams.get("event");
   const pathName = usePathname();
   const { replace } = useRouter();
+  const { setCurrentEvent, reset } = useCurrentEvent();
 
   const handleTabChange = (tab: tabs) => {
-    const params = new URLSearchParams({
-      tab,
-    });
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", tab);
     replace(`${pathName}?${params.toString()}`);
   };
 
+  const getEventByIdMutation = useMutation({
+    mutationFn: (eventId: number) => getEventById(eventId),
+    onSuccess: (data) => {
+      setCurrentEvent(data.data);
+    },
+    onError: (error) => {
+      reset();
+    },
+  });
+
+  useEffect(() => {
+    if (eventId) {
+      getEventByIdMutation.mutate(parseInt(eventId));
+    }
+  }, [eventId]);
+
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 gap-4">
       <div>
         <Tabs
           defaultValue={
@@ -69,14 +86,17 @@ export default function page() {
           </div>
 
           <TabsContent value="pending" className="w-full">
-            <PendingEvents />
+            <ScrollArea className="h-[calc(100vh_-_theme(spacing.64))] border-b-2">
+              <PendingEvents />
+            </ScrollArea>
           </TabsContent>
           <TabsContent value="isFeedback" className="w-full">
-            <IsFeedbackEvents />
+            <ScrollArea className="h-[calc(100vh_-_theme(spacing.64))] border-b-2">
+              <IsFeedbackEvents />
+            </ScrollArea>
           </TabsContent>
         </Tabs>
       </div>
-      <div>Hi</div>
     </div>
   );
 }

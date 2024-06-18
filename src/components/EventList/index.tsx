@@ -3,6 +3,8 @@ import { getEvent, GetEventSendData } from "@/api/event";
 import { useMutation } from "@tanstack/react-query";
 import EventCard from "@/app/dashboard/@manager/feedback/components/EventCard";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import NoEventFound from "@/app/dashboard/@manager/feedback/components/NoEventFound";
+import EventsLoading from "@/app/dashboard/@manager/feedback/components/EventsLoading";
 
 export default function EventList({
   queryData,
@@ -11,12 +13,6 @@ export default function EventList({
 }) {
   const eventsMuation = useMutation({
     mutationFn: (queryData: GetEventSendData) => getEvent(queryData),
-    onSuccess: (data) => {
-      console.log(data);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
   });
 
   useEffect(() => {
@@ -25,19 +21,15 @@ export default function EventList({
   return (
     <div className="w-full">
       {eventsMuation.isPending ? (
-        <div>Loading...</div>
+        <EventsLoading />
+      ) : eventsMuation.data?.Data.length === 0 ? (
+        <NoEventFound />
       ) : (
-        <ScrollArea className="h-[calc(100vh_-_theme(spacing.64))]">
-          {eventsMuation.data?.length === 0 ? (
-            <div>No events found</div>
-          ) : (
-            <div className="flex flex-col gap-4 w-full">
-              {eventsMuation.data?.map((event, index) => (
-                <EventCard key={index} event={event} />
-              ))}
-            </div>
-          )}
-        </ScrollArea>
+        <div className="flex flex-col gap-4 w-full">
+          {eventsMuation.data?.Data.map((event, index) => (
+            <EventCard key={index} event={event} />
+          ))}
+        </div>
       )}
     </div>
   );

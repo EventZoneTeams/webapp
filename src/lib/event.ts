@@ -1,4 +1,6 @@
 import { OrganizationStatusEnum, StatusEnum } from "@/enums/statusEnum";
+import { mapBackendUserToUser } from "@/lib/user";
+import { BackendUser } from "@/types/authuser";
 import { BackendEvent, Event } from "@/types/event";
 
 export const mapBackendEventToEvent = (backendEvent: BackendEvent): Event => {
@@ -18,6 +20,7 @@ export const mapBackendEventToEvent = (backendEvent: BackendEvent): Event => {
     Note: backendEvent.note,
     Location: backendEvent.location || "",
     UserId: backendEvent["user-id"],
+    User: mapBackendUserToUser(backendEvent.user ?? ({} as BackendUser)),
     EventCategory: {
       Id: backendEvent["event-category"].id,
       Title: backendEvent["event-category"].title,

@@ -1,3 +1,4 @@
+import { BackendUser, User } from "@/types/authuser";
 import { EventCategory } from "@/types/event-categories";
 
 export type Event = {
@@ -12,6 +13,7 @@ export type Event = {
   Note: string;
   Location: string;
   UserId: number;
+  User: User | null;
   EventCategory: EventCategory;
   University: string;
   Status: StatusEnum;
@@ -32,6 +34,7 @@ export type BackendEvent = {
   note: string;
   location: string | null;
   "user-id": number;
+  user: BackendUser | null;
   "event-category": {
     id: number;
     title: string;

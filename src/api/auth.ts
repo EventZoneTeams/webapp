@@ -63,8 +63,10 @@ export type RefreshTokenResponse = {
 //Functions
 export const login = async (data: LoginFormType) => {
   try {
-    const response = await axiosClient.post("/users/login", data);
-    return response.data as LoginResponse;
+    const response = (
+      await axiosClient.post<LoginResponse>("/users/login", data)
+    ).data;
+    return response;
   } catch (error: any) {
     const errorResponse = error as AxiosError<LoginResponse>;
     throw new Error(errorResponse.response?.data.message);
@@ -80,8 +82,10 @@ export const register = async (data: registerFormType) => {
     gender: data.gender,
   };
   try {
-    const response = await axiosClient.post("/users/register", sendData);
-    return response.data as RegisterResponse;
+    const response = (
+      await axiosClient.post<RegisterResponse>("/users/register", sendData)
+    ).data;
+    return response;
   } catch (error) {
     throw new Error(error as string);
   }
@@ -89,8 +93,8 @@ export const register = async (data: registerFormType) => {
 
 export const getMe = async () => {
   try {
-    const response = await axiosClient.get("/users/me");
-    return response.data as GetMeResponse;
+    const response = (await axiosClient.get<GetMeResponse>("/users/me")).data;
+    return response;
   } catch (error) {
     const errorResponse = error as AxiosError<GetMeResponse>;
     throw errorResponse;
@@ -99,8 +103,10 @@ export const getMe = async () => {
 
 export const refreshToken = async (data: RefreshTokenSendData) => {
   try {
-    const response = await axiosClient.post("/users/refresh-token", data);
-    return response.data as RefreshTokenResponse;
+    const response = (
+      await axiosClient.post<RefreshTokenResponse>("/users/refresh-token", data)
+    ).data;
+    return response;
   } catch (error) {
     throw new Error(error as string);
   }
