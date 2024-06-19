@@ -6,7 +6,7 @@ import React from "react";
 export default function FilterBar() {
   return (
     <div className="flex gap-2 items-center">
-      <Input placeholder="Search..." />
+      <Input placeholder="Search..." className="w-[250px]" />
       <Button variant={"outline"} className="flex items-center gap-2">
         <Filter size={18} />
         Filter

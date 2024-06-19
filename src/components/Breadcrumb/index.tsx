@@ -16,7 +16,6 @@ import { usePathname } from "next/navigation";
 export function MyBreadcrumb() {
   const pathname = usePathname();
   const splitPath = pathname.split("/").filter((path) => path !== "");
-
   const uppercaseFirstLetter = (path: string) => {
     if (path.includes("-")) {
       path = path.replace(/-/g, " ");
@@ -29,6 +28,7 @@ export function MyBreadcrumb() {
       <BreadcrumbList>
         {splitPath.map((path, index) => {
           const isLast = index === splitPath.length - 1;
+          const url = `/${splitPath.slice(0, index + 1).join("/")}`;
           return (
             <React.Fragment key={index}>
               <BreadcrumbItem key={path}>
@@ -37,7 +37,7 @@ export function MyBreadcrumb() {
                     {uppercaseFirstLetter(path)}
                   </span>
                 ) : (
-                  <Link href={`/${path}`}>{uppercaseFirstLetter(path)}</Link>
+                  <Link href={url}>{uppercaseFirstLetter(path)}</Link>
                 )}
               </BreadcrumbItem>
               {!isLast && <BreadcrumbSeparator />}

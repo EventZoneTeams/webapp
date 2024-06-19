@@ -47,7 +47,7 @@ export default function EventCard({ event }: { event: Event }) {
           </div>
         )}
       </div>
-      <CardContent className=" w-full flex gap-4 pt-2">
+      <CardContent className=" w-full flex gap-4 pt-4">
         <div className="">
           <Avatar className="size-10">
             <AvatarImage src={event.User?.Image} alt={event.User?.FullName} />
@@ -62,9 +62,10 @@ export default function EventCard({ event }: { event: Event }) {
             {event.Name}
           </p>
           <div className="mt-2 flex gap-2">
-            <Badge>{event.EventCategory.Title}</Badge>
+            <Badge className="line-clamp-1">{event.EventCategory.Title}</Badge>
             <Badge
               className={cn(
+                "line-clamp-1",
                 event.IsDonation
                   ? "bg-green-200 text-green-700"
                   : "bg-red-200 text-red-700"
@@ -75,7 +76,7 @@ export default function EventCard({ event }: { event: Event }) {
           </div>
           <div className="flex items-center justify-between gap-2 mt-2">
             <div className="flex items-center text-sm">
-              <Calendar size={15} className="mr-2 text-sm" />
+              <Calendar size={15} className="mr-2 text-sm " />
               {formatDistanceToNow(event.CreatedAt, {
                 includeSeconds: true,
               })}{" "}

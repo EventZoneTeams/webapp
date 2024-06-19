@@ -33,8 +33,8 @@ export interface GetEventSendData {
   "event-end-date"?: Date;
   status?: StatusEnum;
   "origanization-status-enums"?: OrganizationStatusEnum;
-  "page-number": number;
-  "page-size": number;
+  "page-number"?: number;
+  "page-size"?: number;
 }
 
 export interface GetEventsResponse {
@@ -43,7 +43,7 @@ export interface GetEventsResponse {
   "current-page": number;
   "page-size": number;
   "total-count": number;
-  "total-page": number;
+  "total-pages": number;
   message: string;
 }
 
@@ -84,7 +84,7 @@ export const getEvent = async (data: GetEventSendData) => {
       CurrentPage: response["current-page"],
       PageSize: response["page-size"],
       TotalCount: response["total-count"],
-      TotalPage: response["total-page"],
+      TotalPages: response["total-pages"],
       Message: response.message,
     };
   } catch (error) {
