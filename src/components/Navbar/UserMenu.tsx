@@ -2,6 +2,8 @@
 
 import { CreditCard, LifeBuoy, LogOut, Settings, User } from "lucide-react";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,23 +11,16 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
+import { removeLocalToken } from "@/stores/auth";
+import { useUserStore } from "@/stores/user";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import { useUserStore } from "@/stores/user";
-import { removeLocalToken } from "@/stores/auth";
 
 export function UserMenu() {
   const { theme, setTheme } = useTheme();
@@ -58,7 +53,7 @@ export function UserMenu() {
               </div>
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-96 mr-6">
+          <DropdownMenuContent className="w-96 mr-6 shadow-2xl">
             <DropdownMenuLabel className="text-orange-500">
               <Badge
                 className={cn({

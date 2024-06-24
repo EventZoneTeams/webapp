@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import NavMenu from "@/components/Navbar/NavMenu";
 import { UserMenu } from "@/components/Navbar/UserMenu";
+import NotificationMenu from "@/components/Navbar/NotificationMenu";
 
 export default function Navbar() {
   return (
@@ -22,7 +23,10 @@ export default function Navbar() {
         <NavMenu />
       </div>
 
-      <UserMenu />
+      <div className="flex items-center gap-4">
+        <NotificationMenu />
+        <UserMenu />
+      </div>
     </header>
   );
 }

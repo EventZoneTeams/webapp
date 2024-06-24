@@ -1,52 +1,16 @@
-"use client";
-
-import { getEvent } from "@/api/event";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
 import { Calendar } from "lucide-react";
 import { Event } from "@/types/event";
-import { useEffect, useState } from "react";
-import { isValidImageUrl } from "@/lib/image";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import EventImage from "@/components/EventImage";
 
 export default function EventCard({ event }: { event: Event }) {
-  const [isValidImage, setIsValidImage] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (event.ThumbnailUrl) {
-      isValidImageUrl(event.ThumbnailUrl).then((res) => {
-        setIsValidImage(res as boolean);
-      });
-    }
-  }, [event.ThumbnailUrl]);
-
   return (
     <Card className="w-full bg-transparent hover:ring hover:cursor-pointer">
-      <div className="aspect-video h-full">
-        {event.ThumbnailUrl ? (
-          isValidImage ? (
-            <Image
-              src={event.ThumbnailUrl ?? ""}
-              alt={event.Name}
-              width={500}
-              height={500}
-              className="w-full h-full rounded-t-md"
-            />
-          ) : (
-            <div className="w-full h-full bg-secondary rounded-md flex items-center justify-center">
-              <p>Invalid Image</p>
-            </div>
-          )
-        ) : (
-          <div className="w-full h-full bg-secondary rounded-md flex items-center justify-center">
-            <p>No Image</p>
-          </div>
-        )}
-      </div>
+      <EventImage src={event.ThumbnailUrl ?? ""} />
       <CardContent className=" w-full flex gap-4 pt-4">
         <div className="">
           <Avatar className="size-10">

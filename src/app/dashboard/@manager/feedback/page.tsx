@@ -7,7 +7,6 @@ import { MessageSquareMore, MessageSquareText } from "lucide-react";
 import FilterBar from "@/app/dashboard/@manager/feedback/components/FilterBar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Paging from "@/app/dashboard/@manager/feedback/components/Paging";
-import { GetEventSendData } from "@/api/event";
 import EventList from "@/app/dashboard/@manager/feedback/components/EventList";
 import { useFilterAndPaging } from "@/stores/manager/filter-paging";
 
@@ -23,7 +22,7 @@ export default function page() {
   const { replace } = useRouter();
 
   const handleTabChange = (tab: tabs) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams();
     params.set("tab", tab);
     replace(`${pathName}?${params.toString()}`);
   };
