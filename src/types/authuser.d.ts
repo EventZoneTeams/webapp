@@ -9,7 +9,7 @@ export type User = {
   University: string;
   IsDeleted: boolean;
   RoleName: string;
-  Role: string;
+  Role?: string;
 };
 
 export type BackendUser = {
