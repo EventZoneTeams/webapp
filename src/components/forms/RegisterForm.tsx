@@ -23,13 +23,13 @@ import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
 import { register, RegisterResponse } from "@/api/auth";
 import { AxiosError } from "axios";
-import { toast } from "react-toastify";
 import {
   registerFormDefaultValues,
   registerFormSchema,
   registerFormType,
 } from "@/schemas/registerFromSchema";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function RegisterForm() {
   const router = useRouter();

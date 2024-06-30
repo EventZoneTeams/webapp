@@ -23,9 +23,9 @@ import PasswordInput from "@/components/ui/password-input";
 import { getMe, login, LoginResponse } from "@/api/auth";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { setLocalToken } from "@/stores/auth";
+import { toast } from "sonner";
 
 export default function LoginForm() {
   const router = useRouter();

@@ -1,7 +1,7 @@
 import { MyBreadcrumb } from "@/components/Breadcrumb";
 import Sidebar from "@/components/SideBar/Sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import PrivateProvider from "@/providers/privateProvider";
+import PrivateProvider from "@/providers/PrivateProvider";
 import { SidebarItem } from "@/types/sidebar";
 import {
   Home,

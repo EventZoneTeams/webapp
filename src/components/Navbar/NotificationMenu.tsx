@@ -15,9 +15,9 @@ import { Button } from "@/components/ui/button";
 import { Notification } from "@/types/notification";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import * as signalR from "@microsoft/signalr";
-import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "sonner";
 
 const ExampleNotifications: Notification[] = [
   {
@@ -64,7 +64,6 @@ const ExampleNotifications: Notification[] = [
 
 export default function NotificationMenu() {
   useEffect(() => {
-    console.log("Connecting to SignalR");
     const connection = new signalR.HubConnectionBuilder()
       .configureLogging(signalR.LogLevel.Debug)
       .withUrl("https://eventzone.azurewebsites.net/notification-hub", {
@@ -102,11 +101,8 @@ export default function NotificationMenu() {
           <DropdownMenuSeparator />
           <ScrollArea className="h-96">
             <div className="space-y-4">
-              {ExampleNotifications.map((notification) => (
-                <NotificationItem
-                  key={notification.Title}
-                  notification={notification}
-                />
+              {ExampleNotifications.map((notification, index) => (
+                <NotificationItem key={index} notification={notification} />
               ))}
             </div>
           </ScrollArea>

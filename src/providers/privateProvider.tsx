@@ -7,7 +7,7 @@ import { User } from "@/types/authuser";
 import { useMutation } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 export default function PrivateProvider({ children }: { children: ReactNode }) {
   const router = useRouter();

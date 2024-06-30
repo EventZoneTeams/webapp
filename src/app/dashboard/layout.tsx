@@ -1,7 +1,7 @@
 "use client";
 
 import FullpageLoader from "@/components/Loading/fullpage-loader";
-import PrivateProvider from "@/providers/privateProvider";
+import PrivateProvider from "@/providers/PrivateProvider";
 import { useUserStore } from "@/stores/user";
 import React from "react";
 

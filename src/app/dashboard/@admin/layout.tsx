@@ -2,7 +2,7 @@ import React from "react";
 import { Home, Package, Users } from "lucide-react";
 import Sidebar from "@/components/SideBar/Sidebar";
 import { MyBreadcrumb } from "@/components/Breadcrumb";
-import PrivateProvider from "@/providers/privateProvider";
+import PrivateProvider from "@/providers/PrivateProvider";
 import { SidebarItem } from "@/types/sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 

@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { ThemeProvider } from "@/providers/themeProvider";
 import Navbar from "@/components/Navbar";
 import ReactQueryProvider from "@/providers/reactQueryProvider";
+import { ThemeProvider } from "@/providers/themeProvider";
 import ToastProvider from "@/providers/toastProvider";
 import PublicProvider from "@/providers/publicProvider";
 
