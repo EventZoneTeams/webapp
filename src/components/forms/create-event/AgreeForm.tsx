@@ -32,6 +32,7 @@ import { createEvent, CreateEventSendData } from "@/api/event";
 import { useUserStore } from "@/stores/user";
 import { useMutation } from "@tanstack/react-query";
 import { Spinner } from "@/components/Loading/spinner";
+import useEvent from "@/hooks/useEvent";
 
 export default function AgreeToTermAndCondition() {
   const { nextStep, prevStep, hasCompletedAllSteps } = useStepper();
@@ -45,24 +46,13 @@ export default function AgreeToTermAndCondition() {
     reset,
   } = useCreateEventStore();
   const { authUser } = useUserStore();
+  const { createEventMutation } = useEvent();
 
   const form = useForm<TermAndConditionSchemaType>({
     resolver: zodResolver(TermAndConditionSchema),
     defaultValues: {
       ...TermAndConditionDefaultValues,
       ...TermAndCons,
-    },
-  });
-
-  const createEventMutation = useMutation({
-    mutationFn: (data: CreateEventSendData) => createEvent(data),
-    onSuccess: () => {
-      console.log("Event created successfully");
-      reset();
-      nextStep();
-    },
-    onError: (error) => {
-      console.log(error);
     },
   });
 
@@ -92,6 +82,7 @@ export default function AgreeToTermAndCondition() {
       };
       console.log(sendData);
       createEventMutation.mutate(sendData);
+      createEventMutation.isSuccess && nextStep();
     }
   };
 

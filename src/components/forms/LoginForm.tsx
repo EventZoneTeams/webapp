@@ -1,18 +1,9 @@
 "use client";
 
-import React from "react";
-import {
-  loginFormDefaultValues,
-  loginFormSchema,
-  LoginFormType,
-} from "@/schemas/loginFormSchema";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,31 +11,21 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/ui/password-input";
-import { getMe, login, LoginResponse } from "@/api/auth";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
-import { setLocalToken } from "@/stores/auth";
-import { toast } from "sonner";
+import useAuth from "@/hooks/useAuth";
+import {
+  loginFormDefaultValues,
+  loginFormSchema,
+  LoginFormType,
+} from "@/schemas/loginFormSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 export default function LoginForm() {
-  const router = useRouter();
+  const { loginMutation } = useAuth();
 
   const loginFrom = useForm<LoginFormType>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: loginFormDefaultValues,
-  });
-
-  const loginMutation = useMutation({
-    mutationFn: (data: LoginFormType) => login(data),
-    onSuccess: (data: LoginResponse) => {
-      setLocalToken(data.jwt, data["jwt-refresh-token"]);
-      toast.success("Login successful");
-      router.push("/");
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
   });
 
   const onSubmit = async (data: LoginFormType) => {

@@ -12,8 +12,8 @@ import { Badge } from "@/components/ui/badge";
 
 export default function EventsLoading() {
   return (
-    <ScrollArea className="h-[calc(100vh_-_theme(spacing.64))] border-b-2">
-      <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full p-10">
+    <ScrollArea className="h-[calc(100vh_-_theme(spacing.28))] border-b-2">
+      <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full p-4">
         {Array.from({ length: 8 }).map((_, i) => (
           <EventLoading key={i} />
         ))}

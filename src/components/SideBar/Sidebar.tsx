@@ -17,6 +17,8 @@ import { LockKeyhole } from "lucide-react";
 import { SidebarItem } from "@/types/sidebar";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import useAuth from "@/hooks/useAuth";
+import Image from "next/image";
 
 interface Props {
   parentPath?: string;
@@ -32,11 +34,12 @@ export default function Sidebar({
   parentPath,
 }: Props) {
   const pathname = usePathname();
+  const { authUser } = useAuth();
 
   return (
     <div className="hidden border-r bg-background md:block">
       <div className="flex h-full max-h-screen flex-col gap-2">
-        <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+        <div className="flex h-14 items-center border-b px-4 lg:px-6">
           <Link
             href={`${parentPath || ""}`}
             className="flex items-center gap-2 font-semibold"
@@ -81,6 +84,13 @@ export default function Sidebar({
                 </Button>
               </CardContent>
             </Card>
+          </div>
+        )}
+        {authUser && (
+          <div>
+            <div className="text-red-500">
+              <Image src={authUser.Image} alt="user" width={50} height={50} />
+            </div>
           </div>
         )}
       </div>

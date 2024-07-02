@@ -1,7 +1,6 @@
 export type StatusEnum =
   | "PENDING"
   | "REJECTED"
-  | "ISFEEDBACK"
   | "APPROVED"
   | "DONATING"
   | "SUCCESSFUL";

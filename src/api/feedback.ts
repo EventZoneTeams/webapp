@@ -1,5 +1,6 @@
 import { axiosClient } from "@/api/axiosClient";
 import { mapBackendFeedBacksToFeedBacks } from "@/lib/feedback";
+import { FeedbackSchemaType } from "@/schemas/feedbackSchema";
 import { BackendFeedBack } from "@/types/feedback";
 
 //type
@@ -22,13 +23,19 @@ export const getEventFeedBack = async (eventId: number) => {
   }
 };
 
-export const addEventFeedBack = async (evenId: number, content: string) => {
+export const addEventFeedBack = async (
+  eventId: number,
+  data: FeedbackSchemaType
+) => {
   try {
     const response = (
-      await axiosClient.post<AddEventFeedBackResponse>("/event-feedbacks", {
-        "event-id": evenId,
-        content,
-      })
+      await axiosClient.post<AddEventFeedBackResponse>(
+        `/event-feedbacks?feedbackOption=${data.status}`,
+        {
+          "event-id": eventId,
+          content: data.content,
+        }
+      )
     ).data;
     return response;
   } catch (error) {

@@ -27,14 +27,14 @@ const sidebarItems: SidebarItem[] = [
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <PrivateProvider>
-      <div className="grid min-h-[calc(100vh_-_theme(spacing.20))] w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <Sidebar
           sidebarItems={sidebarItems}
           sidebarTitle="Admin dashboard"
           parentPath="/dashboard"
         />
         <div className="flex flex-col">
-          <ScrollArea className="h-[calc(100vh_-_theme(spacing.40))]">
+          <ScrollArea className="h-[calc(100vh_-_theme(spacing.14))]">
             <main className="flex flex-col gap-4 p-4 lg:gap-6 lg:p-6 h-full">
               {children}
             </main>

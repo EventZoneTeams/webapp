@@ -1,20 +1,15 @@
-import React, { useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useFilterAndPaging } from "@/stores/manager/filter-paging";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import useEvent from "@/hooks/useEvent";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Paging() {
-  const { setQueryObj, queryObj, metaData } = useFilterAndPaging();
+  const { metaData } = useEvent();
   const searchParams = useSearchParams();
   const pageNumberParam = searchParams.get("page-number");
   const { replace } = useRouter();

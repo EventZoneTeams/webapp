@@ -1,10 +1,8 @@
 "use client";
 
-import React from "react";
-
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { CustomDatePicker } from "@/components/ui/custom-date-picker";
 import {
   Form,
   FormControl,
@@ -16,39 +14,25 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/ui/password-input";
-import { CustomDatePicker } from "@/components/ui/custom-date-picker";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
-import { useMutation } from "@tanstack/react-query";
-import { register, RegisterResponse } from "@/api/auth";
-import { AxiosError } from "axios";
+import useAuth from "@/hooks/useAuth";
 import {
   registerFormDefaultValues,
   registerFormSchema,
   registerFormType,
 } from "@/schemas/registerFromSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { useForm } from "react-hook-form";
 
 export default function RegisterForm() {
   const router = useRouter();
+  const { registerMutation } = useAuth();
 
   const registerForm = useForm<registerFormType>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: registerFormDefaultValues,
-  });
-
-  const registerMutation = useMutation({
-    mutationFn: (data: registerFormType) => register(data),
-    onSuccess: (data: RegisterResponse) => {
-      console.log(data);
-      toast.success("Register successfully, please login to continue");
-      router.push("/login");
-    },
-    onError: (error: AxiosError<RegisterResponse>) => {
-      toast.error(error.response?.data.message);
-    },
   });
 
   const onSubmit = (data: registerFormType) => {

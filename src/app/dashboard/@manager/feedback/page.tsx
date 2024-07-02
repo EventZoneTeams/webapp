@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { MessageSquareMore, MessageSquareText } from "lucide-react";
@@ -8,14 +8,14 @@ import FilterBar from "@/app/dashboard/@manager/feedback/components/FilterBar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Paging from "@/app/dashboard/@manager/feedback/components/Paging";
 import EventList from "@/app/dashboard/@manager/feedback/components/EventList";
-import { useFilterAndPaging } from "@/stores/manager/filter-paging";
+import useEvent from "@/hooks/useEvent";
 
-type tabs = "pending" | "isFeedback";
-const tabsEnum = ["pending", "isFeedback"];
+type tabs = "pending" | "approved" | "rejected";
+const tabsEnum = ["pending", "approved", "rejected"];
 
 export default function page() {
   const searchParams = useSearchParams();
-  const { setQueryObj, queryObj } = useFilterAndPaging();
+  const { setQueryObj, queryObj } = useEvent();
   const tab = searchParams.get("tab");
   const pageNumberParam = searchParams.get("page-number");
   const pathName = usePathname();
@@ -26,13 +26,33 @@ export default function page() {
     params.set("tab", tab);
     replace(`${pathName}?${params.toString()}`);
   };
-
   useEffect(() => {
     if (tab) {
-      setQueryObj({
-        ...queryObj,
-        status: tab === "pending" ? "PENDING" : "ISFEEDBACK",
-      });
+      switch (tab) {
+        case "pending":
+          setQueryObj({
+            ...queryObj,
+            status: "PENDING",
+          });
+          break;
+        case "approved":
+          setQueryObj({
+            ...queryObj,
+            status: "APPROVED",
+          });
+          break;
+        case "rejected":
+          setQueryObj({
+            ...queryObj,
+            status: "REJECTED",
+          });
+          break;
+        default:
+          setQueryObj({
+            ...queryObj,
+            status: "PENDING",
+          });
+      }
     } else {
       setQueryObj({
         ...queryObj,
@@ -68,7 +88,7 @@ export default function page() {
           }
           className="w-full"
         >
-          <div className="flex items-center justify-between gap-4 relative">
+          <div className="flex items-center justify-between gap-4 relative ">
             <TabsList>
               <TabsTrigger
                 value="pending"
@@ -81,14 +101,24 @@ export default function page() {
                 Pending
               </TabsTrigger>
               <TabsTrigger
-                value="isFeedback"
+                value="approved"
                 onClick={() => {
-                  handleTabChange("isFeedback");
+                  handleTabChange("approved");
                 }}
                 className="flex items-center gap-1"
               >
                 <MessageSquareText size={18} />
-                Is Feedback
+                Approved
+              </TabsTrigger>
+              <TabsTrigger
+                value="rejected"
+                onClick={() => {
+                  handleTabChange("rejected");
+                }}
+                className="flex items-center gap-1"
+              >
+                <MessageSquareText size={18} />
+                Rejected
               </TabsTrigger>
             </TabsList>
             <div className="absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2">
@@ -98,12 +128,17 @@ export default function page() {
           </div>
 
           <TabsContent value="pending" className="w-full">
-            <ScrollArea className="h-[calc(100vh_-_theme(spacing.64))] border-y-2">
+            <ScrollArea className="h-[calc(100vh_-_theme(spacing.40))] border-y-2">
               <EventList />
             </ScrollArea>
           </TabsContent>
-          <TabsContent value="isFeedback" className="w-full">
-            <ScrollArea className="h-[calc(100vh_-_theme(spacing.64))] border-y-2">
+          <TabsContent value="approved" className="w-full">
+            <ScrollArea className="h-[calc(100vh_-_theme(spacing.40))] border-y-2">
+              <EventList />
+            </ScrollArea>
+          </TabsContent>
+          <TabsContent value="rejected" className="w-full">
+            <ScrollArea className="h-[calc(100vh_-_theme(spacing.40))] border-y-2">
               <EventList />
             </ScrollArea>
           </TabsContent>

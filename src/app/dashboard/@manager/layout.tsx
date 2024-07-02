@@ -1,4 +1,5 @@
 import { MyBreadcrumb } from "@/components/Breadcrumb";
+import DashboardHeader from "@/components/DashboardHeader";
 import Sidebar from "@/components/SideBar/Sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PrivateProvider from "@/providers/PrivateProvider";
@@ -28,18 +29,21 @@ const sidebarItems: SidebarItem[] = [
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <PrivateProvider>
-      <div className="grid min-h-[calc(100vh_-_theme(spacing.20))] w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <Sidebar
           sidebarItems={sidebarItems}
           sidebarTitle="Manager dashboard"
           parentPath="/dashboard"
         />
         <div className="flex flex-col">
-          <div className="h-14 gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6 flex items-center">
+          <div className="w-full">
+            <DashboardHeader />
+          </div>
+          <div className="h-14 gap-4 px-4 flex items-center">
             <MyBreadcrumb />
           </div>
-          <ScrollArea className="h-[calc(100vh_-_theme(spacing.40))]">
-            <main className="flex flex-col gap-4 p-4 lg:gap-6 lg:p-6 h-full">
+          <ScrollArea className="h-[calc(100vh_-_theme(spacing.28))]">
+            <main className="flex flex-col gap-4 px-4 lg:gap-6 lg:px-4 h-full ">
               {children}
             </main>
           </ScrollArea>

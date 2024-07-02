@@ -1,18 +1,17 @@
 "use client";
 
 import { getEventFeedBack } from "@/api/feedback";
+import useFeedback from "@/hooks/useFeedback";
 import { useMutation } from "@tanstack/react-query";
 import { format } from "date-fns";
 import React, { useEffect, useMemo } from "react";
 
 export default function FeedBackList({ eventId }: { eventId: number }) {
-  const getEventFeedBackMutation = useMutation({
-    mutationFn: (eventId: number) => getEventFeedBack(eventId),
-  });
+  const { getEventFeedBackMutation, trigger } = useFeedback();
 
   useEffect(() => {
     getEventFeedBackMutation.mutate(eventId);
-  }, [eventId]);
+  }, [eventId, trigger]);
 
   const feedBacks = useMemo(
     () => getEventFeedBackMutation.data,
@@ -23,17 +22,15 @@ export default function FeedBackList({ eventId }: { eventId: number }) {
 
   return (
     <div>
-      <div className="text-right py-5 space-y-3">
+      <div className=" space-y-4 p-4">
         {feedBacks?.map((feedBack, index) => (
-          <div className="flex justify-end" key={index}>
+          <div className="p-2 rounded-md bg-background" key={index}>
             <div className="">
-              <div className="bg-tertiary p-2 rounded-lg px-4 py-2 text-left text-white">
-                {feedBack.Content}
-              </div>
-              <div className="text-xs text-gray-500 mt-2">
+              <div className="text-lg">{feedBack.Content}</div>
+              <div className="text-sm text-gray-500 text-right">
                 {format(new Date(feedBack.CreatedAt), "yyyy-MM-dd HH:mm")}
               </div>
-              <div className="text-xs text-gray-500">
+              <div className="text-sm text-gray-500 text-right">
                 {feedBack.User.FullName ?? "manager"} -{" "}
                 {feedBack.User.Email ?? "manager"}
               </div>

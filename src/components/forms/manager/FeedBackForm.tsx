@@ -1,4 +1,3 @@
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import React from "react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -11,52 +10,88 @@ import {
   Underline,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  FeedbackDefaultValues,
+  FeedbackSchema,
+  FeedbackSchemaType,
+} from "@/schemas/feedbackSchema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import { usePathname } from "next/navigation";
+import useFeedback from "@/hooks/useFeedback";
 
 export default function FeedBackForm() {
+  const { addFeedback } = useFeedback();
+  const pathname = usePathname();
+  const eventId = Number(pathname.split("/")[4]);
+  const form = useForm<FeedbackSchemaType>({
+    resolver: zodResolver(FeedbackSchema),
+    defaultValues: FeedbackDefaultValues,
+  });
+
+  const onSubmit = (data: FeedbackSchemaType) => {
+    addFeedback.mutate({ eventId, data });
+  };
+
   return (
-    <div className="flex flex-col gap-2 h-40 ">
-      <div className="flex justify-between bg-secondary rounded-md">
-        <ToggleGroup type="multiple">
-          <ToggleGroupItem value="bold" aria-label="Toggle bold">
-            <Bold className="h-4 w-4" />
-          </ToggleGroupItem>
-          <ToggleGroupItem value="italic" aria-label="Toggle italic">
-            <Italic className="h-4 w-4" />
-          </ToggleGroupItem>
-          <ToggleGroupItem value="underline" aria-label="Toggle underline">
-            <Underline className="h-4 w-4" />
-          </ToggleGroupItem>
-        </ToggleGroup>
-        <div className="flex items-center gap-2">
-          <Button
-            variant={"outline"}
-            className={cn(
-              "flex items-center gap-2 text-white bg-red-500 hover:bg-red-300 "
+    <div className="flex flex-col gap-2 h-40">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-2">
+          <FormField
+            control={form.control}
+            name="content"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Textarea
+                    placeholder="Give your feedback here..."
+                    className="resize-none"
+                    {...field}
+                    rows={5}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
-          >
-            <Ban size={20} />
-            Reject
-          </Button>
-          <Button
-            variant={"outline"}
-            className={cn(
-              "flex items-center gap-2 text-white bg-green-500 hover:bg-green-300 "
-            )}
-          >
-            <CircleCheck size={20} />
-            Approve
-          </Button>
-        </div>
-        <Button variant={"default"} className={cn("flex items-center gap-2 ")}>
-          Send
-          <SendHorizonal size={20} />
-        </Button>
-      </div>
-      <Textarea
-        placeholder="Write your feedback here"
-        rows={5}
-        className={cn("resize-none ")}
-      />
+          />
+          <div className="flex gap-4 items-center">
+            <Button
+              type="button"
+              className="flex-1 flex items-center gap-2 text-red-500"
+              variant={"secondary"}
+              onClick={() => {
+                form.setValue("status", "REJECT");
+                form.handleSubmit(onSubmit)();
+              }}
+            >
+              <Ban />
+              Reject
+            </Button>
+            <Button
+              type="button"
+              className="flex-1 flex items-center gap-2 text-green-500"
+              variant={"secondary"}
+              onClick={() => {
+                form.setValue("status", "APPROVE");
+                form.handleSubmit(onSubmit)();
+              }}
+            >
+              <CircleCheck />
+              Approve
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }

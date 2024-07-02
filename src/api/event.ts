@@ -23,6 +23,16 @@ export interface CreateEventSendData {
   "is-donation": boolean;
   "total-cost": number | null | undefined;
 }
+
+export const createEvent = async (data: CreateEventSendData) => {
+  try {
+    const response = await axiosClientFormData.post("/events", data);
+    console.log(response.data);
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
 export interface GetEventSendData {
   "search-term"?: string;
   "event-category-id"?: number;
@@ -36,7 +46,6 @@ export interface GetEventSendData {
   "page-number"?: number;
   "page-size"?: number;
 }
-
 export interface GetEventsResponse {
   success: boolean;
   data: BackendEvent[];
@@ -46,23 +55,6 @@ export interface GetEventsResponse {
   "total-pages": number;
   message: string;
 }
-
-export interface GetEventByIdResponse {
-  success: boolean;
-  data: BackendEvent;
-  message: string;
-}
-
-//Function
-export const createEvent = async (data: CreateEventSendData) => {
-  try {
-    const response = await axiosClientFormData.post("/events", data);
-    console.log(response.data);
-  } catch (error) {
-    throw new Error(error as string);
-  }
-};
-
 export const getEvent = async (data: GetEventSendData) => {
   try {
     let baseUrl = "/events";
@@ -92,6 +84,11 @@ export const getEvent = async (data: GetEventSendData) => {
   }
 };
 
+export interface GetEventByIdResponse {
+  success: boolean;
+  data: BackendEvent;
+  message: string;
+}
 export const getEventById = async (eventId: number) => {
   try {
     const response = (

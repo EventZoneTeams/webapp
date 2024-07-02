@@ -1,5 +1,4 @@
 import { GetEventSendData, GetEventsResponse } from "@/api/event";
-import { Event } from "@/types/event";
 import { create } from "zustand";
 
 interface FilterPagingState {
@@ -17,6 +16,7 @@ interface FilterPagingState {
 const initialState: FilterPagingState = {
   queryObj: {
     "page-size": 10,
+    status: "PENDING",
   },
   metaData: {
     currentPage: 1,

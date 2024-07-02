@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import Navbar from "@/components/Navbar";
-import ReactQueryProvider from "@/providers/reactQueryProvider";
-import { ThemeProvider } from "@/providers/themeProvider";
-import ToastProvider from "@/providers/toastProvider";
-import PublicProvider from "@/providers/publicProvider";
+import PublicProvider from "@/providers/RefetchUserData";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
+import ToastProvider from "@/providers/ToastProvider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -39,10 +38,10 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <ToastProvider>
-              <div className="flex min-h-screen w-full flex-col bg-muted/40">
-                <Navbar />
+              <div className="flex min-h-screen w-full flex-col bg-[#141417]">
+                {/* <Navbar /> */}
                 <PublicProvider>
-                  <div className="flex min-h-[calc(100vh_-_theme(spacing.20))] flex-1 flex-col gap-4 ">
+                  <div className="flex min-h-screen flex-1 flex-col gap-4 ">
                     {children}
                   </div>
                 </PublicProvider>
