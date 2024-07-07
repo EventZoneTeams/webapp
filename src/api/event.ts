@@ -36,13 +36,10 @@ export const createEvent = async (data: CreateEventSendData) => {
 export interface GetEventSendData {
   "search-term"?: string;
   "event-category-id"?: number;
-  "is-donation"?: boolean;
+  UserId?: number;
   "donation-start-date"?: Date;
-  "donation-end-date"?: Date;
-  "event-start-date"?: Date;
   "event-end-date"?: Date;
   status?: StatusEnum;
-  "origanization-status-enums"?: OrganizationStatusEnum;
   "page-number"?: number;
   "page-size"?: number;
 }

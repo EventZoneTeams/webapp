@@ -25,7 +25,7 @@ export default function EventCard({ event }: { event: Event }) {
     }
   }, [event.ThumbnailUrl]);
   return (
-    <Card className="flex gap-2 h-44 w-full relative">
+    <Card className="flex gap-2 h-44 w-full relative ">
       <div className="aspect-video h-full">
         {event.ThumbnailUrl ? (
           isValidImage ? (

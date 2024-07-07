@@ -66,7 +66,7 @@ export default function NotificationMenu() {
   useEffect(() => {
     const connection = new signalR.HubConnectionBuilder()
       .configureLogging(signalR.LogLevel.Debug)
-      .withUrl("https://eventzone.azurewebsites.net/notification-hub", {
+      .withUrl("https://ez-api.azurewebsites.net/notification-hub", {
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,
       })

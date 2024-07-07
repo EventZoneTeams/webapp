@@ -19,6 +19,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import useAuth from "@/hooks/useAuth";
 import Image from "next/image";
+import { UserMenu } from "@/components/Navbar/UserMenu";
 
 interface Props {
   parentPath?: string;
@@ -86,13 +87,7 @@ export default function Sidebar({
             </Card>
           </div>
         )}
-        {authUser && (
-          <div>
-            <div className="text-red-500">
-              <Image src={authUser.Image} alt="user" width={50} height={50} />
-            </div>
-          </div>
-        )}
+        <div className="px-4 py-2">{authUser && <UserMenu />}</div>
       </div>
     </div>
   );

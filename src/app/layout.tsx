@@ -38,7 +38,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <ToastProvider>
-              <div className="flex min-h-screen w-full flex-col bg-[#141417]">
+              <div className="flex min-h-screen w-full flex-col bg-secondary-background">
                 {/* <Navbar /> */}
                 <PublicProvider>
                   <div className="flex min-h-screen flex-1 flex-col gap-4 ">

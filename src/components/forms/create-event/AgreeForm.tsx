@@ -82,7 +82,10 @@ export default function AgreeToTermAndCondition() {
       };
       console.log(sendData);
       createEventMutation.mutate(sendData);
-      createEventMutation.isSuccess && nextStep();
+      if (createEventMutation.isSuccess) {
+        reset();
+        nextStep();
+      }
     }
   };
 

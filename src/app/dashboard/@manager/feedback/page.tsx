@@ -88,7 +88,7 @@ export default function page() {
           }
           className="w-full"
         >
-          <div className="flex items-center justify-between gap-4 relative ">
+          <div className="flex items-center justify-between gap-4 relative my-2">
             <TabsList>
               <TabsTrigger
                 value="pending"
@@ -128,17 +128,17 @@ export default function page() {
           </div>
 
           <TabsContent value="pending" className="w-full">
-            <ScrollArea className="h-[calc(100vh_-_theme(spacing.40))] border-y-2">
+            <ScrollArea className="h-[calc(100vh_-_theme(spacing.42))] border-y-2">
               <EventList />
             </ScrollArea>
           </TabsContent>
           <TabsContent value="approved" className="w-full">
-            <ScrollArea className="h-[calc(100vh_-_theme(spacing.40))] border-y-2">
+            <ScrollArea className="h-[calc(100vh_-_theme(spacing.42))] border-y-2">
               <EventList />
             </ScrollArea>
           </TabsContent>
           <TabsContent value="rejected" className="w-full">
-            <ScrollArea className="h-[calc(100vh_-_theme(spacing.40))] border-y-2">
+            <ScrollArea className="h-[calc(100vh_-_theme(spacing.42))] border-y-2">
               <EventList />
             </ScrollArea>
           </TabsContent>

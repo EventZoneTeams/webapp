@@ -9,7 +9,7 @@ import EventImage from "@/components/EventImage";
 
 export default function EventCard({ event }: { event: Event }) {
   return (
-    <Card className="w-full bg-transparent hover:ring hover:cursor-pointer">
+    <Card className="w-full bg-transparent hover:ring hover:cursor-pointer bg-background">
       <EventImage src={event.ThumbnailUrl ?? ""} />
       <CardContent className=" w-full flex gap-4 pt-4">
         <div className="">

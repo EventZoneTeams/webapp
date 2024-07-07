@@ -1,9 +1,12 @@
 export type StatusEnum =
+  | "DRAFT"
   | "PENDING"
   | "REJECTED"
   | "APPROVED"
-  | "DONATING"
-  | "SUCCESSFUL";
+  | "PUBLISHED"
+  | "ONGOING"
+  | "COMPLETED"
+  | "CANCELED";
 
 export type OrganizationStatusEnum =
   | "PREPARING"

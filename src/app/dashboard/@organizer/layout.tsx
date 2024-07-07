@@ -80,7 +80,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
           parentPath="/dashboard"
         />
         <div className="flex flex-col">
-          <div className="h-14 gap-4 px-4 flex items-center">
+          <div className="h-14 gap-4 px-4 flex items-center border-b">
             <MyBreadcrumb />
           </div>
           <ScrollArea className="h-[calc(100vh_-_theme(spacing.14))]">

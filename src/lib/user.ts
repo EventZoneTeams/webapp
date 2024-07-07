@@ -15,3 +15,7 @@ export const mapBackendUserToUser = (backendUser: BackendUser): User => {
     Role: backendUser.role || "",
   };
 };
+
+export const mapBackendUsersToUsers = (backendUsers: BackendUser[]): User[] => {
+  return backendUsers.map(mapBackendUserToUser);
+};
