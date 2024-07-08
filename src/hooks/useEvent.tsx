@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 
 export default function useEvent() {
   const { queryObj, reset, metaData, setQueryObj } = useFilterAndPaging();
-  const eventsMuation = useMutation({
+  const eventsMutation = useMutation({
     mutationFn: (queryData: GetEventSendData) => getEvent(queryData),
     onSuccess: (data) => {
       useFilterAndPaging.setState((state) => ({
@@ -45,7 +45,7 @@ export default function useEvent() {
     reset,
     metaData,
     setQueryObj,
-    eventsMuation,
+    eventsMutation,
     getEventByIdMutation,
     createEventMutation,
   };

@@ -14,7 +14,7 @@ import Image from "next/image";
 
 export default function page() {
   const { authUser } = useAuth();
-  const { eventsMuation, setQueryObj, queryObj } = useEvent();
+  const { eventsMutation, setQueryObj, queryObj } = useEvent();
 
   useEffect(() => {
     if (authUser) {
@@ -25,7 +25,7 @@ export default function page() {
   }, [authUser]);
 
   useEffect(() => {
-    eventsMuation.mutate(queryObj);
+    eventsMutation.mutate(queryObj);
   }, [queryObj]);
   return (
     <div className="bg-background grid grid-cols-5 gap-4 pb-5">
@@ -42,13 +42,13 @@ export default function page() {
         </div> */}
       </div>
       <div className="col-span-3 rounded-md">
-        {eventsMuation.isPending ? (
+        {eventsMutation.isPending ? (
           <div>Loading...</div>
-        ) : eventsMuation.data?.Data.length === 0 ? (
+        ) : eventsMutation.data?.Data.length === 0 ? (
           <div>No Event Found</div>
         ) : (
           <div className="grid grid-cols-1 gap-4">
-            {eventsMuation.data?.Data.map((event, index) => (
+            {eventsMutation.data?.Data.map((event, index) => (
               <div key={index}>
                 <Post {...event} />
               </div>
