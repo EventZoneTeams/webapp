@@ -16,7 +16,6 @@ interface FilterPagingState {
 const initialState: FilterPagingState = {
   queryObj: {
     "page-size": 10,
-    status: "PENDING",
   },
   metaData: {
     currentPage: 1,

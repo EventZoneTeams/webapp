@@ -1,3 +1,4 @@
+import { OrganizationStatusEnum, StatusEnum } from "@/enums/statusEnum";
 import { BackendUser, User } from "@/types/authuser";
 import { EventCategory } from "@/types/event-categories";
 

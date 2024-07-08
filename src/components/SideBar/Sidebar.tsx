@@ -13,18 +13,16 @@ import {
 } from "@/components/ui/card";
 import useAuth from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
-import { SidebarItem } from "@/types/sidebar";
 import { LockKeyhole } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useSidebarStore } from "@/stores/sidebar";
 
 interface Props {
-  parentPath?: string;
   sidebarTitle: string;
   isPro?: boolean;
 }
 
-export default function Sidebar({ sidebarTitle, isPro, parentPath }: Props) {
+export default function Sidebar({ sidebarTitle, isPro }: Props) {
   const pathname = usePathname();
   const { authUser } = useAuth();
   const { sidebarItems } = useSidebarStore();
@@ -34,7 +32,7 @@ export default function Sidebar({ sidebarTitle, isPro, parentPath }: Props) {
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-14 items-center border-b px-4 lg:px-6">
           <Link
-            href={`${parentPath || ""}`}
+            href={`/dashboard`}
             className="flex items-center gap-2 font-semibold"
           >
             <LockKeyhole className="h-6 w-6" />
@@ -46,12 +44,11 @@ export default function Sidebar({ sidebarTitle, isPro, parentPath }: Props) {
             {sidebarItems.map((item) => (
               <Link
                 key={item.title}
-                href={`/dashboard${item.href}` || "#"}
+                href={`${item.href}` || "#"}
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
                   {
-                    "text-primary bg-muted":
-                      pathname === `${parentPath}${item.href}`,
+                    "text-primary bg-muted": pathname === item.href,
                   }
                 )}
               >
