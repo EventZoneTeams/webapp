@@ -72,7 +72,7 @@ export default function NotificationMenu() {
       })
       .build();
 
-    connection.start().catch(() => toast.error("Failed to connect to SignalR"));
+    connection.start().catch(() => console.log("Error connecting to SignalR"));
 
     connection.on("ReceiveNotification", (title, content) => {
       toast.info(`${title} - ${content}`);

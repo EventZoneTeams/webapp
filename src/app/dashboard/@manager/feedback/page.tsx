@@ -7,7 +7,7 @@ import { MessageSquareMore, MessageSquareText } from "lucide-react";
 import FilterBar from "@/app/dashboard/@manager/feedback/components/FilterBar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Paging from "@/app/dashboard/@manager/feedback/components/Paging";
-import EventList from "@/app/dashboard/@manager/feedback/components/EventList";
+import EventList from "@/components/Event/EventList";
 import useEvent from "@/hooks/useEvent";
 
 type tabs = "pending" | "approved" | "rejected";
@@ -128,17 +128,17 @@ export default function page() {
           </div>
 
           <TabsContent value="pending" className="w-full">
-            <ScrollArea className="h-[calc(100vh_-_theme(spacing.42))] border-y-2">
+            <ScrollArea className="h-[calc(100vh_-_theme(spacing.40)_-_0.5rem)] border-y-2">
               <EventList />
             </ScrollArea>
           </TabsContent>
           <TabsContent value="approved" className="w-full">
-            <ScrollArea className="h-[calc(100vh_-_theme(spacing.42))] border-y-2">
+            <ScrollArea className="h-[calc(100vh_-_theme(spacing.40)_-_0.5rem)] border-y-2">
               <EventList />
             </ScrollArea>
           </TabsContent>
           <TabsContent value="rejected" className="w-full">
-            <ScrollArea className="h-[calc(100vh_-_theme(spacing.42))] border-y-2">
+            <ScrollArea className="h-[calc(100vh_-_theme(spacing.40)_-_0.5rem)] border-y-2">
               <EventList />
             </ScrollArea>
           </TabsContent>

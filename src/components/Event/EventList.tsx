@@ -1,6 +1,6 @@
-import EventsLoading from "@/app/dashboard/@manager/feedback/components/EventsLoading";
-import NoEventFound from "@/app/dashboard/@manager/feedback/components/NoEventFound";
-import EventCard from "@/components/EventCard";
+import EventsLoading from "@/components/Event/EventsLoading";
+import NoEventFound from "@/components/Event/NoEventFound";
+import EventCard from "@/components/Event/EventCard";
 import useEvent from "@/hooks/useEvent";
 import Link from "next/link";
 import { useEffect } from "react";
