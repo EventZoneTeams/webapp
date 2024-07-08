@@ -7,9 +7,15 @@ import { formatDistanceToNow } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import EventImage from "@/components/EventImage";
 
-export default function EventCard({ event }: { event: Event }) {
+export default function EventCard({
+  event,
+  status,
+}: {
+  event: Event;
+  status: boolean;
+}) {
   return (
-    <Card className="w-full bg-transparent hover:ring hover:cursor-pointer bg-background">
+    <Card className="w-full  hover:ring hover:cursor-pointer bg-background">
       <EventImage src={event.ThumbnailUrl ?? ""} />
       <CardContent className=" w-full flex gap-4 pt-4">
         <div className="">

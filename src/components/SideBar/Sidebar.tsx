@@ -1,10 +1,8 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
-import { Home, LineChart, Package, ShoppingCart, Users } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
+import { UserMenu } from "@/components/Navbar/UserMenu";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,29 +11,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { LockKeyhole } from "lucide-react";
-import { SidebarItem } from "@/types/sidebar";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 import useAuth from "@/hooks/useAuth";
-import Image from "next/image";
-import { UserMenu } from "@/components/Navbar/UserMenu";
+import { cn } from "@/lib/utils";
+import { SidebarItem } from "@/types/sidebar";
+import { LockKeyhole } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useSidebarStore } from "@/stores/sidebar";
 
 interface Props {
   parentPath?: string;
   sidebarTitle: string;
-  sidebarItems: SidebarItem[];
   isPro?: boolean;
 }
 
-export default function Sidebar({
-  sidebarItems,
-  sidebarTitle,
-  isPro,
-  parentPath,
-}: Props) {
+export default function Sidebar({ sidebarTitle, isPro, parentPath }: Props) {
   const pathname = usePathname();
   const { authUser } = useAuth();
+  const { sidebarItems } = useSidebarStore();
 
   return (
     <div className="hidden border-r bg-background md:block">

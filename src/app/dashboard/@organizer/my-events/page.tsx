@@ -27,7 +27,6 @@ export default function page() {
     eventsMuation.mutate(queryObj);
   }, [queryObj]);
 
-  console.log(eventsMuation.data);
   return (
     <div>
       <div className="w-full">
@@ -43,7 +42,7 @@ export default function page() {
                 className=" flex items-center justify-center"
                 href={`/dashboard/feedback/event/${event.Id}`}
               >
-                <EventCard event={event} />
+                <EventCard event={event} status />
               </Link>
             ))}
           </div>
