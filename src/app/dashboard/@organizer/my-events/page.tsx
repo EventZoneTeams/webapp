@@ -40,7 +40,7 @@ export default function page() {
               <Link
                 key={index}
                 className=" flex items-center justify-center"
-                href={`/dashboard/feedback/event/${event.Id}`}
+                href={`/dashboard/manage-event/${event.Id}`}
               >
                 <EventCard event={event} status />
               </Link>

@@ -15,6 +15,6 @@ export default function SidebarProvider({
 
   useEffect(() => {
     setSidebarItems(sidebarItems);
-  }, []);
+  }, [sidebarItems]);
   return children;
 }
