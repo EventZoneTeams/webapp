@@ -29,21 +29,26 @@ export default function Ticket({ event }: { event: Event }) {
   };
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const [hasEventStarted, setHasEventStarted] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
+      const newTimeLeft = calculateTimeLeft();
+      setTimeLeft(newTimeLeft);
+      setHasEventStarted(
+        differenceInSeconds(new Date(event.EventStartDate), new Date()) <= 0
+      );
     }, 1000);
 
     return () => clearInterval(timer);
   }, [event.EventStartDate]);
 
   return (
-    <div className="relative mt-12">
-      <div className="absolute text-black left-24 top-8">
+    <div className="relative mt-6">
+      <div className="absolute text-black left-16 top-8 w-[400px]">
         <p className="font-semibold text-2xl">{event.Name}</p>
         <div className="flex items-center text-lg mt-2">
-          {timeLeft.days !== undefined ? (
+          {!hasEventStarted ? (
             <div className="mt-5">
               <p className="text-black font-bold text-xl">Start In...</p>
               <div className="flex items-center justify-around w-full mt-4">
@@ -80,16 +85,25 @@ export default function Ticket({ event }: { event: Event }) {
               </div>
             </div>
           ) : (
-            <span className="text-black font-bold text-xl">Event Started!</span>
+            <span className="text-black font-bold text-xl mt-14 mb-10">
+              Event Started!
+            </span>
           )}
         </div>
-        <div className="flex items-center text-lg mt-8">
-          <Calendar size={25} className="mr-2" />
-          {format(new Date(event.EventStartDate), "HH:mm, dd MMMM yyyy")}
+        <div className="flex items-center text-lg mt-4 h-[56px]">
+          <div>
+            <Calendar size={25} className="mr-2" />
+          </div>
+          <p>
+            {" "}
+            {format(new Date(event.EventStartDate), "HH:mm, dd MMMM yyyy")}
+          </p>
         </div>
-        <div className="flex items-center text-lg mt-6">
-          <MapPin size={25} className="mr-2" />
-          {event.Location}
+        <div className="flex items-center text-lg h-[56px]">
+          <div>
+            <MapPin size={25} className="mr-2" />
+          </div>
+          <p>{event.Location}</p>
         </div>
       </div>
       <div className="">
