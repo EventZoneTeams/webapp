@@ -9,7 +9,7 @@ import {
 } from "@/api/auth";
 import { LoginFormType } from "@/schemas/loginFormSchema";
 import { registerFormType } from "@/schemas/registerFromSchema";
-import { setLocalToken } from "@/stores/auth";
+import { getLocalToken, setLocalToken } from "@/stores/auth";
 import { useUserStore } from "@/stores/user";
 import { User } from "@/types/authuser";
 import { useMutation } from "@tanstack/react-query";
@@ -19,6 +19,7 @@ import { toast } from "sonner";
 
 export default function useAuth() {
   const { setAuthUser, reset, authUser } = useUserStore();
+  const { jwt, jwtRefreshToken } = getLocalToken();
   const router = useRouter();
   const loginMutation = useMutation({
     mutationFn: (data: LoginFormType) => login(data),
@@ -64,12 +65,21 @@ export default function useAuth() {
         setAuthUser(user);
       }
     },
+    onError: (error) => {
+      if (jwtRefreshToken) {
+        refreshTokenMutation.mutate({
+          "access-token": jwt as string,
+          "refresh-token": jwtRefreshToken as string,
+        });
+      }
+    },
   });
 
   const refreshTokenMutation = useMutation({
     mutationFn: (data: RefreshTokenSendData) => refreshToken(data),
     onSuccess: (data) => {
       setLocalToken(data.jwt, data["jwt-refresh-token"]);
+      getMeMutation.mutate();
     },
     onError: (error) => {
       toast.error(error.message);
