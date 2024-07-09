@@ -1,5 +1,8 @@
-import { axiosClient } from "@/api/axiosClient";
-import { mapBackEndEventProductsToEventProducts } from "@/lib/event-product";
+import { axiosClient, axiosClientFormData } from "@/api/axiosClient";
+import {
+  mapBackEndEventProductsToEventProducts,
+  mapBackEndEventProductToEventProduct,
+} from "@/lib/event-product";
 import { BackEndEventProduct } from "@/types/event-product";
 
 export type GetEventProductsSendData = {
@@ -30,6 +33,39 @@ export const getEventProduct = async (data: GetEventProductsSendData) => {
     const response = (await axiosClient.get<BackEndEventProduct[]>(baseUrl))
       .data;
     return mapBackEndEventProductsToEventProducts(response);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export interface CreateEventProductSendData {
+  EventId: number;
+  Name: string;
+  Description: string;
+  Price: number;
+  QuantityInStock: number;
+  fileImages: File;
+}
+
+export interface CreateEventProductResponse {
+  status: boolean;
+  message: string;
+  data: BackEndEventProduct;
+}
+
+export const createEventProduct = async (data: CreateEventProductSendData) => {
+  try {
+    const response = (
+      await axiosClientFormData.post<CreateEventProductResponse>(
+        "/event-products",
+        data
+      )
+    ).data;
+    return {
+      status: response.status,
+      message: response.message,
+      data: mapBackEndEventProductToEventProduct(response.data),
+    };
   } catch (error) {
     throw error;
   }

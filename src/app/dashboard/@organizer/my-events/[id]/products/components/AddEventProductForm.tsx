@@ -3,6 +3,7 @@
 import { AddDepositSchema } from "@/schemas/addDepositSchema";
 import {
   AddEventProductDefaultValue,
+  AddEventProductSchema,
   AddEventProductType,
 } from "@/schemas/eventProductSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,16 +22,33 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/ImageUpload";
+import useEventProduct from "@/hooks/useEventProduct";
+import { CreateEventProductSendData } from "@/api/event-product";
+import { toast } from "sonner";
 
 export default function AddEventProductForm() {
+  const { getEventProductMutation, queryObj, createEventProductMutation } =
+    useEventProduct();
   const [image, setImage] = React.useState<File | null>(null);
   const form = useForm<AddEventProductType>({
-    resolver: zodResolver(AddDepositSchema),
+    resolver: zodResolver(AddEventProductSchema),
     defaultValues: AddEventProductDefaultValue,
   });
 
   const onSubmit = (data: AddEventProductType) => {
-    console.log(data);
+    if (queryObj.EventId && image) {
+      const sendData: CreateEventProductSendData = {
+        EventId: queryObj.EventId,
+        Name: data.Name,
+        Price: data.Price,
+        QuantityInStock: data.QuantityInStock,
+        Description: data.Description,
+        fileImages: image,
+      };
+      createEventProductMutation.mutate(sendData);
+    } else {
+      toast.error("EventId is not found");
+    }
   };
 
   return (
@@ -59,50 +77,53 @@ export default function AddEventProductForm() {
                 </FormItem>
               )}
             />
-            <div className="flex gap-4 items-center">
-              <FormField
-                control={form.control}
-                name="Price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price (VND)</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter the price of the product"
-                        {...field}
-                        value={Intl.NumberFormat("vn-Vi", {
-                          style: "currency",
-                          currency: "VND",
-                        }).format(Number(field.value))}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, "");
-                          field.onChange(Number(value));
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="QuantityInStock"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Quantity In Stock</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="shadcn"
-                        {...field}
-                        type="number"
-                        min={0}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="Price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price (VND)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter the price of the product"
+                      {...field}
+                      value={Intl.NumberFormat("vn-Vi", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(Number(field.value))}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        field.onChange(Number(value));
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="QuantityInStock"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Quantity In Stock</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="shadcn"
+                      {...field}
+                      type="number"
+                      min={0}
+                      value={field.value}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        field.onChange(Number(value));
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="Description"
@@ -125,8 +146,12 @@ export default function AddEventProductForm() {
           </div>
         </div>
 
-        <Button type="submit" className="w-full">
-          Submit
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={createEventProductMutation.isPending}
+        >
+          {createEventProductMutation.isPending ? "Loading..." : "Add Product"}
         </Button>
       </form>
     </Form>

@@ -8,11 +8,11 @@ import useEventProduct from "@/hooks/useEventProduct";
 import { useEffect } from "react";
 
 export default function page({ params }: { params: { id: string } }) {
-  const { setQueryObj, getEventProductMutation } = useEventProduct();
+  const { setQueryObj, getEventProductMutation, trigger } = useEventProduct();
 
   useEffect(() => {
     setQueryObj({ EventId: Number(params.id) });
-  }, []);
+  }, [trigger]);
 
   return (
     <div className="space-y-2">
