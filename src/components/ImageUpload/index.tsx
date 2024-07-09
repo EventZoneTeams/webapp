@@ -3,10 +3,18 @@ import NextImage from "next/image";
 import React, { useEffect, useRef } from "react";
 import { Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useCreateEventStore } from "@/stores/createEvent";
 
-export default function ImageUpload() {
-  const { setImage, Thumbnail } = useCreateEventStore();
+export default function ImageUpload({
+  ratio,
+  setImage,
+  image,
+  deleteImage,
+}: {
+  ratio: number;
+  setImage: (file: File) => void;
+  deleteImage: () => void;
+  image: File | null;
+}) {
   const [file, setFile] = React.useState<File | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -20,7 +28,7 @@ export default function ImageUpload() {
 
   const handleFileRemove = () => {
     setFile(null);
-    setImage(null);
+    deleteImage();
     if (inputRef.current) {
       inputRef.current.value = "";
     }
@@ -37,7 +45,7 @@ export default function ImageUpload() {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        const aspectRatio = 16 / 9;
+        const aspectRatio = ratio;
         let { width, height } = img;
         let newWidth, newHeight;
 
@@ -94,10 +102,10 @@ export default function ImageUpload() {
         ref={inputRef}
       />
       <div>
-        {Thumbnail ? (
+        {image ? (
           <div className="w-full h-full relative group aspect-video">
             <NextImage
-              src={URL.createObjectURL(Thumbnail)}
+              src={URL.createObjectURL(image)}
               alt="preview"
               width={100}
               height={100}

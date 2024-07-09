@@ -1,0 +1,134 @@
+"use client";
+
+import { AddDepositSchema } from "@/schemas/addDepositSchema";
+import {
+  AddEventProductDefaultValue,
+  AddEventProductType,
+} from "@/schemas/eventProductSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import ImageUpload from "@/components/ImageUpload";
+
+export default function AddEventProductForm() {
+  const [image, setImage] = React.useState<File | null>(null);
+  const form = useForm<AddEventProductType>({
+    resolver: zodResolver(AddDepositSchema),
+    defaultValues: AddEventProductDefaultValue,
+  });
+
+  const onSubmit = (data: AddEventProductType) => {
+    console.log(data);
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <div className="grid grid-cols-2 gap-4">
+          <ImageUpload
+            ratio={16 / 9}
+            setImage={setImage}
+            image={image}
+            deleteImage={() => {
+              setImage(null);
+            }}
+          />
+          <div className="p-4 rounded-md border space-y-4">
+            <FormField
+              control={form.control}
+              name="Name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Product Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex gap-4 items-center">
+              <FormField
+                control={form.control}
+                name="Price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price (VND)</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter the price of the product"
+                        {...field}
+                        value={Intl.NumberFormat("vn-Vi", {
+                          style: "currency",
+                          currency: "VND",
+                        }).format(Number(field.value))}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, "");
+                          field.onChange(Number(value));
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="QuantityInStock"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Quantity In Stock</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="shadcn"
+                        {...field}
+                        type="number"
+                        min={0}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormField
+              control={form.control}
+              name="Description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Description"
+                      {...field}
+                      rows={3}
+                      className=""
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <Button type="submit" className="w-full">
+          Submit
+        </Button>
+      </form>
+    </Form>
+  );
+}

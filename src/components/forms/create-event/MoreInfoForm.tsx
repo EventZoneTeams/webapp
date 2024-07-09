@@ -1,20 +1,4 @@
-import React, { use } from "react";
-import {
-  MoreInfoFormSchemaType,
-  MoreInfoFormSchema,
-  MoreInfoFormDefaultValues,
-} from "@/schemas/createEventSchema";
-import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import {
   Card,
   CardContent,
@@ -23,19 +7,30 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  MoreInfoFormDefaultValues,
+  MoreInfoFormSchema,
+  MoreInfoFormSchemaType,
+} from "@/schemas/createEventSchema";
+import { useForm } from "react-hook-form";
 
 import ImageUpload from "@/components/ImageUpload";
-import { useCreateEventStore } from "@/stores/createEvent";
 import { useStepper } from "@/components/stepper";
+import { useCreateEventStore } from "@/stores/createEvent";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getEventCategories } from "@/api/event-categories";
-import { useQuery } from "@tanstack/react-query";
 import { ArrowLeftToLine, ArrowRightToLine } from "lucide-react";
 
 export default function MoreInfoForm() {
   const { nextStep, prevStep } = useStepper();
-  const { setMoreInfo, MoreInfo } = useCreateEventStore();
+  const { setMoreInfo, MoreInfo, setImage, Thumbnail } = useCreateEventStore();
   const form = useForm<MoreInfoFormSchemaType>({
     resolver: zodResolver(MoreInfoFormSchema),
     defaultValues: {
@@ -63,7 +58,14 @@ export default function MoreInfoForm() {
             </CardDescription>
           </CardHeader>
           <CardContent className=" grid md:grid-cols-1 lg:grid-cols-2 gap-4">
-            <ImageUpload />
+            <ImageUpload
+              ratio={16 / 9}
+              setImage={setImage}
+              image={Thumbnail}
+              deleteImage={() => {
+                setImage(null);
+              }}
+            />
             <div className="space-y-4">
               <FormField
                 control={form.control}

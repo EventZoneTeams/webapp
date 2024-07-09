@@ -1,5 +1,10 @@
 import MiniSidebar from "@/components/SideBar/MiniSidebar";
+import { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Manage Event",
+};
 
 export default function layout({
   children,

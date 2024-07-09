@@ -1,12 +1,9 @@
 "use client";
 
-import { useCreateEventStore } from "@/stores/createEvent";
-import Image from "next/image";
-import React, { useEffect } from "react";
-import { Trash2 } from "lucide-react";
-import { compareAsc, format } from "date-fns";
-import { Terminal } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useCreateEventStore } from "@/stores/createEvent";
+import { compareAsc, format } from "date-fns";
+import Image from "next/image";
 
 export default function EventPreview() {
   const { Thumbnail, BasicInfo } = useCreateEventStore();
