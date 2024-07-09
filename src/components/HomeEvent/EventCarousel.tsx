@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Carousel,
   CarouselContent,
@@ -6,33 +8,28 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import EventCard from "./EventCard";
-import { Event } from "@/types/event";
 import { Badge } from "../ui/badge";
 import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import useEvent from "@/hooks/useEvent";
+import Link from "next/link";
 
 export function EventCarousel({
-  event,
   category,
+  categoryId,
 }: {
-  event: Event;
   category: String;
+  categoryId: number;
 }) {
-  const searchParams = useSearchParams();
-  const eventCategoryIdParam = searchParams.get("event-category-id");
-  const { setQueryObj, queryObj, eventsMutation } = useEvent();
-
-
+  const { queryObj, eventsMutation } = useEvent();
 
   useEffect(() => {
-    eventsMutation.mutate({ ...queryObj, "event-category-id": 1 });
+    eventsMutation.mutate({ ...queryObj, "event-category-id": categoryId });
   }, [queryObj]);
 
   return (
-    <div>
-      <div className="flex items-center mb-2">
-        <Badge className=" h-[50px] rounded-sm bg-blue-400 hover:bg-blue-400"></Badge>
+    <div className="mt-8">
+      <div className="flex items-center mb-4">
+        <Badge className=" h-[40px] rounded-sm bg-blue-400 hover:bg-blue-400"></Badge>
         <p className="text-blue-400 ml-3 text-lg">
           {category ? category : "Category"}
         </p>
@@ -42,9 +39,14 @@ export function EventCarousel({
           {eventsMutation.data?.Data.map((event, index) => (
             <CarouselItem
               key={index}
-              className="pl-4 md:basis-1/2 lg:basis-[28%]"
+              className="p-0 ml-4 basis-[26%] "
             >
-              <EventCard event={event} />
+              <Link
+                key={index}
+                href={`/event/${event.Id}`}
+              >
+                <EventCard event={event} />
+              </Link>
             </CarouselItem>
           ))}
         </CarouselContent>

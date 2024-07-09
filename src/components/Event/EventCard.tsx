@@ -15,9 +15,21 @@ export default function EventCard({
   status: boolean;
 }) {
   return (
-    <Card className="w-full  hover:ring hover:cursor-pointer bg-background">
+    <Card className="w-full  hover:ring hover:cursor-pointer bg-background relative">
+      {status && (
+        <Badge
+          className={cn(
+            "absolute top-2 right-2",
+            event.Status === "PENDING" && "bg-blue-200 text-blue-700",
+            event.Status === "APPROVED" && "bg-green-200 text-green-700",
+            event.Status === "REJECTED" && "bg-red-200 text-red-700"
+          )}
+        >
+          {event.Status}
+        </Badge>
+      )}
       <EventImage src={event.ThumbnailUrl ?? ""} />
-      <CardContent className=" w-full flex gap-4 pt-4">
+      <CardContent className=" w-full flex gap-4 pt-4 ">
         <div className="">
           <Avatar className="size-10">
             <AvatarImage src={event.User?.Image} alt={event.User?.FullName} />

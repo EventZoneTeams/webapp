@@ -10,17 +10,17 @@ import SidebarProvider from "@/providers/SidebarProvider";
 const sidebarItems: SidebarItem[] = [
   {
     title: "Dashboard",
-    href: "",
+    href: "/dashboard",
     icon: <Home className="h-4 w-4" />,
   },
   {
     title: "Users",
-    href: "/users",
+    href: "/dashboard/users",
     icon: <Users className="h-4 w-4" />,
   },
   {
     title: "Event Categories",
-    href: "/event-categories",
+    href: "/dashboard/event-categories",
     icon: <Package className="h-4 w-4" />,
   },
 ];
@@ -30,7 +30,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
     <PrivateProvider>
       <SidebarProvider sidebarItems={sidebarItems}>
         <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-          <Sidebar sidebarTitle="Admin dashboard" parentPath="/dashboard" />
+          <Sidebar sidebarTitle="Admin dashboard" />
           <div className="flex flex-col">
             <ScrollArea className="h-[calc(100vh_-_theme(spacing.14))]">
               <main className="flex flex-col gap-4 p-4 lg:gap-6 lg:p-6 h-full">

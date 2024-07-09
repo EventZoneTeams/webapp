@@ -8,7 +8,7 @@ export default function EventCard({ event }: { event: Event }) {
     <Card className=" hover:cursor-pointer w-[340px] bg-transparent border-none">
       <img
         src={event.ThumbnailUrl ?? ""}
-        alt="img"
+        alt={event.Name}
         className="rounded-lg w-full h-[180px] object-cover"
       />
       <CardContent className=" w-full flex pt-4 px-0">
@@ -16,7 +16,7 @@ export default function EventCard({ event }: { event: Event }) {
           <div className="text-md">{event.Name}</div>
           <div className="flex items-center justify-between gap-2 mt-2 text-blue-400">
             <div className="flex items-center text-md">
-              <Calendar size={15} className="mr-2" />
+              <Calendar size={20} className="mr-2" />
               {format(event.EventStartDate, "HH:mm, dd MMMM yyyy")}
             </div>
           </div>

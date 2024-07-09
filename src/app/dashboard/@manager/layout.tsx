@@ -17,12 +17,12 @@ import React from "react";
 const sidebarItems: SidebarItem[] = [
   {
     title: "Dashboard",
-    href: "",
+    href: "/dashboard",
     icon: <Home className="h-4 w-4" />,
   },
   {
     title: "Feedbacks",
-    href: "/feedback",
+    href: "/dashboard/feedback",
     icon: <MessageSquareQuote className="h-4 w-4" />,
   },
 ];
@@ -32,7 +32,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
     <PrivateProvider>
       <SidebarProvider sidebarItems={sidebarItems}>
         <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-          <Sidebar sidebarTitle="Manager dashboard" parentPath="/dashboard" />
+          <Sidebar sidebarTitle="Manager dashboard" />
           <div className="flex flex-col">
             <div className="w-full">
               <DashboardHeader />

@@ -28,7 +28,7 @@ export default function EventList() {
               className=" flex items-center justify-center"
               href={`/dashboard/feedback/event/${event.Id}`}
             >
-              <EventCard event={event} />
+              <EventCard event={event} status />
             </Link>
           ))}
         </div>

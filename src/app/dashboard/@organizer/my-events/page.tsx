@@ -11,7 +11,7 @@ import EventCard from "@/components/Event/EventCard";
 
 export default function page() {
   const { authUser } = useAuth();
-  const { eventsMutation, queryObj, setQueryObj } = useEvent();
+  const { eventsMuation, queryObj, setQueryObj, reset } = useEvent();
   useEffect(() => {
     if (authUser) {
       setQueryObj({
@@ -40,7 +40,7 @@ export default function page() {
               <Link
                 key={index}
                 className=" flex items-center justify-center"
-                href={`/dashboard/manage-event/${event.Id}`}
+                href={`/dashboard/my-events/${event.Id}`}
               >
                 <EventCard event={event} status />
               </Link>
