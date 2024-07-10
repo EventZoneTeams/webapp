@@ -1,6 +1,6 @@
 import { getLocalToken } from "@/stores/auth";
 import axios from "axios";
-const baseURL = "https://ez-api.azurewebsites.net/api/v1";
+const baseURL = "https://localhost:7006/api/v1";
 
 //json
 export const axiosClient = axios.create({
