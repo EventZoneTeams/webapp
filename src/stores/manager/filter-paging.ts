@@ -15,11 +15,11 @@ interface FilterPagingState {
 
 const initialState: FilterPagingState = {
   queryObj: {
-    "page-size": 10,
+    "page-size": 8,
   },
   metaData: {
     currentPage: 1,
-    pageSize: 10,
+    pageSize: 8,
     totalCount: 0,
     totalPages: 0,
   },
