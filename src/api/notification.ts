@@ -1,14 +1,11 @@
 import { axiosClient } from "@/api/axiosClient";
 
-
-interface GetAllNotificationResponse  {
-    success: boolean;
-    data: 
+interface GetAllNotificationResponse {
+  success: boolean;
 }
 export const getAllNotifications = async (id: number) => {
-    try {
-        const 
-    } catch (error) {
-        throw error;
-    }
-}
+  try {
+  } catch (error) {
+    throw error;
+  }
+};
