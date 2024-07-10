@@ -21,12 +21,15 @@ import { removeLocalToken } from "@/stores/auth";
 import { useUserStore } from "@/stores/user";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function UserMenu() {
   const { theme, setTheme } = useTheme();
   const { authUser } = useUserStore();
+  const router = useRouter();
 
   const logout = () => {
+    router.push("/");
     removeLocalToken();
     useUserStore.setState({ authUser: null });
   };

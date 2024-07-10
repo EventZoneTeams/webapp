@@ -11,19 +11,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import useEventProduct from "@/hooks/useEventProduct";
 import { CirclePlus } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function AddEventProductButton() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isCreateDialogOpen, setIsCreateDialogOpen } = useEventProduct();
   return (
-    <Dialog open={isOpen}>
+    <Dialog open={isCreateDialogOpen}>
       <DialogTrigger>
         <Button
           variant={"default"}
           className="flex items-center gap-2"
           onClick={() => {
-            setIsOpen(true);
+            setIsCreateDialogOpen(true);
           }}
         >
           <CirclePlus size={20} />
@@ -40,7 +41,7 @@ export default function AddEventProductButton() {
           <Button
             variant={"secondary"}
             onClick={() => {
-              setIsOpen(false);
+              setIsCreateDialogOpen(false);
             }}
             className="w-full"
           >

@@ -1,18 +1,42 @@
-import { getEventProduct, GetEventProductsSendData } from "@/api/event-product";
+import {
+  createEventProduct,
+  CreateEventProductSendData,
+  getEventProduct,
+  GetEventProductsSendData,
+} from "@/api/event-product";
 import { useEventProductStore } from "@/stores/event-product";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+
+import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function useEventProduct() {
-  const { queryObj, setQueryObj } = useEventProductStore();
-  const [trigger, setTrigger] = useState<boolean>(false);
-  const switchTrigger = () => {
-    setTrigger(!trigger);
-  };
+  const {
+    queryObj,
+    setQueryObj,
+    isCreateDialogOpen,
+    setIsCreateDialogOpen,
+    trigger,
+    switchTrigger,
+  } = useEventProductStore();
+
+
   const getEventProductMutation = useMutation({
     mutationFn: (data: GetEventProductsSendData) => getEventProduct(data),
+    onSuccess: (data) => {},
+  });
+
+  const createEventProductMutation = useMutation({
+    mutationFn: (data: CreateEventProductSendData) => createEventProduct(data),
     onSuccess: (data) => {
-      console.log(data);
+      if (data.status) {
+        toast.success(data.message);
+        setIsCreateDialogOpen(false);
+        switchTrigger();
+      }
+    },
+    onError: (error) => {
+      console.log(error);
     },
   });
 
@@ -24,6 +48,9 @@ export default function useEventProduct() {
     setQueryObj,
     trigger,
     switchTrigger,
+    isCreateDialogOpen,
+    setIsCreateDialogOpen,
     getEventProductMutation,
+    createEventProductMutation,
   };
 }
