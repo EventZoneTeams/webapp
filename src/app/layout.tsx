@@ -3,9 +3,9 @@ import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import PublicProvider from "@/providers/RefetchUserData";
-import ReactQueryProvider from "@/providers/reactQueryProvider";
-import { ThemeProvider } from "@/providers/themeProvider";
-import ToastProvider from "@/providers/toastProvider";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
+import ToastProvider from "@/providers/ToastProvider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
