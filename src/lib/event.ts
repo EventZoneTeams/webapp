@@ -34,6 +34,7 @@ export const mapBackendEventToEvent = (backendEvent: BackendEvent): Event => {
     CreatedAt: new Date(backendEvent["created-at"]),
     IsDonation: backendEvent["is-donation"],
     TotalCost: backendEvent["total-cost"],
+    EventPackage: backendEvent["event-packages"],
   };
 };
 

@@ -70,3 +70,11 @@ export const createEventProduct = async (data: CreateEventProductSendData) => {
     throw error;
   }
 };
+
+export const deleteEventProduct = async (products: number[]) => {
+  try {
+    
+  } catch (error) {
+    throw error;
+  }
+}

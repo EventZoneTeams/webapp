@@ -3,6 +3,7 @@ import { mapBackendNotifications } from "@/lib/notification";
 import { BackEndNotification } from "@/types/notification";
 
 
+
 interface NotificationResponse {
     data: BackEndNotification[];
     success: boolean;
