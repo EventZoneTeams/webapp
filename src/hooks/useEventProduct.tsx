@@ -6,6 +6,7 @@ import {
 } from "@/api/event-product";
 import { useEventProductStore } from "@/stores/event-product";
 import { useMutation } from "@tanstack/react-query";
+
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -18,6 +19,7 @@ export default function useEventProduct() {
     trigger,
     switchTrigger,
   } = useEventProductStore();
+
 
   const getEventProductMutation = useMutation({
     mutationFn: (data: GetEventProductsSendData) => getEventProduct(data),

@@ -20,12 +20,33 @@ export default function HomeCarousel() {
   return (
     <div className="flex justify-center">
       <Carousel>
-        <CarouselContent className="w-[1000px] h-[400px]">
+        <CarouselContent className="w-[500px] h-[300px]">
           {data?.map((event, index) => (
             <CarouselItem key={index}>
               <div className="p-1">
                 <Card className="flex justify-center items-center">
-                  <CardContent className="flex aspect-square items-center justify-center p-0 w-[1000px] h-[400px]">
+                  <CardContent className="flex aspect-square items-center justify-center p-0 w-full h-full">
+                    <img
+                      className="w-full h-full object-cover"
+                      src={event.ImageUrl}
+                      alt={event.Title}
+                    />
+                  </CardContent>
+                </Card>
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+      <Carousel>
+        <CarouselContent className="w-[500px] h-[300px]">
+          {data?.map((event, index) => (
+            <CarouselItem key={index}>
+              <div className="p-1">
+                <Card className="flex justify-center items-center">
+                  <CardContent className="flex aspect-square items-center justify-center p-0 w-full h-full">
                     <img
                       className="w-full h-full object-cover"
                       src={event.ImageUrl}

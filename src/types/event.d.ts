@@ -1,6 +1,7 @@
 import { OrganizationStatusEnum, StatusEnum } from "@/enums/statusEnum";
 import { BackendUser, User } from "@/types/authuser";
 import { EventCategory } from "@/types/event-categories";
+import { BackEndEventPackage, EventPackage } from "./event-packages.";
 
 export type Event = {
   Id: number;
@@ -22,6 +23,7 @@ export type Event = {
   CreatedAt: Date;
   IsDonation: boolean;
   TotalCost: number | null | undefined;
+  EventPackage: EventPackage[];
 };
 
 export type BackendEvent = {
@@ -48,4 +50,5 @@ export type BackendEvent = {
   "created-at": Date;
   "is-donation": boolean;
   "total-cost": number | null;
+  "event-packages": BackEndEventPackage[];
 };
