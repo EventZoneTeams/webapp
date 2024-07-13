@@ -14,6 +14,8 @@ export default function page({ params }: { params: { id: string } }) {
     setQueryObj({ EventId: Number(params.id) });
   }, [trigger]);
 
+  console.log(getEventProductMutation.data);
+
   return (
     <div className="space-y-4">
       <div>

@@ -3,7 +3,7 @@ import {
   mapBackEndEventProductsToEventProducts,
   mapBackEndEventProductToEventProduct,
 } from "@/lib/event-product";
-import { BackEndEventProduct } from "@/types/event-product";
+import { BackEndEventProduct, EventProduct } from "@/types/event-product";
 
 export type GetEventProductsSendData = {
   PageIndex?: number;
@@ -71,10 +71,24 @@ export const createEventProduct = async (data: CreateEventProductSendData) => {
   }
 };
 
-export const deleteEventProduct = async (products: number[]) => {
+export interface DeleteProductsResponse {
+  status: boolean;
+  message: string;
+  data: BackEndEventProduct;
+}
+export const deleteEventProducts = async (product: number) => {
   try {
-    
+    const response = (
+      await axiosClient.delete<DeleteProductsResponse>(
+        `/event-products/${product}`
+      )
+    ).data;
+    return {
+      status: response.status,
+      message: response.message,
+      data: mapBackEndEventProductToEventProduct(response.data),
+    };
   } catch (error) {
     throw error;
   }
-}
+};

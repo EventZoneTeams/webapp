@@ -31,7 +31,7 @@ export default function AddEventProductButton() {
           Add Product
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[800px]">
+      <DialogContent className="max-w-[800px] bg-secondary-background">
         <DialogHeader>
           <DialogTitle>Add Product</DialogTitle>
           <DialogDescription>Add a product to the event</DialogDescription>

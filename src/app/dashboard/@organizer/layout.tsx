@@ -5,7 +5,16 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import PrivateProvider from "@/providers/PrivateProvider";
 import SidebarProvider from "@/providers/SidebarProvider";
 import { SidebarItem } from "@/types/sidebar";
-import { Home, SquarePlus, Users } from "lucide-react";
+import {
+  Contact,
+  FolderKanban,
+  HandCoins,
+  Headset,
+  Home,
+  Settings,
+  SquarePlus,
+  Users,
+} from "lucide-react";
 import { Metadata } from "next";
 import React from "react";
 
@@ -29,6 +38,36 @@ const sidebarItems: SidebarItem[] = [
     href: "/dashboard/create-event",
     icon: <SquarePlus className="h-4 w-4" />,
   },
+  // {
+  //   title: "Staff Management",
+  //   href: "/dashboard/staff-management",
+  //   icon: <Users className="h-4 w-4" />,
+  // },
+  // {
+  //   title: "Reneuve",
+  //   href: "/dashboard/reneuve",
+  //   icon: <HandCoins className="h-4 w-4" />,
+  // },
+  // {
+  //   title: "Ads Management",
+  //   href: "/dashboard/ads-management",
+  //   icon: <Headset className="h-4 w-4" />,
+  // },
+  // {
+  //   title: "Your Project",
+  //   href: "/dashboard/your-project",
+  //   icon: <FolderKanban className="h-4 w-4" />,
+  // },
+  // {
+  //   title: "Agency Contact",
+  //   href: "/dashboard/agency-contact",
+  //   icon: <Contact className="h-4 w-4" />,
+  // },
+  // {
+  //   title: "Settings",
+  //   href: "/dashboard/settings",
+  //   icon: <Settings className="h-4 w-4" />,
+  // },
 ];
 
 export default function layout({ children }: { children: React.ReactNode }) {

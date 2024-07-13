@@ -14,35 +14,31 @@ import {
 import { Button } from "@/components/ui/button";
 import { IoMdMore } from "react-icons/io";
 import { LogOut, MoreHorizontal, Pencil, Trash } from "lucide-react";
+import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export const columns: ColumnDef<EventProduct>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "id",
     header: "ID",
     cell: ({ row }) => {
       return <div>{row.original.id}</div>;
+    },
+  },
+  {
+    accessorKey: "productImages",
+    header: "Image",
+    cell: ({ row }) => {
+      return (
+        <Image
+          src={row.original.productImages[0].imageUrl}
+          width={80}
+          height={45}
+          alt={row.original.name}
+          className="rounded-lg aspect-video object-cover"
+        />
+      );
     },
   },
   {
@@ -99,33 +95,43 @@ export const columns: ColumnDef<EventProduct>[] = [
     accessorKey: "isDeleted",
     header: "Is Deleted",
     cell: ({ row }) => {
-      return <div>{row.original.isDeleted ? "Yes" : "No"}</div>;
-    },
-  },
-  {
-    id: "actions",
-    header: "",
-    cell: ({ row }) => {
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button aria-haspopup="true" size="icon" variant="ghost">
-              <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">Toggle menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            className="mt-0 bg-secondary-background"
-          >
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Badge
+          className={cn(
+            row.original.isDeleted
+              ? "bg-red-200 text-red-800 hover:bg-red-300"
+              : "bg-green-200 text-green-800 hover:bg-green-300"
+          )}
+        >
+          {row.original.isDeleted ? "Deactived" : "Actived"}
+        </Badge>
       );
     },
-    enableSorting: false,
-    enableHiding: false,
   },
+  // {
+  //   id: "actions",
+  //   header: "",
+  //   cell: ({ row }) => {
+  //     return (
+  //       <DropdownMenu>
+  //         <DropdownMenuTrigger asChild>
+  //           <Button aria-haspopup="true" size="icon" variant="ghost">
+  //             <MoreHorizontal className="h-4 w-4" />
+  //             <span className="sr-only">Toggle menu</span>
+  //           </Button>
+  //         </DropdownMenuTrigger>
+  //         <DropdownMenuContent
+  //           align="end"
+  //           className="mt-0 bg-secondary-background"
+  //         >
+  //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+  //           <DropdownMenuItem>Edit</DropdownMenuItem>
+  //           <DropdownMenuItem>Delete</DropdownMenuItem>
+  //         </DropdownMenuContent>
+  //       </DropdownMenu>
+  //     );
+  //   },
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
 ];

@@ -24,7 +24,6 @@ interface Props {
 
 export default function Sidebar({ sidebarTitle, isPro }: Props) {
   const pathname = usePathname();
-  const { authUser } = useAuth();
   const { sidebarItems } = useSidebarStore();
 
   return (

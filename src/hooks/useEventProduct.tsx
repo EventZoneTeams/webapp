@@ -3,6 +3,7 @@ import {
   CreateEventProductSendData,
   getEventProduct,
   GetEventProductsSendData,
+  deleteEventProducts,
 } from "@/api/event-product";
 import { useEventProductStore } from "@/stores/event-product";
 import { useMutation } from "@tanstack/react-query";
@@ -19,7 +20,6 @@ export default function useEventProduct() {
     trigger,
     switchTrigger,
   } = useEventProductStore();
-
 
   const getEventProductMutation = useMutation({
     mutationFn: (data: GetEventProductsSendData) => getEventProduct(data),
@@ -40,6 +40,20 @@ export default function useEventProduct() {
     },
   });
 
+  const deleteEventProductsMutation = useMutation({
+    mutationFn: (product: number) => deleteEventProducts(product),
+    onSuccess: (data) => {
+      if (data.status) {
+        toast.success("Delete product successfully");
+        switchTrigger();
+      }
+    },
+
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   useEffect(() => {
     getEventProductMutation.mutate(queryObj);
   }, [queryObj, trigger]);
@@ -52,5 +66,6 @@ export default function useEventProduct() {
     setIsCreateDialogOpen,
     getEventProductMutation,
     createEventProductMutation,
+    deleteEventProductsMutation,
   };
 }
