@@ -15,13 +15,12 @@ export default function page({ params }: { params: { id: string } }) {
   }, [trigger]);
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <div>
         <div className="flex items-center gap-2 justify-between">
           <Input placeholder="Search" className="w-96" />
           <AddEventProductButton />
         </div>
-        <div></div>
       </div>
       <div>
         <DataTable

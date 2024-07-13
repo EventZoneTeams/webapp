@@ -80,7 +80,7 @@ export default function BasicInfoForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex justify-center"
       >
-        <Card className="w-[600px]">
+        <Card className="w-[600px] bg-card">
           <CardHeader>
             <CardTitle>Event Basic Info</CardTitle>
             <CardDescription>

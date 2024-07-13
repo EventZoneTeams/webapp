@@ -11,7 +11,7 @@ import EventCard from "@/components/Event/EventCard";
 
 export default function page() {
   const { authUser } = useAuth();
-  const { eventsMuation, queryObj, setQueryObj, reset } = useEvent();
+  const { eventsMutation, queryObj, setQueryObj, reset } = useEvent();
   useEffect(() => {
     if (authUser) {
       setQueryObj({

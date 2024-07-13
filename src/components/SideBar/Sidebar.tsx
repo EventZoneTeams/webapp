@@ -76,7 +76,6 @@ export default function Sidebar({ sidebarTitle, isPro }: Props) {
             </Card>
           </div>
         )}
-        <div className="px-4 py-2">{authUser && <UserMenu />}</div>
       </div>
     </div>
   );

@@ -34,6 +34,12 @@ const config = {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
+        landing: {
+          DEFAULT: "var(--landing-via)",
+          from: "var(--landing-from)",
+          via: "var(--landing-via)",
+          to: "var(--landing-to)",
+        },
         tertiary: {
           DEFAULT: "hsl(var(--tertiary))",
           foreground: "hsl(var(--tertiary-foreground))",

@@ -15,21 +15,20 @@ import { Button } from "@/components/ui/button";
 import { Notification } from "@/types/notification";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import * as signalR from "@microsoft/signalr";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import useNotification from "@/hooks/useNotification";
 import { formatDistanceToNow } from "date-fns";
 import useAuth from "@/hooks/useAuth";
 
-
 export default function NotificationMenu() {
-
-  const {notifications, refetch} = useNotification();
-  const {authUser} = useAuth();
-  console.log(authUser)
-
-  console.log(notifications);
+  const { notifications, refetch } = useNotification();
+  const { authUser } = useAuth();
+  const nodificationCount = useMemo(
+    () => notifications.length,
+    [notifications]
+  );
 
   useEffect(() => {
     const connection = new signalR.HubConnectionBuilder()
@@ -40,15 +39,14 @@ export default function NotificationMenu() {
       })
       .build();
 
-    connection.start()
-    .then(() => {
-      console.log("Connection started")
-      console.log(authUser)
-      if(authUser){
-        connection.invoke("JoinRoom", authUser.RoleName)
-      }
-    })
-    .catch(() => console.log("Error connecting to SignalR"));
+    connection
+      .start()
+      .then(() => {
+        if (authUser) {
+          connection.invoke("JoinRoom", authUser.RoleName);
+        }
+      })
+      .catch(() => console.log("Error connecting to SignalR"));
 
     connection.on("ReceiveNotification", (title, content) => {
       refetch();
@@ -68,22 +66,20 @@ export default function NotificationMenu() {
           <Button variant={"ghost"} className="relative">
             <BellIcon />
             <span className="absolute -top-1 right-1 bg-red-500 text-tertiary-foreground  h-6 w-6 items-center justify-center flex rounded-full select-none">
-              5
+              {nodificationCount}
             </span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="w-96 shadow-2xl mr-6 mt-2"
+          className="w-96 shadow-2xl mr-6 mt-2 bg-secondary-background"
           side="bottom"
           align="start"
         >
-          <DropdownMenuLabel className="text-orange-500">
-            <Badge>Notification</Badge>
-          </DropdownMenuLabel>
+          <DropdownMenuLabel className="">Notification</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <ScrollArea className="h-96">
+          <ScrollArea className="max-h-96">
             <div className="space-y-4">
-              {notifications.map((notification,index:number) => (
+              {notifications.map((notification, index: number) => (
                 <NotificationItem key={index} notification={notification} />
               ))}
             </div>
@@ -110,7 +106,7 @@ function NotificationItem({ notification }: { notification: Notification }) {
   console.log(domain);
   console.log(notification);
   return (
-    <DropdownMenuItem>
+    <DropdownMenuItem className="">
       <div className="flex items-center gap-2">
         <Avatar>
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -118,12 +114,12 @@ function NotificationItem({ notification }: { notification: Notification }) {
         </Avatar>
         <div>
           <div className="font-semibold">{notification.Title}</div>
-          <div className="line-clamp-2">
-            {notification.Body}
-          </div>
+          <div className="line-clamp-2">{notification.Body}</div>
           {/* at */}
           <div className="text-xs">
-            {formatDistanceToNow(new Date(notification.CreatedAt), { addSuffix: true })}
+            {formatDistanceToNow(new Date(notification.CreatedAt), {
+              addSuffix: true,
+            })}
           </div>
         </div>
       </div>

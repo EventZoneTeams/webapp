@@ -114,7 +114,10 @@ export const columns: ColumnDef<EventProduct>[] = [
               <span className="sr-only">Toggle menu</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent
+            align="end"
+            className="mt-0 bg-secondary-background"
+          >
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>Edit</DropdownMenuItem>
             <DropdownMenuItem>Delete</DropdownMenuItem>

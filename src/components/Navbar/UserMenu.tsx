@@ -39,7 +39,7 @@ export function UserMenu() {
       {authUser ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="rounded-lg flex items-center gap-2  px-3 py-2 pr-4 bg-muted hover:cursor-pointer hover:bg-muted/80">
+            <div className="rounded-lg flex items-center gap-2 cursor-pointer">
               <Avatar className="size-10">
                 <AvatarImage src={authUser.Image} alt={authUser.FullName} />
                 <AvatarFallback className="bg-tertiary text-white ">
@@ -56,7 +56,7 @@ export function UserMenu() {
               </div>
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-96 mr-6 shadow-2xl">
+          <DropdownMenuContent className="w-96 mt-1 shadow-2xl bg-secondary-background">
             <DropdownMenuLabel className="text-orange-500">
               <Badge
                 className={cn({

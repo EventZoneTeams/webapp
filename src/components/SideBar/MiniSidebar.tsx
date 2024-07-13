@@ -4,8 +4,7 @@ import { cn } from "@/lib/utils";
 import { SidebarItem } from "@/types/sidebar";
 import { Home, Package } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import React from "react";
+import { usePathname } from "next/navigation";
 
 const MiniSidebarItem: SidebarItem[] = [
   {
@@ -27,7 +26,6 @@ const MiniSidebarItem: SidebarItem[] = [
 
 export default function MiniSidebar({ id }: { id: string }) {
   const pathname = usePathname();
-  const router = useRouter();
   const baseUrl = `/dashboard/my-events/${id}`;
   return (
     <div className="">
@@ -36,9 +34,8 @@ export default function MiniSidebar({ id }: { id: string }) {
           <Link
             key={index}
             className={cn(
-              "flex items-center gap-2 px-4 py-2 text-muted-foreground hover:text-primary rounded-md cursor-pointer",
-              pathname === `${baseUrl}${item.href}` &&
-                "bg-secondary text-primary"
+              "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary cursor-pointer",
+              pathname === `${baseUrl}${item.href}` && "bg-muted text-primary"
             )}
             href={`${baseUrl}${item.href}`}
           >

@@ -1,6 +1,7 @@
 "use client";
 
 import NotificationMenu from "@/components/Navbar/NotificationMenu";
+import { UserMenu } from "@/components/Navbar/UserMenu";
 import { usePathname } from "next/navigation";
 import React, { use, useEffect, useState } from "react";
 
@@ -15,8 +16,9 @@ export default function DashboardHeader() {
       <div className=" text-lg font-semibold flex items-center">
         <p>{pageTitle}</p>
       </div>
-      <div>
+      <div className="flex gap-4 items-center">
         <NotificationMenu />
+        <UserMenu />
       </div>
     </div>
   );
