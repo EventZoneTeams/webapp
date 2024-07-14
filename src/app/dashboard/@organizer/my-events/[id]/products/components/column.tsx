@@ -81,7 +81,7 @@ export const columns: ColumnDef<EventProduct>[] = [
     accessorKey: "quantityInStock",
     header: "Quantity in Stock",
     cell: ({ row }) => {
-      return <div>{row.original.quantityInStock}</div>;
+      return <div className="text-center">{row.original.quantityInStock}</div>;
     },
   },
   {

@@ -1,3 +1,5 @@
+import {BackEndEventProduct, EventProduct} from "@/types/event-product";
+
 export type EventPackage = {
   Id: number;
   EventId: number;
@@ -6,7 +8,7 @@ export type EventPackage = {
   Description: string;
   ThumbnailUrl: string;
   IsDeleted: boolean;
-  ProductsInPackage: Array;
+  ProductsInPackage: EventProduct[];
 };
 
 export type BackEndEventPackage = {
@@ -17,5 +19,5 @@ export type BackEndEventPackage = {
   description: string;
   "thumbnail-url": string;
   "is-deleted": boolean;
-  "products-in-package": Array;
+  "products-in-package": BackEndEventProduct[];
 };

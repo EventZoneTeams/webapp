@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { SidebarItem } from "@/types/sidebar";
-import { Home, Package, Pen, Settings, Ticket, Users } from "lucide-react";
+import { Home, Package } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -49,8 +49,8 @@ export default function MiniSidebar({ id }: { id: string }) {
   const pathname = usePathname();
   const baseUrl = `/dashboard/my-events/${id}`;
   return (
-    <div className="">
-      <div className="flex flex-col">
+    <div className="mt-2">
+      <div className="flex flex-col ">
         {MiniSidebarItem.map((item, index) => (
           <Link
             key={index}

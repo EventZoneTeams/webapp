@@ -14,10 +14,8 @@ export default function page({ params }: { params: { id: string } }) {
     setQueryObj({ EventId: Number(params.id) });
   }, [trigger]);
 
-  console.log(getEventProductMutation.data);
-
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-2">
       <div>
         <div className="flex items-center gap-2 justify-between">
           <Input placeholder="Search" className="w-96" />

@@ -4,6 +4,7 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -16,20 +17,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import DeleteProductButton from "@/app/dashboard/@organizer/my-events/[id]/products/components/DeleteProductButton";
+import UpdateProductButton from "@/app/dashboard/@organizer/my-events/[id]/products/components/UpdateProductButton";
+import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { EventProduct } from "@/types/event-product";
-import Image from "next/image";
-import { Fragment } from "react";
-import { format } from "date-fns";
-import { Button } from "@/components/ui/button";
-import { ChevronUp, Pencil, Trash2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import DeleteButton from "@/app/dashboard/@organizer/my-events/[id]/products/components/DeleteButton";
 import { cn } from "@/lib/utils";
+import { EventProduct } from "@/types/event-product";
+import { format } from "date-fns";
+import { ChevronUp } from "lucide-react";
+import Image from "next/image";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -44,14 +45,15 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
-    <div className="rounded-md border">
+    <div className="border ">
       <Table>
-        <TableHeader className="bg-background rounded-lg">
+        <TableHeader className="bg-background ">
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow key={headerGroup.id} className="">
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>
@@ -67,6 +69,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
+
         <TableBody className="bg-background">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => {
@@ -133,7 +136,12 @@ export function DataTable<TData, TValue>({
                               </p>
                             </div>
                           </div>
-                          <Separator className="my-2" />
+                          <Separator
+                            className={cn(
+                              "my-2",
+                              productRow.isDeleted && "hidden"
+                            )}
+                          />
                           <div
                             className={cn(
                               "flex items-center gap-4",
@@ -153,11 +161,8 @@ export function DataTable<TData, TValue>({
                                 productRow.isDeleted && "hidden"
                               )}
                             >
-                              <DeleteButton productId={productRow.id} />
-                              <Button className="flex gap-2 text-blue-800 bg-blue-200 hover:bg-blue-300">
-                                <Pencil size={20} />
-                                Edit
-                              </Button>
+                              <DeleteProductButton productId={productRow.id} />
+                              <UpdateProductButton productId={productRow.id} />
                             </div>
                           </div>
                         </TableCell>

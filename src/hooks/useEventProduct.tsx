@@ -17,6 +17,8 @@ export default function useEventProduct() {
     setQueryObj,
     isCreateDialogOpen,
     setIsCreateDialogOpen,
+    isUpdateDialogOpen,
+    setIsUpdateDialogOpen,
     trigger,
     switchTrigger,
   } = useEventProductStore();
@@ -64,6 +66,8 @@ export default function useEventProduct() {
     switchTrigger,
     isCreateDialogOpen,
     setIsCreateDialogOpen,
+    isUpdateDialogOpen,
+    setIsUpdateDialogOpen,
     getEventProductMutation,
     createEventProductMutation,
     deleteEventProductsMutation,

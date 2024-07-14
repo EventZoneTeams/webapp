@@ -7,6 +7,8 @@ interface EventProductState {
   setQueryObj: (queryObj: GetEventProductsSendData) => void;
   isCreateDialogOpen: boolean;
   setIsCreateDialogOpen: (isCreateDialogOpen: boolean) => void;
+  isUpdateDialogOpen: boolean;
+  setIsUpdateDialogOpen: (isUpdateDialogOpen: boolean) => void;
   trigger: boolean;
   switchTrigger: () => void;
 }
@@ -16,6 +18,8 @@ export const useEventProductStore = create<EventProductState>((set) => ({
   setQueryObj: (queryObj) => set({ queryObj }),
   isCreateDialogOpen: false,
   setIsCreateDialogOpen: (isCreateDialogOpen) => set({ isCreateDialogOpen }),
+  isUpdateDialogOpen: false,
+  setIsUpdateDialogOpen: (isUpdateDialogOpen) => set({ isUpdateDialogOpen }),
   trigger: false,
   switchTrigger: () => set((state) => ({ trigger: !state.trigger })),
 }));

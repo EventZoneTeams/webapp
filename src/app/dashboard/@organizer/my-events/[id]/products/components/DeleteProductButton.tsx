@@ -12,7 +12,11 @@ import useEventProduct from "@/hooks/useEventProduct";
 import { Trash2 } from "lucide-react";
 import React from "react";
 
-export default function DeleteButton({ productId }: { productId: number }) {
+export default function DeleteProductButton({
+  productId,
+}: {
+  productId: number;
+}) {
   const [open, setOpen] = React.useState(false);
   const { deleteEventProductsMutation } = useEventProduct();
   const handleDeleteProduct = () => {
@@ -26,7 +30,7 @@ export default function DeleteButton({ productId }: { productId: number }) {
         onClick={() => setOpen(true)}
       >
         <Trash2 size={20} />
-        Delete
+        Deactived
       </Button>
       <Dialog open={open}>
         <DialogContent>
