@@ -1,16 +1,29 @@
-import {BackEndEventProduct, EventProduct} from "@/types/event-product";
+import { BackEndEventProduct, EventProduct } from "@/types/event-product";
+
+export type ProductInPackage = {
+    productId: number;
+    packageId: number;
+    quantity: number;
+    eventProduct: EventProduct;
+}
 
 export type EventPackage = {
-  Id: number;
-  EventId: number;
-  ImageUrl: string;
-  TotalPrice: number;
-  Description: string;
-  ThumbnailUrl: string;
-  IsDeleted: boolean;
-  ProductsInPackage: EventProduct[];
+  id: number;
+  eventId: number;
+  imageUrl: string;
+  totalPrice: number;
+  description: string;
+  thumbnailUrl: string;
+  isDeleted: boolean;
+  productsInPackage: ProductInPackage[];
 };
 
+export type BackEndProductInPackage = {
+  "product-id": number;
+  "package-id": number;
+  quantity: number;
+  "event-product": BackEndEventProduct;
+}
 export type BackEndEventPackage = {
   id: number;
   "event-id": number;
@@ -19,5 +32,5 @@ export type BackEndEventPackage = {
   description: string;
   "thumbnail-url": string;
   "is-deleted": boolean;
-  "products-in-package": BackEndEventProduct[];
+  "products-in-package": BackEndProductInPackage[];
 };

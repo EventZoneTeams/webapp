@@ -49,7 +49,7 @@ export default function MiniSidebar({ id }: { id: string }) {
   const pathname = usePathname();
   const baseUrl = `/dashboard/my-events/${id}`;
   return (
-    <div className="mt-2">
+    <div className="mt-4">
       <div className="flex flex-col ">
         {MiniSidebarItem.map((item, index) => (
           <Link

@@ -1,19 +1,32 @@
-import {BackEndEventPackage, EventPackage} from "@/types/event-packages.";
-import {mapBackEndEventProductsToEventProducts} from "@/lib/event-product";
+import {BackEndEventPackage, BackEndProductInPackage, EventPackage, ProductInPackage} from "@/types/event-packages.";
+import {mapBackEndEventProductToEventProduct} from "@/lib/event-product";
 
-export const mapBackEndEventPackageToEventPackage = (eventPackage: BackEndEventPackage): EventPackage => {
+export const mapBackEndProductInPackageToProductInPackage = (data: BackEndProductInPackage): ProductInPackage => {
     return {
-        Id: eventPackage.id,
-        EventId: eventPackage["event-id"],
-        ImageUrl: eventPackage["image-url"],
-        TotalPrice: eventPackage["total-price"],
-        Description: eventPackage.description,
-        ThumbnailUrl: eventPackage["thumbnail-url"],
-        IsDeleted: eventPackage["is-deleted"],
-        ProductsInPackage: mapBackEndEventProductsToEventProducts(eventPackage["products-in-package"]),
-    };
+        productId: data["product-id"],
+        packageId: data["package-id"],
+        quantity: data.quantity,
+        eventProduct: mapBackEndEventProductToEventProduct(data["event-product"])
+    }
 }
 
-export const mapBackEndEventPackagesToEventPackages = (eventPackages: BackEndEventPackage[]): EventPackage[] => {
-    return eventPackages.map(mapBackEndEventPackageToEventPackage);
+export const mapBackEndProductsInPackageToProductsInPackage = (data: BackEndProductInPackage[]): ProductInPackage[] => {
+    return data.map(mapBackEndProductInPackageToProductInPackage);
+}
+
+export const mapBackEndEventPackageToEventPackage = (data: BackEndEventPackage): EventPackage => {
+    return {
+        id: data.id,
+        eventId: data["event-id"],
+        imageUrl: data["image-url"],
+        totalPrice: data["total-price"],
+        description: data.description,
+        thumbnailUrl: data["thumbnail-url"],
+        isDeleted: data["is-deleted"],
+        productsInPackage: mapBackEndProductsInPackageToProductsInPackage(data["products-in-package"])
+    }
+}
+
+export const mapBackEndEventPackagesToEventPackages = (data: BackEndEventPackage[]): EventPackage[] => {
+    return data.map(mapBackEndEventPackageToEventPackage);
 }
