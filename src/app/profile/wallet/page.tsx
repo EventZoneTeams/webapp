@@ -26,7 +26,7 @@ export default function page() {
           >
             <div className="text-lg font-semibold">
               +
-              {Intl.NumberFormat("vn-Vi", {
+              {Intl.NumberFormat("vi-VN", {
                 style: "currency",
                 currency: "VND",
               }).format(500000)}
@@ -40,7 +40,7 @@ export default function page() {
         <div className="p-4 rounded-md bg-red-100 text-red-800">
           <div className="text-lg font-semibold">
             -
-            {Intl.NumberFormat("vn-Vi", {
+            {Intl.NumberFormat("vi-VN", {
               style: "currency",
               currency: "VND",
             }).format(500000)}
@@ -65,7 +65,7 @@ export default function page() {
               <div className="flex items-center gap-4">
                 <div className="text-lg font-semibold flex-1">
                   {transaction.transactionType === "DEPOSIT" ? "+" : "-"}
-                  {Intl.NumberFormat("vn-Vi", {
+                  {Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
                   }).format(transaction.amount)}

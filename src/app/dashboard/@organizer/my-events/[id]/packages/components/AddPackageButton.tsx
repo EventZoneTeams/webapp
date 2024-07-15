@@ -15,7 +15,11 @@ import React from "react";
 import useEventPackage from "@/hooks/useEventPackage";
 import AddPackageForm from "@/app/dashboard/@organizer/my-events/[id]/packages/components/AddPackageForm";
 
-export default function AddPackageButton() {
+export default function AddPackageButton({
+  params,
+}: {
+  params: { id: string };
+}) {
   const { isCreateDialogOpen, setIsCreateDialogOpen } = useEventPackage();
   return (
     <Dialog open={isCreateDialogOpen}>
@@ -31,12 +35,12 @@ export default function AddPackageButton() {
           Add Package
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[800px] bg-secondary-background">
+      <DialogContent className="max-w-[1200px] bg-secondary-background">
         <DialogHeader>
           <DialogTitle>Add Package</DialogTitle>
           <DialogDescription>Add Package</DialogDescription>
         </DialogHeader>
-        <AddPackageForm />
+        <AddPackageForm params={params} />
         <DialogFooter>
           <Button
             variant={"secondary"}

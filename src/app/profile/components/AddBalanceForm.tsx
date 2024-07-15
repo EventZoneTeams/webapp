@@ -55,7 +55,7 @@ export default function AddBalanceForm({
                 <Input
                   placeholder="Enter amount to deposit"
                   {...field}
-                  value={Intl.NumberFormat("vn-Vi", {
+                  value={Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
                   }).format(Number(field.value))}

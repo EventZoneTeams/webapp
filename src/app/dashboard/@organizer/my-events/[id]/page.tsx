@@ -6,7 +6,7 @@ import { AreaChartStacked } from "@/components/Example/Charts/AreaChartStacked";
 import { PieChartComponent } from "@/components/Example/Charts/PieChart";
 import useEvent from "@/hooks/useEvent";
 import { Coins, Package } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 const cards: DashboardCardProps[] = [
   {
@@ -31,7 +31,6 @@ export default function page({ params }: { params: { id: string } }) {
     getEventByIdMutation.mutate(Number(params.id));
   }, [params.id]);
 
-  const event = getEventByIdMutation.data;
   return (
     <div className="py-4 space-y-4">
       <DashboardCardList cards={cards} />

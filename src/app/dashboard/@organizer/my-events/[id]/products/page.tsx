@@ -11,7 +11,7 @@ export default function page({ params }: { params: { id: string } }) {
   const { setQueryObj, getEventProductMutation, trigger } = useEventProduct();
 
   useEffect(() => {
-    setQueryObj({ EventId: Number(params.id) });
+    setQueryObj({ EventId: Number(params.id), PageSize: 10, PageIndex: 1 });
   }, [trigger]);
 
   return (

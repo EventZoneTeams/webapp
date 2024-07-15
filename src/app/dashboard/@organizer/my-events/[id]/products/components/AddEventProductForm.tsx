@@ -87,7 +87,7 @@ export default function AddEventProductForm() {
                     <Input
                       placeholder="Enter the price of the product"
                       {...field}
-                      value={Intl.NumberFormat("vn-Vi", {
+                      value={Intl.NumberFormat("vi-VN", {
                         style: "currency",
                         currency: "VND",
                       }).format(Number(field.value))}

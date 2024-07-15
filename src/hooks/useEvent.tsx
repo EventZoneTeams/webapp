@@ -5,11 +5,13 @@ import {
   getEventById,
   GetEventSendData,
 } from "@/api/event";
+import { useEventStore } from "@/stores/event";
 import { useFilterAndPaging } from "@/stores/manager/filter-paging";
 import { useMutation } from "@tanstack/react-query";
 
 export default function useEvent() {
   const { queryObj, reset, metaData, setQueryObj } = useFilterAndPaging();
+  const { currentEvent, setCurrentEvent } = useEventStore();
   const eventsMutation = useMutation({
     mutationFn: (queryData: GetEventSendData) => getEvent(queryData),
     onSuccess: (data) => {
@@ -41,6 +43,8 @@ export default function useEvent() {
   });
 
   return {
+    currentEvent,
+    setCurrentEvent,
     queryObj,
     reset,
     metaData,

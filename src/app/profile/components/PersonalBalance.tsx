@@ -28,7 +28,7 @@ export default function PersonalBalance() {
         <p className="mt-3 text-2xl font-extrabold">
           {wallets &&
             wallets.length > 0 &&
-            Intl.NumberFormat("vn-Vi", {
+            Intl.NumberFormat("vi-VN", {
               style: "currency",
               currency: "VND",
             }).format(wallets[0].balance)}

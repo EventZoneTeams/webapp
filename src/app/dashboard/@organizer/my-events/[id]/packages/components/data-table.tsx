@@ -88,8 +88,8 @@ export function DataTable<TData, TValue>({
                       <TableRow className="ease-linear duration-200 transition-all">
                         <TableCell colSpan={columns.length}>
                           <div className="gap-4 grid grid-cols-2">
-                            <div className="flex gap-4 bg-background p-2 pr-4 rounded-lg col-span-1">
-                              <div className="h-full">
+                            <div className=" col-span-1 ">
+                              <div className="grid grid-cols-2 gap-4 p-2 pr-4 rounded-lg bg-background">
                                 <Image
                                   src={packageRow.thumbnailUrl}
                                   alt={packageRow.description}
@@ -97,40 +97,40 @@ export function DataTable<TData, TValue>({
                                   height={180}
                                   className="rounded-lg aspect-video object-cover"
                                 />
-                              </div>
-                              <div className="flex flex-col gap-2 space-y-2">
-                                <div className="flex gap-2 items-center">
-                                  <div className="text-lg font-semibold">
-                                    {packageRow.description}
+                                <div className="flex flex-col gap-2 space-y-2">
+                                  <div className="flex gap-2 items-center">
+                                    <div className="text-lg font-semibold">
+                                      {packageRow.description}
+                                    </div>
+                                    <div>
+                                      <Badge
+                                        className={cn(
+                                          packageRow.isDeleted
+                                            ? "bg-red-200 text-red-800 hover:bg-red-300"
+                                            : "bg-green-200 text-green-800 hover:bg-green-300"
+                                        )}
+                                      >
+                                        {packageRow.isDeleted
+                                          ? "Deactived"
+                                          : "Actived"}
+                                      </Badge>
+                                    </div>
                                   </div>
-                                  <div>
-                                    <Badge
-                                      className={cn(
-                                        packageRow.isDeleted
-                                          ? "bg-red-200 text-red-800 hover:bg-red-300"
-                                          : "bg-green-200 text-green-800 hover:bg-green-300"
-                                      )}
-                                    >
-                                      {packageRow.isDeleted
-                                        ? "Deactived"
-                                        : "Actived"}
-                                    </Badge>
+                                  <div className="flex gap-2">
+                                    <div className="font-semibold">Price:</div>
+                                    <div>
+                                      {Intl.NumberFormat("vi-VN", {
+                                        style: "currency",
+                                        currency: "VND",
+                                      }).format(packageRow.totalPrice)}
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="flex gap-2">
-                                  <div className="font-semibold">Price:</div>
-                                  <div>
-                                    {Intl.NumberFormat("vi-VN", {
-                                      style: "currency",
-                                      currency: "VND",
-                                    }).format(packageRow.totalPrice)}
+                                  <div className="flex gap-2">
+                                    <div className="font-semibold">
+                                      Total products:
+                                    </div>
+                                    {packageRow.productsInPackage.length}
                                   </div>
-                                </div>
-                                <div className="flex gap-2">
-                                  <div className="font-semibold">
-                                    Total products:
-                                  </div>
-                                  {packageRow.productsInPackage.length}
                                 </div>
                               </div>
                             </div>

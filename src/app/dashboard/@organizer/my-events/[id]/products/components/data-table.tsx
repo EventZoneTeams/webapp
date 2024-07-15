@@ -123,7 +123,7 @@ export function DataTable<TData, TValue>({
                                 <span className="font-semibold mr-2">
                                   Price:
                                 </span>
-                                {Intl.NumberFormat("vn-Vi", {
+                                {Intl.NumberFormat("vi-VN", {
                                   style: "currency",
                                   currency: "VND",
                                 }).format(productRow.price)}
