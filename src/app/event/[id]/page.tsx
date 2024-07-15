@@ -30,13 +30,17 @@ export default function page({ params }: { params: { id: string } }) {
           <section>
             <Ticket event={event} />
           </section>
+
           <section className="mt-12 flex w-full">
             <section className="w-full bg-muted">
               <Description description={event.Description} />
             </section>
-            <section className="ml-4 ">
-              <Package eventPackages={event.EventPackage} />
-            </section>
+
+            {event.EventPackage && event.EventPackage.length > 0 ? (
+              <section className="ml-4 bg-muted">
+                <Package eventPackages={event.EventPackage} />
+              </section>
+            ) : null}
           </section>
         </div>
       ) : (

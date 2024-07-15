@@ -2,6 +2,7 @@ import { OrganizationStatusEnum, StatusEnum } from "@/enums/statusEnum";
 import { mapBackendUserToUser } from "@/lib/user";
 import { BackendUser } from "@/types/authuser";
 import { BackendEvent, Event } from "@/types/event";
+import { mapBackEndEventPackagesToEventPackages } from "./event-package";
 
 export const mapBackendEventToEvent = (backendEvent: BackendEvent): Event => {
   return {
@@ -29,12 +30,14 @@ export const mapBackendEventToEvent = (backendEvent: BackendEvent): Event => {
     University: backendEvent.university || "",
     Status: backendEvent.status as StatusEnum,
     OrganizationStatus: backendEvent[
-      "origanization-status"
+      "organization-status"
     ] as OrganizationStatusEnum,
     CreatedAt: new Date(backendEvent["created-at"]),
     IsDonation: backendEvent["is-donation"],
     TotalCost: backendEvent["total-cost"],
-    EventPackage: backendEvent["event-packages"],
+    EventPackage: mapBackEndEventPackagesToEventPackages(
+      backendEvent["event-packages"]
+    ),
   };
 };
 
