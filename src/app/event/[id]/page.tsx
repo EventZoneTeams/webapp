@@ -35,7 +35,7 @@ export default function page({ params }: { params: { id: string } }) {
               <Description description={event.Description} />
             </section>
             <section className="ml-4 ">
-              <Package eventPackages={event.EventPackage} />
+              {/* <Package eventPackages={event.EventPackage} /> */}
             </section>
           </section>
         </div>
