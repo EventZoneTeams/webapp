@@ -78,7 +78,10 @@ export function DataTable<TData, TValue>({
                 <Collapsible key={row.id} asChild>
                   <>
                     <CollapsibleTrigger asChild className="cursor-pointer">
-                      <TableRow data-state={row.getIsSelected() && "selected"}>
+                      <TableRow
+                        data-state={row.getIsSelected() && "selected"}
+                        className={cn("select-none")}
+                      >
                         {row.getVisibleCells().map((cell) => (
                           <TableCell key={cell.id}>
                             {flexRender(

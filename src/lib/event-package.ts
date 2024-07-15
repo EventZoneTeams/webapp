@@ -18,7 +18,6 @@ export const mapBackEndEventPackageToEventPackage = (data: BackEndEventPackage):
     return {
         id: data.id,
         eventId: data["event-id"],
-        imageUrl: data["image-url"],
         totalPrice: data["total-price"],
         description: data.description,
         thumbnailUrl: data["thumbnail-url"],
