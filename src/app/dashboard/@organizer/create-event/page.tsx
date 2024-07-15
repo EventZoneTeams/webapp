@@ -39,7 +39,7 @@ const steps: StepItem[] = [
 
 export default function page() {
   return (
-    <div className="flex w-full flex-col gap-6 h-full">
+    <div className="flex w-full flex-col gap-6 h-full py-4">
       <Stepper
         variant="circle-alt"
         initialStep={0}
