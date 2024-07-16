@@ -67,6 +67,10 @@ const NavMenuItems: MenuItem[] = [
       },
     ],
   },
+  {
+    title: "Cart",
+    href: "/cart",
+  },
 ];
 export default function NavMenu() {
   const pathName = usePathname();

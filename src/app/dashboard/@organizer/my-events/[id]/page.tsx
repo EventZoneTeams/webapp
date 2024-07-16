@@ -5,7 +5,7 @@ import DashboardCardList from "@/components/DashboardCard/DashboardCardList";
 import { AreaChartStacked } from "@/components/Example/Charts/AreaChartStacked";
 import { PieChartComponent } from "@/components/Example/Charts/PieChart";
 import useEvent from "@/hooks/useEvent";
-import { Coins, Package } from "lucide-react";
+import { Package } from "lucide-react";
 import { useEffect } from "react";
 
 const cards: DashboardCardProps[] = [

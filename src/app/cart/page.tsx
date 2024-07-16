@@ -42,12 +42,38 @@ export default function CartPage() {
     localStorage.setItem("cart", JSON.stringify(updatedCartItems));
   };
 
-  const handleCheckSingle = (itemId: string) => {
-    const updatedCartItems = cartItems.map((item) =>
-      item.id === itemId ? { ...item, isChecked: !item.isChecked } : item
-    );
-    setCartItems(updatedCartItems);
-    localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+  const handlePlaceOrder = async () => {
+    const orderDetails = cartItems.map((item) => ({
+      "package-id": item.id,
+      quantity: item.quantity,
+    }));
+    const eventId = 14;
+    const orderData = {
+      "event-id": eventId,
+      "event-order-details": orderDetails,
+    };
+
+    try {
+      const response = await fetch(
+        "https://ez-api.azurewebsites.net/api/v1/event-orders",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderData),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Order placed successfully:", data);
+      } else {
+        console.error("Failed to place order:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error placing order:", error);
+    }
   };
 
   return (
@@ -152,7 +178,12 @@ export default function CartPage() {
                 </span>
               </div>
             </div>
-            <Button className="w-full py-3 rounded mt-4">Place order</Button>
+            <Button
+              onClick={handlePlaceOrder}
+              className="w-full py-3 rounded mt-4"
+            >
+              Place order
+            </Button>
           </div>
         </div>
       </div>
