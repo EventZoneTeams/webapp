@@ -82,10 +82,6 @@ export default function AgreeToTermAndCondition() {
       };
       console.log(sendData);
       createEventMutation.mutate(sendData);
-      if (createEventMutation.isSuccess) {
-        reset();
-        nextStep();
-      }
     }
   };
 
@@ -148,6 +144,7 @@ export default function AgreeToTermAndCondition() {
                 onClick={() => {
                   prevStep();
                 }}
+                disabled={createEventMutation.isPending}
               >
                 <ArrowLeftToLine className="mr-2 h-4 w-4" />
                 Back
@@ -155,15 +152,12 @@ export default function AgreeToTermAndCondition() {
               <Button
                 type="submit"
                 className=" w-full"
-                disabled={!form.formState.isValid}
+                disabled={
+                  !form.formState.isValid || createEventMutation.isPending
+                }
               >
                 {createEventMutation.isPending ? (
                   <div className="flex gap-2 items-center">
-                    <Spinner
-                      size="medium"
-                      show={true}
-                      className="text-primary-foreground"
-                    />
                     <p>Creating event...</p>
                   </div>
                 ) : (

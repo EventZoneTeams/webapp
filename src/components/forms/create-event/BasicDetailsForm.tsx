@@ -36,7 +36,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowRightToLine } from "lucide-react";
 import { useEffect } from "react";
 import { DateTimePicker } from "@/components/ui/my-date-input";
-import { DateValue } from "react-aria";
+import Swal from "sweetalert2";
 
 export default function BasicInfoForm() {
   const { nextStep } = useStepper();
