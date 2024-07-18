@@ -52,19 +52,21 @@ export default function AddBalanceForm({
             <FormItem>
               <FormLabel>Deposit amount</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Enter amount to deposit"
-                  {...field}
-                  value={Intl.NumberFormat("vn-Vi", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(Number(field.value))}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, "");
-                    field.onChange(Number(value));
-                  }}
-                  autoFocus
-                />
+                <div className="relative">
+                  <span className="absolute top-1/2 right-4 -translate-y-1/2 text-sm">
+                    (VND)
+                  </span>
+                  <Input
+                    autoFocus
+                    placeholder="Enter the price of the product"
+                    {...field}
+                    value={field.value.toLocaleString()}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, "");
+                      field.onChange(Number(value));
+                    }}
+                  />
+                </div>
               </FormControl>
               <FormDescription>
                 This is the amount you want to deposit

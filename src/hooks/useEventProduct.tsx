@@ -4,6 +4,9 @@ import {
   getEventProduct,
   GetEventProductsSendData,
   deleteEventProducts,
+  getEventProductById,
+  UpdateEventProductSendData,
+  updateEventProduct,
 } from "@/api/event-product";
 import { useEventProductStore } from "@/stores/event-product";
 import { useMutation } from "@tanstack/react-query";
@@ -25,7 +28,10 @@ export default function useEventProduct() {
 
   const getEventProductMutation = useMutation({
     mutationFn: (data: GetEventProductsSendData) => getEventProduct(data),
-    onSuccess: (data) => {},
+  });
+
+  const getEventProductByIdMutation = useMutation({
+    mutationFn: (id: number) => getEventProductById(id),
   });
 
   const createEventProductMutation = useMutation({
@@ -56,6 +62,17 @@ export default function useEventProduct() {
     },
   });
 
+  const updateEventProductMuation = useMutation({
+    mutationFn: (data: UpdateEventProductSendData) => updateEventProduct(data),
+    onSuccess: (data) => {
+      if (data.status) {
+        toast.success(data.message);
+        setIsUpdateDialogOpen(false);
+        switchTrigger();
+      }
+    },
+  });
+
   useEffect(() => {
     getEventProductMutation.mutate(queryObj);
   }, [queryObj, trigger]);
@@ -69,7 +86,9 @@ export default function useEventProduct() {
     isUpdateDialogOpen,
     setIsUpdateDialogOpen,
     getEventProductMutation,
+    getEventProductByIdMutation,
     createEventProductMutation,
     deleteEventProductsMutation,
+    updateEventProductMuation,
   };
 }

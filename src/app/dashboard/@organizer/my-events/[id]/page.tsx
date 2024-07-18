@@ -31,7 +31,6 @@ export default function page({ params }: { params: { id: string } }) {
     getEventByIdMutation.mutate(Number(params.id));
   }, [params.id]);
 
-  const event = getEventByIdMutation.data;
   return (
     <div className="py-4 space-y-4">
       <DashboardCardList cards={cards} />

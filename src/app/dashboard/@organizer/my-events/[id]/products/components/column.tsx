@@ -68,7 +68,7 @@ export const columns: ColumnDef<EventProduct>[] = [
     cell: ({ row }) => {
       return (
         <div>
-          {Intl.NumberFormat("vn-Vi", {
+          {Intl.NumberFormat("vi-VN", {
             style: "currency",
             currency: "VND",
           }).format(row.original.price)}

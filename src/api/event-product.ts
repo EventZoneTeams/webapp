@@ -3,6 +3,7 @@ import {
   mapBackEndEventProductsToEventProducts,
   mapBackEndEventProductToEventProduct,
 } from "@/lib/event-product";
+import { UpdateEventProductType } from "@/schemas/eventProductSchema";
 import { BackEndEventProduct, EventProduct } from "@/types/event-product";
 
 export type GetEventProductsSendData = {
@@ -33,6 +34,28 @@ export const getEventProduct = async (data: GetEventProductsSendData) => {
     const response = (await axiosClient.get<BackEndEventProduct[]>(baseUrl))
       .data;
     return mapBackEndEventProductsToEventProducts(response);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export interface GetEventProductByIdResponse {
+  status: boolean;
+  message: string;
+  data: BackEndEventProduct;
+}
+export const getEventProductById = async (id: number) => {
+  try {
+    const response = (
+      await axiosClient.get<GetEventProductByIdResponse>(
+        `/event-products/${id}`
+      )
+    ).data;
+    return {
+      status: response.status,
+      message: response.message,
+      data: mapBackEndEventProductToEventProduct(response.data),
+    };
   } catch (error) {
     throw error;
   }
@@ -81,6 +104,34 @@ export const deleteEventProducts = async (product: number) => {
     const response = (
       await axiosClient.delete<DeleteProductsResponse>(
         `/event-products/${product}`
+      )
+    ).data;
+    return {
+      status: response.status,
+      message: response.message,
+      data: mapBackEndEventProductToEventProduct(response.data),
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export interface UpdateEventProductSendData {
+  productId: number;
+  data: UpdateEventProductType;
+}
+
+export interface UpdateEventProductResponse {
+  status: boolean;
+  message: string;
+  data: BackEndEventProduct;
+}
+export const updateEventProduct = async (data: UpdateEventProductSendData) => {
+  try {
+    const response = (
+      await axiosClient.put<UpdateEventProductResponse>(
+        `/event-products/${data.productId}`,
+        data.data
       )
     ).data;
     return {

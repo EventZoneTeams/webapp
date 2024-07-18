@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 240, 6%, 97%;
     --secondary-background: 0, 0%, 100%;
     --landing-from: #eef2ff;
     --landing-via: #fff;

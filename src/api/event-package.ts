@@ -1,6 +1,9 @@
-import { axiosClient } from "@/api/axiosClient";
-import { BackEndEventPackage } from "@/types/event-packages.";
-import { mapBackEndEventPackagesToEventPackages } from "@/lib/event-package";
+import { axiosClient, axiosClientFormData } from "@/api/axiosClient";
+import { BackEndEventPackage, EventPackage } from "@/types/event-packages.";
+import {
+  mapBackEndEventPackagesToEventPackages,
+  mapBackEndEventPackageToEventPackage,
+} from "@/lib/event-package";
 
 export interface GetEventPackageSendData {
   PageIndex?: number;
@@ -30,6 +33,46 @@ export const getEventPackages = async (data: GetEventPackageSendData) => {
     const response = (await axiosClient.get<BackEndEventPackage[]>(baseUrl))
       .data;
     return mapBackEndEventPackagesToEventPackages(response);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export interface PackageProductSendData {
+  productid: number;
+  quantity: number;
+}
+export interface CreateEventPackageSendData {
+  eventId: number;
+  Description: string;
+  Products: PackageProductSendData[];
+  Thumbnail: File;
+}
+
+export interface CreateEventPackageResponse {
+  status: boolean;
+  message: string;
+  data: BackEndEventPackage;
+}
+
+export const createEventPackage = async (data: CreateEventPackageSendData) => {
+  try {
+    const form = new FormData();
+    data.Products.forEach((product) => {
+      form.append("Products", JSON.stringify(product));
+    });
+    form.append("Description", data.Description);
+    form.append("Thumbnail", data.Thumbnail);
+
+    const response = await axiosClientFormData.post<CreateEventPackageResponse>(
+      `/event-packages?eventId=${data.eventId}`,
+      form
+    );
+    return {
+      status: response.data.status,
+      message: response.data.message,
+      data: mapBackEndEventPackageToEventPackage(response.data.data),
+    };
   } catch (error) {
     throw error;
   }

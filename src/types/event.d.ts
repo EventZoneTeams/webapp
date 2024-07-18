@@ -46,7 +46,7 @@ export type BackendEvent = {
   };
   university: string | null;
   status: string;
-  "origanization-status": string;
+  "organization-status": string;
   "created-at": Date;
   "is-donation": boolean;
   "total-cost": number | null;

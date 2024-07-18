@@ -1,23 +1,15 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { Metadata } from "next";
+import ProfileTabs from "@/app/profile/components/ProfileTabs";
 import Navbar from "@/components/Navbar";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import MyAccount from "@/app/profile/components/MyAccount";
-import WalletPage from "@/app/profile/components/WalletPage";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import useAuth from "@/hooks/useAuth";
 import { format } from "date-fns";
 import { Calendar } from "lucide-react";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { FaWallet } from "react-icons/fa";
-import { MdAccountCircle, MdVerified } from "react-icons/md";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import ProfileTabs from "@/app/profile/components/ProfileTabs";
+import React from "react";
+import { MdVerified } from "react-icons/md";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   const { authUser } = useAuth();

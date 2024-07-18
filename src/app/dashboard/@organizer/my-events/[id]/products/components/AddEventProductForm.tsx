@@ -84,18 +84,20 @@ export default function AddEventProductForm() {
                 <FormItem>
                   <FormLabel>Price (VND)</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter the price of the product"
-                      {...field}
-                      value={Intl.NumberFormat("vn-Vi", {
-                        style: "currency",
-                        currency: "VND",
-                      }).format(Number(field.value))}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, "");
-                        field.onChange(Number(value));
-                      }}
-                    />
+                    <div className="relative">
+                      <span className="absolute top-1/2 right-4 -translate-y-1/2 text-sm">
+                        (VND)
+                      </span>
+                      <Input
+                        placeholder="Enter the price of the product"
+                        {...field}
+                        value={field.value.toLocaleString()}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, "");
+                          field.onChange(Number(value));
+                        }}
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

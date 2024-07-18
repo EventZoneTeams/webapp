@@ -60,33 +60,35 @@ export default function NotificationMenu() {
   }, [authUser]);
 
   return (
-    <div>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant={"ghost"} className="relative">
-            <BellIcon />
-            <span className="absolute -top-1 right-1 bg-red-500 text-tertiary-foreground  h-6 w-6 items-center justify-center flex rounded-full select-none">
-              {nodificationCount}
-            </span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          className="w-96 shadow-2xl mr-6 mt-2 bg-secondary-background"
-          side="bottom"
-          align="start"
-        >
-          <DropdownMenuLabel className="">Notification</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <ScrollArea className="max-h-96">
-            <div className="space-y-4">
-              {notifications.map((notification, index: number) => (
-                <NotificationItem key={index} notification={notification} />
-              ))}
-            </div>
-          </ScrollArea>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+    authUser && (
+      <div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"ghost"} className="relative">
+              <BellIcon />
+              <span className="absolute -top-1 right-1 bg-red-500 text-tertiary-foreground  h-6 w-6 items-center justify-center flex rounded-full select-none">
+                {nodificationCount}
+              </span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className="w-96 shadow-2xl mr-6 mt-2 bg-secondary-background"
+            side="bottom"
+            align="start"
+          >
+            <DropdownMenuLabel className="">Notification</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <ScrollArea className="max-h-96">
+              <div className="space-y-4">
+                {notifications.map((notification, index: number) => (
+                  <NotificationItem key={index} notification={notification} />
+                ))}
+              </div>
+            </ScrollArea>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    )
   );
 }
 

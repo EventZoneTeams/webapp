@@ -29,7 +29,7 @@ export const createEvent = async (data: CreateEventSendData) => {
     const response = await axiosClientFormData.post("/events", data);
     console.log(response.data);
   } catch (error) {
-    throw new Error(error as string);
+    throw error;
   }
 };
 
