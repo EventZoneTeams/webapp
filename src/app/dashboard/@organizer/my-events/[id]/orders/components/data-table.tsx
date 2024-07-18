@@ -15,6 +15,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { cn } from "@/lib/utils";
+import { CollapsibleContent } from "@radix-ui/react-collapsible";
+import { EventOrder } from "@/types/event-order";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -32,9 +36,9 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="rounded-md border">
+    <div className=" border">
       <Table>
-        <TableHeader>
+        <TableHeader className="bg-background">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -54,18 +58,37 @@ export function DataTable<TData, TValue>({
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
+            table.getRowModel().rows.map((row) => {
+              const orderRow = row.original as EventOrder;
+              return (
+                <Collapsible key={row.id} asChild>
+                  <>
+                    <CollapsibleTrigger asChild className="cursor-pointer">
+                      <TableRow
+                        data-state={row.getIsSelected() && "selected"}
+                        className={cn("select-none")}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent asChild>
+                      <TableRow className="ease-linear duration-200 transition-all">
+                        <TableCell colSpan={columns.length}>
+                          <div className="flex gap-4 "></div>
+                        </TableCell>
+                      </TableRow>
+                    </CollapsibleContent>
+                  </>
+                </Collapsible>
+              );
+            })
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
