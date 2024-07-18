@@ -78,7 +78,7 @@ export default function NotificationMenu() {
           >
             <DropdownMenuLabel className="">Notification</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <ScrollArea className="max-h-96">
+            <ScrollArea className="h-96">
               <div className="space-y-4">
                 {notifications.map((notification, index: number) => (
                   <NotificationItem key={index} notification={notification} />

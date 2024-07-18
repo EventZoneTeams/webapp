@@ -2,6 +2,7 @@ import { OrganizationStatusEnum, StatusEnum } from "@/enums/statusEnum";
 import { BackendUser, User } from "@/types/authuser";
 import { EventCategory } from "@/types/event-categories";
 import { BackEndEventPackage, EventPackage } from "./event-packages.";
+import { BackEndEventCampaign } from "@/types/event-campaign";
 
 export type Event = {
   Id: number;
@@ -19,10 +20,11 @@ export type Event = {
   EventCategory: EventCategory;
   University: string;
   Status: StatusEnum;
-  OrganizationStatus: OrganizationStatusEnum;
   CreatedAt: Date;
-  IsDonation: boolean;
+  IsDeleted: boolean;
   TotalCost: number | null | undefined;
+  EventPackages: EventPackage[];
+  EventCampaigns: EventCampaign[];
 };
 
 export type BackendEvent = {
@@ -45,8 +47,9 @@ export type BackendEvent = {
   };
   university: string | null;
   status: string;
-  "origanization-status": string;
   "created-at": Date;
-  "is-donation": boolean;
+  "is-deleted": boolean;
   "total-cost": number | null;
+  "event-packages": BackEndEventPackage[];
+  "event-campaigns": BackEndEventCampaign[];
 };

@@ -9,15 +9,16 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Paging from "@/app/dashboard/@manager/feedback/components/Paging";
 import EventList from "@/components/Event/EventList";
 import useEvent from "@/hooks/useEvent";
+import { GetEventSendData } from "@/api/event";
 
-type tabs = "pending" | "approved" | "rejected";
-const tabsEnum = ["pending", "approved", "rejected"];
+type tabs = "pending" | "approved" | "rejected" | "all";
+const tabsEnum = ["pending", "approved", "rejected", "all"];
 
 export default function page() {
   const searchParams = useSearchParams();
   const { setQueryObj, queryObj } = useEvent();
-  const tab = searchParams.get("tab");
-  const pageNumberParam = searchParams.get("page-number");
+  const tab = searchParams.get("tab") ?? "pending";
+  const pageNumberParam = searchParams.get("page-number") ?? 1;
   const pathName = usePathname();
   const { replace } = useRouter();
 
@@ -26,52 +27,69 @@ export default function page() {
     params.set("tab", tab);
     replace(`${pathName}?${params.toString()}`);
   };
+
   useEffect(() => {
+    let updatedQueryObj: GetEventSendData;
     if (tab) {
       switch (tab) {
         case "pending":
-          setQueryObj({
+          updatedQueryObj = {
             ...queryObj,
             status: "PENDING",
-          });
+          };
+          setQueryObj(updatedQueryObj);
           break;
         case "approved":
-          setQueryObj({
+          updatedQueryObj = {
             ...queryObj,
             status: "APPROVED",
-          });
+          };
+          setQueryObj(updatedQueryObj);
           break;
         case "rejected":
-          setQueryObj({
+          updatedQueryObj = {
             ...queryObj,
             status: "REJECTED",
-          });
+          };
+          setQueryObj(updatedQueryObj);
+          break;
+        case "all":
+          updatedQueryObj = {
+            ...queryObj,
+            status: undefined,
+          };
+          setQueryObj(updatedQueryObj);
           break;
         default:
-          setQueryObj({
+          updatedQueryObj = {
             ...queryObj,
             status: "PENDING",
-          });
+          };
+          setQueryObj(updatedQueryObj);
       }
     } else {
-      setQueryObj({
+      updatedQueryObj = {
         ...queryObj,
-        status: "PENDING",
-      });
+        status: undefined,
+      };
+      setQueryObj(updatedQueryObj);
     }
   }, [tab]);
 
   useEffect(() => {
+    let updatedQueryObj: GetEventSendData;
     if (pageNumberParam) {
-      setQueryObj({
+      updatedQueryObj = {
         ...queryObj,
         "page-number": Number(pageNumberParam),
-      });
+      };
+      setQueryObj(updatedQueryObj);
     } else {
-      setQueryObj({
+      updatedQueryObj = {
         ...queryObj,
         "page-number": 1,
-      });
+      };
+      setQueryObj(updatedQueryObj);
     }
   }, [pageNumberParam]);
 
@@ -83,13 +101,23 @@ export default function page() {
             tab
               ? tabsEnum.includes(tab as tabs)
                 ? (tab as tabs)
-                : "pending"
-              : "pending"
+                : "all"
+              : "all"
           }
           className="w-full"
         >
           <div className="flex items-center justify-between gap-4 relative my-2">
             <TabsList>
+              <TabsTrigger
+                value="all"
+                onClick={() => {
+                  handleTabChange("all");
+                }}
+                className="flex items-center gap-1"
+              >
+                <MessageSquareMore size={18} />
+                All
+              </TabsTrigger>
               <TabsTrigger
                 value="pending"
                 onClick={() => {
@@ -126,7 +154,11 @@ export default function page() {
             </div>
             <FilterBar />
           </div>
-
+          <TabsContent value="all" className="w-full">
+            <ScrollArea className="h-[calc(100vh_-_theme(spacing.40)_-_0.5rem)] border-y-2">
+              <EventList />
+            </ScrollArea>
+          </TabsContent>
           <TabsContent value="pending" className="w-full">
             <ScrollArea className="h-[calc(100vh_-_theme(spacing.40)_-_0.5rem)] border-y-2">
               <EventList />
