@@ -3,6 +3,7 @@ import {
   CreateEventOrderSendData,
   getEventOrderByEventId,
   getEventOrderById,
+  getMyOrder,
   updateEventOrder,
   UpdateEventOrderSendData,
 } from "@/api/event-order";
@@ -42,10 +43,15 @@ export default function useEventOrder() {
     mutationFn: (data: UpdateEventOrderSendData) => updateEventOrder(data),
   });
 
+  const getMyOrderMutation = useMutation({
+    mutationFn: () => getMyOrder(),
+  });
+
   return {
     getEventOrderMutation,
     getEventOrderByIdMutation,
     createEventOrderMutation,
     updateEventOrderMutation,
+    getMyOrderMutation,
   };
 }

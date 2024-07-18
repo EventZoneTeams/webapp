@@ -167,7 +167,7 @@ export interface DonateResponse {
 export const donate = async (data: DonateSendData) => {
   try {
     const response = (
-      await axiosClient.post<DonateResponse>("/donations", data)
+      await axiosClient.post<DonateResponse>("/event-donations", data)
     ).data;
     return {
       status: response.status,
