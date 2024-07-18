@@ -42,10 +42,6 @@ export default function useEventOrder() {
     mutationFn: (data: UpdateEventOrderSendData) => updateEventOrder(data),
   });
 
-  const getUserEventOrderMutation = useMutation({
-    mutationFn: () => getEventOrderByEventId(),
-  });
-
   return {
     getEventOrderMutation,
     getEventOrderByIdMutation,
