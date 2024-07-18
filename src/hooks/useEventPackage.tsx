@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import {
   createEventPackage,
   CreateEventPackageSendData,
+  getEventPackageById,
   getEventPackages,
   GetEventPackageSendData,
 } from "@/api/event-package";
@@ -31,6 +32,10 @@ export default function useEventPackage() {
       }
     },
   });
+
+  const getEventPackageByIdMutation = useMutation({
+    mutationFn: (id: number) => getEventPackageById(id),
+  });
   return {
     trigger,
     switchTrigger,
@@ -39,6 +44,7 @@ export default function useEventPackage() {
     isCreateDialogOpen,
     setIsCreateDialogOpen,
     getEventPackagesMutation,
+    getEventPackageByIdMutation,
     createEventPackageMutation,
   };
 }

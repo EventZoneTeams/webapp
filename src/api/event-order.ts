@@ -10,14 +10,14 @@ import {
   EventOrderStatusEnum,
 } from "@/types/event-order";
 
-export interface GetEventOrderResponse {
+export interface GetEventOrderByEventIdResponse {
   status: boolean;
   data: BackEndEventOrder[];
   message: string;
 }
-export const getEventOrder = async (eventId: number) => {
+export const getEventOrderByEventId = async (eventId: number) => {
   try {
-    const response = await axiosClient.get<GetEventOrderResponse>(
+    const response = await axiosClient.get<GetEventOrderByEventIdResponse>(
       `/event/${eventId}/event-orders`
     );
     return {

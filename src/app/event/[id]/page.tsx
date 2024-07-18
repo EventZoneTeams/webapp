@@ -52,7 +52,7 @@ export default function page({ params }: { params: { id: string } }) {
               {eventCampaigns && eventCampaigns.length > 0
                 ? eventCampaigns.map((eventCampaign) => (
                     <section className="ml-4 mb-4 bg-muted rounded-lg">
-                      <Campaign campaignId={eventCampaign.id} />
+                      <Campaign campaignId={eventCampaign.id} eventName = {event.Name} />
                     </section>
                   ))
                 : null}

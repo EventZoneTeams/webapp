@@ -1,16 +1,18 @@
 import {
+  createEventCampaign,
+  CreateEventCampaignSendData,
+  deleteEventCampaign,
+  donate,
+  DonateSendData,
   getEventCampaign,
   getEventCampaignByEventId,
   getEventCampaignById,
   GetEventCampaignSendData,
-  createEventCampaign,
-  deleteEventCampaign,
   updateEventCampaign,
-  CreateEventCampaignSendData,
   UpdateEventCampaignSendData,
 } from "@/api/event-campaign";
 import { useMutation } from "@tanstack/react-query";
-import React from "react";
+import Swal from "sweetalert2";
 
 export default function useEventCampaign() {
   const getEventCampaignMutation = useMutation({
@@ -38,6 +40,21 @@ export default function useEventCampaign() {
     mutationFn: (data: UpdateEventCampaignSendData) =>
       updateEventCampaign(data),
   });
+
+  const donateMutation = useMutation({
+    mutationFn: (data: DonateSendData) => donate(data),
+    onSuccess: () => {
+      Swal.fire({
+        icon: "success",
+        title: "Successfully",
+        text: "Contribute successfully!",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#30a5e8",
+      }).then((result) => {
+        window.location.reload();
+      });
+    },
+  });
   return {
     getEventCampaignMutation,
     getEventCampaignByIdMutation,
@@ -45,5 +62,6 @@ export default function useEventCampaign() {
     createEventCampaignMutation,
     deleteEventCampaignMutation,
     updateEventCampaignMutation,
+    donateMutation,
   };
 }

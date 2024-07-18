@@ -62,16 +62,15 @@ export default function CartPage() {
 
     try {
       console.log(sendData);
-      await createEventOrderMutation.mutateAsync(sendData); // Assuming mutate is async
+      await createEventOrderMutation.mutateAsync(sendData);
 
       // Clear cart after successful order placement
       setCartItems([]);
       localStorage.removeItem("cart");
     } catch (error) {
       console.error("Error placing order:", error);
-      // Handle error if needed
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false); 
     }
   };
 
