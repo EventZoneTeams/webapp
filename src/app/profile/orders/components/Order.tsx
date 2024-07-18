@@ -4,7 +4,7 @@ import useEventOrder from "@/hooks/useEventOrder";
 import { useEffect, useMemo } from "react";
 import Navbar from "@/components/Navbar";
 
-export default function page() {
+export default function PackageOrder() {
   const { getMyOrderMutation } = useEventOrder();
 
   useEffect(() => {
@@ -18,8 +18,11 @@ export default function page() {
 
   return (
     <main>
-      <Navbar />
-      <div>{eventOrder?.data?.map((order) => order.id)}</div>
+      <div>
+        {eventOrder?.data?.map((order) => (
+          <div key={order.id}>{order.id}</div>
+        ))}
+      </div>
     </main>
   );
 }
