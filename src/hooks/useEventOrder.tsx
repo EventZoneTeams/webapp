@@ -1,7 +1,7 @@
 import {
   createEventOrder,
   CreateEventOrderSendData,
-  getEventOrder,
+  getEventOrderByEventId,
   getEventOrderById,
   updateEventOrder,
   UpdateEventOrderSendData,
@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 
 export default function useEventOrder() {
   const getEventOrderMutation = useMutation({
-    mutationFn: (eventId: number) => getEventOrder(eventId),
+    mutationFn: (eventId: number) => getEventOrderByEventId(eventId),
   });
 
   const getEventOrderByIdMutation = useMutation({
