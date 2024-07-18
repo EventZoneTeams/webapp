@@ -62,12 +62,8 @@ export default function AgreeToTermAndCondition() {
         name: BasicInfo.Name,
         description: MoreInfo.Description,
         "thumbnail-url": Thumbnail,
-        "donation-start-date": Donation.IsDonation
-          ? Donation.DonationStartDate
-          : null,
-        "donation-end-date": Donation.IsDonation
-          ? Donation.DonationEndDate
-          : null,
+        "donation-start-date": Donation.IsDonation ? Donation.StartDate : null,
+        "donation-end-date": Donation.IsDonation ? Donation.EndDate : null,
         "event-start-date": BasicInfo.EventStartDate,
         "event-end-date": BasicInfo.EventEndDate,
         note: MoreInfo.Note,
@@ -75,10 +71,7 @@ export default function AgreeToTermAndCondition() {
         "user-id": authUser.Id,
         "event-category-id": parseInt(BasicInfo.EventCategoryId),
         university: BasicInfo.University,
-        status: "PENDING",
-        "organization-status": "PREPARING",
-        "is-donation": Donation.IsDonation,
-        "total-cost": Donation.IsDonation ? Donation.TotalCost : null,
+        "total-cost": Donation.IsDonation ? Donation.GoalAmount : null,
       };
       console.log(sendData);
       createEventMutation.mutate(sendData);
