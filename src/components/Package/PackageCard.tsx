@@ -15,7 +15,9 @@ export default function PackageCard({
       />
       <div className="ml-4 w-[200px] flex flex-col justify-between">
         <div>
-          <p className="text-md font-semibold text-left">Title</p>
+          <p className="text-md font-semibold text-left">
+            {eventPackage.title}
+          </p>
           <p className="text-sm line-clamp-3 text-left">
             {eventPackage.description}
           </p>

@@ -18,7 +18,7 @@ export interface GetEventOrderResponse {
 export const getEventOrder = async (eventId: number) => {
   try {
     const response = await axiosClient.get<GetEventOrderResponse>(
-      `/api/v1/event/${eventId}/event-orders`
+      `/event/${eventId}/event-orders`
     );
     return {
       status: response.data.status,
@@ -39,7 +39,7 @@ export const getEventOrderById = async (eventOrderId: number) => {
   try {
     const response = (
       await axiosClient.get<GetEventOrderByIdResponse>(
-        `/api/v1/event-orders/${eventOrderId}`
+        `/event-orders/${eventOrderId}`
       )
     ).data;
     return {
@@ -69,7 +69,7 @@ export interface CreateEventOrderResponse {
 export const createEventOrder = async (data: CreateEventOrderSendData) => {
   try {
     const response = await axiosClient.post<CreateEventOrderResponse>(
-      `/api/v1/event-orders`,
+      `/event-orders`,
       data
     );
     return {

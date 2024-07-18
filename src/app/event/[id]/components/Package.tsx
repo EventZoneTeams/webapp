@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { EventPackage } from "@/types/event-packages.";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function Package({
   eventPackages,
@@ -11,31 +12,56 @@ export default function Package({
   eventPackages: EventPackage[];
 }) {
   const [quantity, setQuantity] = useState<number>(1);
+  const [openDialog, setOpenDialog] = useState<number | null>(null);
 
-  const handleAddToCart = (eventPackage: EventPackage) => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  const handleAddToCart = (
+    eventPackage: EventPackage,
+    closeDialog: () => void
+  ) => {
+    try {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-    const existingPackageIndex = cart.findIndex(
-      (item: { id: number }) => item.id === eventPackage.id
-    );
+      const existingPackageIndex = cart.findIndex(
+        (item: { id: number }) => item.id === eventPackage.id
+      );
 
-    if (existingPackageIndex !== -1) {
-      cart[existingPackageIndex].quantity += quantity;
-    } else {
-      cart.push({ ...eventPackage, quantity });
+      if (existingPackageIndex !== -1) {
+        cart[existingPackageIndex].quantity += quantity;
+      } else {
+        cart.push({ ...eventPackage, quantity });
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      setQuantity(1); // Reset quantity after adding to cart
+
+      toast.success(`${eventPackage.title} added to cart successfully!`);
+      closeDialog(); // Close the dialog on success
+    } catch (error) {
+      toast.error(`Failed to add ${eventPackage.title} to cart.`);
     }
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-    setQuantity(1); // Reset quantity after adding to cart
   };
+
   return (
     <div className="p-6 w-[500px]">
-      <p className=" text-2xl mb-6 font-semibold">Packages</p>
+      <p className="text-2xl mb-6 font-semibold">Packages</p>
       <div className="">
         {eventPackages?.map((eventPackage) => (
-          <Dialog key={eventPackage.id}>
+          <Dialog
+            key={eventPackage.id}
+            open={openDialog === eventPackage.id}
+            onOpenChange={(open) => {
+              if (!open) {
+                setOpenDialog(null);
+              }
+            }}
+          >
             <DialogTrigger asChild>
-              <button onClick={() => setQuantity(1)}>
+              <button
+                onClick={() => {
+                  setQuantity(1);
+                  setOpenDialog(eventPackage.id);
+                }}
+              >
                 <PackageCard eventPackage={eventPackage} />
               </button>
             </DialogTrigger>
@@ -46,7 +72,7 @@ export default function Package({
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
                       <h2 className="text-xl font-bold mb-4">
-                        {eventPackage.description}
+                        {eventPackage.title}
                       </h2>
                       <p>{eventPackage.description}</p>
                     </div>
@@ -81,7 +107,11 @@ export default function Package({
                         </div>
 
                         <Button
-                          onClick={() => handleAddToCart(eventPackage)}
+                          onClick={() =>
+                            handleAddToCart(eventPackage, () =>
+                              setOpenDialog(null)
+                            )
+                          }
                           className="bg-tertiary text-slate-50 hover:bg-sky-600 hover:text-slate-200"
                         >
                           Add to cart
@@ -109,7 +139,7 @@ export default function Package({
                     >
                       <div className="w-[200px]">
                         <img
-                          src={product.eventProduct.productImages[0].imageUrl} // de nem cook
+                          src={product.eventProduct.productImages[0].imageUrl}
                           alt={product.eventProduct.name}
                           className="object-cover h-[120px] w-[200px] rounded-xl"
                         />

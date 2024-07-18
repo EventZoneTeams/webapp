@@ -1,21 +1,27 @@
 "use client";
-
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { MinusIcon, PlusIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import Navbar from "@/components/Navbar";
+import CartItem from "./components/CartItem";
+import PriceDetails from "./components/PriceDetails";
+import { ShoppingCart } from "lucide-react";
+import useEventOrder from "@/hooks/useEventOrder";
+import { CreateEventOrderSendData } from "@/api/event-order";
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [subTotal, setSubTotal] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
+  const cartIsEmpty = !cartItems || cartItems.length === 0;
+
+  const { createEventOrderMutation } = useEventOrder();
 
   useEffect(() => {
     const cart = localStorage.getItem("cart");
     if (cart) {
-      setCartItems(JSON.parse(cart));
+      const parsedCart = JSON.parse(cart);
+      const sortedCart = parsedCart.sort((a: any, b: any) => b.id - a.id);
+      setCartItems(sortedCart);
     }
   }, []);
 
@@ -24,7 +30,6 @@ export default function CartPage() {
       return sum + item.quantity * item.totalPrice;
     }, 0);
     setSubTotal(subtotal);
-
     setTotalAmount(subtotal);
   }, [cartItems]);
 
@@ -43,36 +48,30 @@ export default function CartPage() {
   };
 
   const handlePlaceOrder = async () => {
+    setIsLoading(true); // Start loading
+
     const orderDetails = cartItems.map((item) => ({
       "package-id": item.id,
       quantity: item.quantity,
     }));
-    const eventId = 14;
-    const orderData = {
-      "event-id": eventId,
+
+    const sendData: CreateEventOrderSendData = {
+      "event-id": 14,
       "event-order-details": orderDetails,
     };
 
     try {
-      const response = await fetch(
-        "https://ez-api.azurewebsites.net/api/v1/event-orders",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(orderData),
-        }
-      );
+      console.log(sendData);
+      await createEventOrderMutation.mutateAsync(sendData); // Assuming mutate is async
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Order placed successfully:", data);
-      } else {
-        console.error("Failed to place order:", response.statusText);
-      }
+      // Clear cart after successful order placement
+      setCartItems([]);
+      localStorage.removeItem("cart");
     } catch (error) {
       console.error("Error placing order:", error);
+      // Handle error if needed
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -82,108 +81,35 @@ export default function CartPage() {
       <div className="container mx-auto p-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-semibold mb-4">Cart</h2>
-            <div className="p-6 rounded-lg shadow-md">
-              {cartItems?.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center mb-6 border-b pb-4"
-                >
-                  {/* <Checkbox
-                    checked={item.isChecked}
-                    onChange={() => handleCheckSingle(item.id)}
-                  /> */}
-                  <img
-                    src={item.thumbnailUrl}
-                    alt={item.description}
-                    className="ml-4 mr-4 object-cover h-[120px] w-[200px] rounded-2xl"
+            <h2 className="text-2xl font-bold mb-4 flex items-center">
+              <ShoppingCart className="mr-2" />
+              Cart
+            </h2>
+            {cartIsEmpty ? (
+              <div className="flex items-center mb-6 border-b pb-4">
+                <p className="text-lg font-semibold">Cart is empty.</p>
+              </div>
+            ) : (
+              <div className="p-6 rounded-lg shadow-md">
+                {cartItems?.map((item) => (
+                  <CartItem
+                    key={item.id}
+                    item={item}
+                    onQuantityChange={handleQuantityChange}
+                    onRemoveItem={handleRemoveItem}
                   />
-
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold">
-                      {item.description}
-                    </h3>
-                    <p className="text-gray-500">{item.description}</p>
-                    <div className="flex items-center mt-2">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() =>
-                          handleQuantityChange(
-                            item.id,
-                            Math.max(1, item.quantity - 1)
-                          )
-                        }
-                        disabled={item.quantity === 1}
-                      >
-                        <MinusIcon className="h-4 w-4" />
-                      </Button>
-                      <span className="mx-2">{item.quantity}</span>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() =>
-                          handleQuantityChange(item.id, item.quantity + 1)
-                        }
-                      >
-                        <PlusIcon className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="text-lg font-semibold">
-                    {Intl.NumberFormat("vi-vn", {
-                      style: "currency",
-                      currency: "VND",
-                    }).format(item.quantity * item.totalPrice)}
-                  </div>
-                  <button
-                    className="ml-4 text-sm"
-                    onClick={() => handleRemoveItem(item.id)}
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
-          <div className="p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold mb-4">Coupons</h3>
-            <div className="flex w-full items-center space-x-2">
-              <Input type="text" placeholder="Coupons" />
-              <Button type="submit">Apply</Button>
-            </div>
-
-            <h3 className="text-lg font-semibold mt-6 mb-4">Price Details</h3>
-            <div className="text-sm">
-              <div className="flex justify-between mb-2">
-                <span>Subtotal</span>
-                <span>
-                  {Intl.NumberFormat("vi-vn", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(subTotal)}
-                </span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <span>Coupon discount</span>
-                <span>None</span>
-              </div>
-              <div className="flex justify-between font-semibold text-lg mt-4">
-                <span>Total Amount</span>
-                <span>
-                  {Intl.NumberFormat("vi-vn", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(totalAmount)}
-                </span>
-              </div>
-            </div>
-            <Button
-              onClick={handlePlaceOrder}
-              className="w-full py-3 rounded mt-4"
-            >
-              Place order
-            </Button>
+          <div className="lg:col-span-1">
+            <PriceDetails
+              subTotal={subTotal}
+              totalAmount={totalAmount}
+              onPlaceOrder={handlePlaceOrder}
+              isLoading={isLoading}
+              cartIsEmpty = {cartIsEmpty}
+            />
           </div>
         </div>
       </div>
