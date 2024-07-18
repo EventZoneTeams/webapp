@@ -1,7 +1,6 @@
 "use client";
 
 import useEvent from "@/hooks/useEvent";
-import useFeedback from "@/hooks/useFeedback";
 import { useEffect, useMemo } from "react";
 import FullpageLoader from "@/components/Loading/fullpage-loader";
 import Navbar from "@/components/Navbar";
@@ -9,25 +8,38 @@ import Package from "./components/Package";
 import Ticket from "./components/Ticket";
 import Description from "./components/Description";
 import Campaign from "./components/Campaign";
+import useEventCampaign from "@/hooks/useEventCampaign";
 
 export default function page({ params }: { params: { id: string } }) {
   const { getEventByIdMutation } = useEvent();
-  const { trigger } = useFeedback();
 
   useEffect(() => {
     getEventByIdMutation.mutate(Number(params.id));
-  }, [params.id, trigger]);
+  }, [params.id]);
 
   const event = useMemo(
     () => getEventByIdMutation.data,
     [getEventByIdMutation.data]
   );
 
+  const { getEventCampaignByEventIdMutation } = useEventCampaign();
+
+  useEffect(() => {
+    if (event?.Id) {
+      getEventCampaignByEventIdMutation.mutate(event.Id);
+    }
+  }, [event?.Id]);
+
+  const eventCampaigns = useMemo(
+    () => getEventCampaignByEventIdMutation.data,
+    [getEventCampaignByEventIdMutation.data]
+  );
+
   return (
     <main>
       <Navbar />
       {event ? (
-        <div className="container">
+        <div className="container mb-4">
           <section>
             <Ticket event={event} />
           </section>
@@ -37,9 +49,14 @@ export default function page({ params }: { params: { id: string } }) {
               <Description description={event.Description} />
             </section>
             <div>
-              <section className="ml-4 mb-4 bg-muted rounded-lg">
-                <Campaign eventId={event.Id} />
-              </section>
+              {eventCampaigns && eventCampaigns.length > 0
+                ? eventCampaigns.map((eventCampaign) => (
+                    <section className="ml-4 mb-4 bg-muted rounded-lg">
+                      <Campaign campaignId={eventCampaign.id} />
+                    </section>
+                  ))
+                : null}
+
               {event.EventPackage && event.EventPackage.length > 0 ? (
                 <section className="ml-4 bg-muted rounded-lg">
                   <Package eventPackages={event.EventPackage} />

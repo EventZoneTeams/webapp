@@ -34,26 +34,34 @@ export type EventDonation = {
 
 export type BackEndEventCampaign = {
   id: number;
+  "event-id": number;
   name: string;
   description: string;
   "start-date": string;
   "end-date": string;
   status: EventCampaignStatusEnum;
+  "collected-amount": number;
   "goal-amount": number;
-  "colelcted-amount": number;
-  "event-id": number;
+  "total-donors": number;
+  "target-achievement-percentage": number;
+  "average-donation-amount": number;
+  "highest-donation-amount": number;
   "event-donations": BackEndEventDonation[];
 };
 
 export type EventCampaign = {
   id: number;
+  eventId: number;
   name: string;
   description: string;
   startDate: Date;
   endDate: Date;
   status: EventCampaignStatusEnum;
-  goalAmount: number;
   collectedAmount: number;
-  eventId: number;
+  goalAmount: number;
+  totalDonors: number;
+  targetAchievementPercentage: number;
+  averageDonationAmount: number;
+  highestDonationAmount: number;
   eventDonations: EventDonation[];
 };

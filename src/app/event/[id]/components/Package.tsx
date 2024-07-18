@@ -29,7 +29,7 @@ export default function Package({
     setQuantity(1); // Reset quantity after adding to cart
   };
   return (
-    <div className="p-6 w-[460px]">
+    <div className="p-6 w-[500px]">
       <p className=" text-2xl mb-6 font-semibold">Packages</p>
       <div className="">
         {eventPackages?.map((eventPackage) => (
