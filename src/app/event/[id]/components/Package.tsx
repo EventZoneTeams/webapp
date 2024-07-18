@@ -40,8 +40,8 @@ export default function Package({
               </button>
             </DialogTrigger>
 
-            <DialogContent className="lg:min-w-[950px] md:min-w-[950px] sm:min-w-[950px]">
-              <section className="p-5">
+            <DialogContent className="lg:min-w-[950px] md:min-w-[950px] sm:min-w-[950px] max-h-[95vh]">
+              <section className="p-5 max-h-[90vh] overflow-auto">
                 <section className="mb-12 flex justify-between">
                   <div className="flex-1 flex flex-col justify-between">
                     <div>

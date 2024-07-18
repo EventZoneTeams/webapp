@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import Package from "./components/Package";
 import Ticket from "./components/Ticket";
 import Description from "./components/Description";
+import Campaign from "./components/Campaign";
 
 export default function page({ params }: { params: { id: string } }) {
   const { getEventByIdMutation } = useEvent();
@@ -32,15 +33,19 @@ export default function page({ params }: { params: { id: string } }) {
           </section>
 
           <section className="mt-12 flex w-full">
-            <section className="w-full bg-muted">
+            <section className="w-full bg-muted rounded-lg">
               <Description description={event.Description} />
             </section>
-
-            {event.EventPackage && event.EventPackage.length > 0 ? (
-              <section className="ml-4 bg-muted">
-                <Package eventPackages={event.EventPackage} />
+            <div>
+              <section className="ml-4 mb-4 bg-muted rounded-lg">
+                <Campaign eventId={event.Id} />
               </section>
-            ) : null}
+              {event.EventPackage && event.EventPackage.length > 0 ? (
+                <section className="ml-4 bg-muted rounded-lg">
+                  <Package eventPackages={event.EventPackage} />
+                </section>
+              ) : null}
+            </div>
           </section>
         </div>
       ) : (
