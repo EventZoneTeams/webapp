@@ -1,16 +1,17 @@
 import {
+  createEventCampaign,
+  CreateEventCampaignSendData,
+  deleteEventCampaign,
+  donate,
+  DonateSendData,
   getEventCampaign,
   getEventCampaignByEventId,
   getEventCampaignById,
   GetEventCampaignSendData,
-  createEventCampaign,
-  deleteEventCampaign,
   updateEventCampaign,
-  CreateEventCampaignSendData,
   UpdateEventCampaignSendData,
 } from "@/api/event-campaign";
 import { useMutation } from "@tanstack/react-query";
-import React from "react";
 
 export default function useEventCampaign() {
   const getEventCampaignMutation = useMutation({
@@ -38,6 +39,10 @@ export default function useEventCampaign() {
     mutationFn: (data: UpdateEventCampaignSendData) =>
       updateEventCampaign(data),
   });
+
+  const donateMutation = useMutation({
+    mutationFn: (data: DonateSendData) => donate(data),
+  });
   return {
     getEventCampaignMutation,
     getEventCampaignByIdMutation,
@@ -45,5 +50,6 @@ export default function useEventCampaign() {
     createEventCampaignMutation,
     deleteEventCampaignMutation,
     updateEventCampaignMutation,
+    donateMutation,
   };
 }

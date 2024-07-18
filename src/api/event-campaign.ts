@@ -2,9 +2,11 @@ import { axiosClient } from "@/api/axiosClient";
 import {
   mapBackEndEventCampaignsToEventCampaigns,
   mapBackEndEventCampaignToEventCampaign,
+  mapBackEndEventDonationToEventDonation,
 } from "@/lib/event-campaign";
 import {
   BackEndEventCampaign,
+  BackEndEventDonation,
   EventCampaignStatusEnum,
 } from "@/types/event-campaign";
 
@@ -146,6 +148,33 @@ export const deleteEventCampaign = async (campaignId: number) => {
       )
     ).data;
     return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export interface DonateSendData {
+  "event-campaign-id": number;
+  amount: number;
+  "donation-date": Date;
+}
+
+export interface DonateResponse {
+  status: boolean;
+  message: string;
+  data: BackEndEventDonation;
+}
+
+export const donate = async (data: DonateSendData) => {
+  try {
+    const response = (
+      await axiosClient.post<DonateResponse>("/donations", data)
+    ).data;
+    return {
+      status: response.status,
+      message: response.message,
+      data: mapBackEndEventDonationToEventDonation(response.data),
+    };
   } catch (error) {
     throw error;
   }
