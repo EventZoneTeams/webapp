@@ -108,3 +108,23 @@ export const updateEventOrder = async (data: UpdateEventOrderSendData) => {
     throw error;
   }
 };
+
+export interface GetMyOrderResponse {
+  sucess: boolean;
+  data: BackEndEventOrder[];
+  message: string;
+}
+export const getMyOrder = async () => {
+  try {
+    const response = (
+      await axiosClient.get<GetMyOrderResponse>(`/users/me/event-orders`)
+    ).data;
+    return {
+      sucess: response.sucess,
+      data: mapBackEndEventOrdersToEventOrders(response.data),
+      message: response.message,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
