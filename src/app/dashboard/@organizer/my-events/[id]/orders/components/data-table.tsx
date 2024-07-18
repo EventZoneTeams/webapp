@@ -19,6 +19,7 @@ import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import { CollapsibleContent } from "@radix-ui/react-collapsible";
 import { EventOrder } from "@/types/event-order";
+import PackageCard from "@/app/dashboard/@organizer/my-events/[id]/orders/components/PackageCard";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -81,7 +82,20 @@ export function DataTable<TData, TValue>({
                     <CollapsibleContent asChild>
                       <TableRow className="ease-linear duration-200 transition-all">
                         <TableCell colSpan={columns.length}>
-                          <div className="flex gap-4 "></div>
+                          <div className="space-y-2">
+                            {orderRow.eventOrderDetails.map((orderDetail) => (
+                              <div className="flex items-center gap-4">
+                                <div>
+                                  <div className="font-semibold text-xl">
+                                    {orderDetail.quantity} x{" "}
+                                  </div>
+                                </div>
+                                <div className="flex-1">
+                                  <PackageCard id={orderDetail.packageId} />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         </TableCell>
                       </TableRow>
                     </CollapsibleContent>

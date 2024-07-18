@@ -38,6 +38,28 @@ export const getEventPackages = async (data: GetEventPackageSendData) => {
   }
 };
 
+export interface GetEventPackageByIdResponse {
+  status: boolean;
+  message: string;
+  data: BackEndEventPackage;
+}
+export const getEventPackageById = async (id: number) => {
+  try {
+    const response = (
+      await axiosClient.get<GetEventPackageByIdResponse>(
+        `/event-packages/${id}`
+      )
+    ).data;
+    return {
+      status: response.status,
+      message: response.message,
+      data: mapBackEndEventPackageToEventPackage(response.data),
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
 export interface PackageProductSendData {
   productid: number;
   quantity: number;
