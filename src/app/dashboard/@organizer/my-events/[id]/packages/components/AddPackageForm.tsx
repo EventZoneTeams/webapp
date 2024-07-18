@@ -14,6 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
@@ -82,6 +83,7 @@ export default function AddPackageForm({ params }: { params: { id: string } }) {
       const sendData: CreateEventPackageSendData = {
         eventId: Number(params.id),
         Description: data.description,
+        Title: data.title,
         Products: selectedProducts,
         Thumbnail: image,
       };
@@ -182,7 +184,20 @@ export default function AddPackageForm({ params }: { params: { id: string } }) {
       </div>
       <Separator />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="title" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="description"

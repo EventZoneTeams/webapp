@@ -67,6 +67,7 @@ export interface PackageProductSendData {
 export interface CreateEventPackageSendData {
   eventId: number;
   Description: string;
+  Title: string;
   Products: PackageProductSendData[];
   Thumbnail: File;
 }
@@ -83,6 +84,7 @@ export const createEventPackage = async (data: CreateEventPackageSendData) => {
     data.Products.forEach((product) => {
       form.append("Products", JSON.stringify(product));
     });
+    form.append("Title", data.Title);
     form.append("Description", data.Description);
     form.append("Thumbnail", data.Thumbnail);
 
