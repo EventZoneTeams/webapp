@@ -55,6 +55,7 @@ export default function useEventCampaign() {
       });
     },
   });
+  
   return {
     getEventCampaignMutation,
     getEventCampaignByIdMutation,
