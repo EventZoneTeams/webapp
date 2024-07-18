@@ -1,6 +1,7 @@
 import { axiosClient } from "@/api/axiosClient";
 import {
   mapBackendTransactionsToTransactions,
+  mapBackendTransactionToTransaction,
   mapBackEndWalletsToWallets,
 } from "@/lib/wallet";
 import {
@@ -95,6 +96,28 @@ export const completePendingTransaction = async (transactionId: number) => {
       )
     ).data;
     return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export interface PurchaseOrderResponse {
+  success: boolean;
+  message: string;
+  data: BackEndTransaction;
+}
+export const purchaseOrder = async (orderId: number) => {
+  try {
+    const response = (
+      await axiosClient.post<PurchaseOrderResponse>(
+        `/api/v1/payment/event-orders/${orderId}`
+      )
+    ).data;
+    return {
+      success: response.success,
+      message: response.message,
+      data: mapBackendTransactionToTransaction(response.data),
+    };
   } catch (error) {
     throw error;
   }

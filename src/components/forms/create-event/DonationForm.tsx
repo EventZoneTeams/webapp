@@ -37,6 +37,7 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { CustomDatePicker } from "@/components/ui/custom-date-picker";
 import { DateTimePicker } from "@/components/ui/my-date-input";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function DonationForm() {
   const { nextStep, prevStep } = useStepper();
@@ -51,7 +52,7 @@ export default function DonationForm() {
   });
 
   const [totalCost, setTotalCost] = useState<number | string>(
-    form.getValues("TotalCost") || 0
+    form.getValues("GoalAmount") || 0
   );
 
   const onSubmit = (data: DonationFormSchemaType) => {
@@ -98,30 +99,43 @@ export default function DonationForm() {
             />
             <div
               className={cn(
-                "space-y-8 p-4 border rounded-md transition-all duration-300 ease-in-out",
+                "space-y-6 p-4 border rounded-md transition-all duration-300 ease-in-out",
                 form.getValues("IsDonation") ? "block" : "hidden"
               )}
             >
               <FormField
                 control={form.control}
-                name="TotalCost"
+                name="Name"
                 render={({ field }) => (
                   <FormItem className="col-span-1">
-                    <FormLabel>Total Cost</FormLabel>
+                    <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Total cost of the event"
-                        {...field}
-                        value={new Intl.NumberFormat("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
-                        }).format(Number(totalCost))}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, "");
-                          setTotalCost(value ? Number(value) : "");
-                          field.onChange(value ? Number(value) : "");
-                        }}
-                      />
+                      <Input placeholder="Name" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="GoalAmount"
+                render={({ field }) => (
+                  <FormItem className="col-span-1">
+                    <FormLabel>Goal Amount</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <span className="absolute top-1/2 right-4 -translate-y-1/2 text-sm">
+                          (VND)
+                        </span>
+                        <Input
+                          placeholder="Enter the price of the product"
+                          {...field}
+                          value={field.value.toLocaleString()}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, "");
+                            field.onChange(Number(value));
+                          }}
+                        />
+                      </div>
                     </FormControl>
                   </FormItem>
                 )}
@@ -129,7 +143,7 @@ export default function DonationForm() {
               <div className="grid lg:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
-                  name="DonationStartDate"
+                  name="StartDate"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
                       <FormLabel>Start date</FormLabel>
@@ -146,7 +160,7 @@ export default function DonationForm() {
                 />
                 <FormField
                   control={form.control}
-                  name="DonationEndDate"
+                  name="EndDate"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
                       <FormLabel>End date</FormLabel>
@@ -162,6 +176,18 @@ export default function DonationForm() {
                   )}
                 />
               </div>
+              <FormField
+                control={form.control}
+                name="Description"
+                render={({ field }) => (
+                  <FormItem className="col-span-1">
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="Description" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
             </div>
           </CardContent>
           <CardFooter className="gap-4">

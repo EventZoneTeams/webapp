@@ -18,16 +18,23 @@ export interface CreateEventSendData {
   "user-id": number;
   "event-category-id": number;
   university: string;
-  status: StatusEnum;
-  "organization-status": OrganizationStatusEnum;
-  "is-donation": boolean;
   "total-cost": number | null | undefined;
+}
+
+export interface CreateEventResponse {
+  success: boolean;
+  message: string;
+  data: BackendEvent;
 }
 
 export const createEvent = async (data: CreateEventSendData) => {
   try {
-    const response = await axiosClientFormData.post("/events", data);
-    console.log(response.data);
+    const response = (await axiosClientFormData.post("/events", data)).data;
+    return {
+      Success: response.success,
+      Message: response.message,
+      Data: mapBackendEventToEvent(response.data),
+    };
   } catch (error) {
     throw error;
   }

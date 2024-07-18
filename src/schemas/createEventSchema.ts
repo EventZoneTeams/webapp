@@ -67,18 +67,22 @@ export const MoreInfoFormDefaultValues: MoreInfoFormSchemaType = {
 //Donation
 export const DonationFormSchema = z.object({
   IsDonation: z.boolean(),
-  DonationStartDate: z.date(),
-  DonationEndDate: z.date(),
-  TotalCost: z.number(),
+  Name: z.string(),
+  Description: z.string(),
+  StartDate: z.date(),
+  EndDate: z.date(),
+  GoalAmount: z.number(),
 });
 
 export type DonationFormSchemaType = z.infer<typeof DonationFormSchema>;
 
 export const DonationFormDefaultValues: DonationFormSchemaType = {
   IsDonation: false,
-  DonationStartDate: new Date(),
-  DonationEndDate: new Date(),
-  TotalCost: 0,
+  Name: "",
+  Description: "",
+  StartDate: new Date(),
+  EndDate: new Date(),
+  GoalAmount: 0,
 };
 
 //Term and Condition
