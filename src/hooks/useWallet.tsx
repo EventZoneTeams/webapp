@@ -5,6 +5,7 @@ import {
   getUserWallets,
   getWalletTransactions,
   GetWalletTransactionsSendData,
+  purchaseOrder,
 } from "@/api/wallet";
 import useAuth from "@/hooks/useAuth";
 import { useWalletStore } from "@/stores/wallet";
@@ -75,6 +76,10 @@ export default function useWallet() {
     },
   });
 
+  const purchaseOrderMuatation = useMutation({
+    mutationFn: (orderId: number) => purchaseOrder(orderId),
+  });
+
   useEffect(() => {
     if (authUser) {
       Promise.all([
@@ -93,5 +98,6 @@ export default function useWallet() {
     getWalletTransactionsMutation,
     addDepositTransactionMutation,
     completePendingTransactionMutation,
+    purchaseOrderMuatation,
   };
 }
