@@ -53,6 +53,7 @@ export default function page({ params }: { params: { id: string } }) {
           >
             Previous
           </Button>
+          <div>{pageNumber}</div>
           <Button
             variant={"secondary"}
             onClick={() => {

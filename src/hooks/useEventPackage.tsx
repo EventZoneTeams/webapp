@@ -8,6 +8,7 @@ import {
 } from "@/api/event-package";
 import { useEventPackageStore } from "@/stores/event-package";
 import { toast } from "sonner";
+import { useEffect, useMemo } from "react";
 
 export default function useEventPackage() {
   const {
@@ -36,7 +37,17 @@ export default function useEventPackage() {
   const getEventPackageByIdMutation = useMutation({
     mutationFn: (id: number) => getEventPackageById(id),
   });
+
+  useEffect(() => {
+    getEventPackagesMutation.mutate(queryObj);
+  }, [queryObj, trigger]);
+
+  const eventPackages = useMemo(() => {
+    return getEventPackagesMutation.data;
+  }, [getEventPackagesMutation.data]);
+
   return {
+    eventPackages,
     trigger,
     switchTrigger,
     queryObj,
