@@ -34,14 +34,18 @@ export const mapBackEndEventCampaignToEventCampaign = (
 ): EventCampaign => {
   return {
     id: eventCampaign.id,
+    eventId: eventCampaign["event-id"],
     name: eventCampaign.name,
     description: eventCampaign.description,
     startDate: new Date(eventCampaign["start-date"]),
     endDate: new Date(eventCampaign["end-date"]),
     status: eventCampaign.status,
-    goalAmount: eventCampaign["goal-amount"],
     collectedAmount: eventCampaign["collected-amount"],
-    eventId: eventCampaign["event-id"],
+    goalAmount: eventCampaign["goal-amount"],
+    totalDonors: eventCampaign["total-donors"],
+    targetAchievementPercentage: eventCampaign["target-achievement-percentage"],
+    averageDonationAmount: eventCampaign["average-donation-amount"],
+    highestDonationAmount: eventCampaign["highest-donation-amount"],
     eventDonations: mapBackEndEventDonationsToEventDonations(
       eventCampaign["event-donations"]
     ),

@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import useNotification from "@/hooks/useNotification";
 import { formatDistanceToNow } from "date-fns";
 import useAuth from "@/hooks/useAuth";
+import Link from "next/link";
 
 export default function NotificationMenu() {
   const { notifications, refetch } = useNotification();
@@ -81,7 +82,9 @@ export default function NotificationMenu() {
             <ScrollArea className="h-96">
               <div className="space-y-4">
                 {notifications.map((notification, index: number) => (
-                  <NotificationItem key={index} notification={notification} />
+                  <Link key={index} href={notification.Url}>
+                    <NotificationItem notification={notification} />
+                  </Link>
                 ))}
               </div>
             </ScrollArea>

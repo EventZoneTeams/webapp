@@ -12,6 +12,7 @@ type Tab = {
 const tabs: Tab[] = [
   { label: "Account", href: "/profile/me" },
   { label: "Wallet", href: "/profile/wallet" },
+  { label: "Orders", href: "/profile/orders" },
 ];
 
 export default function ProfileTabs() {
