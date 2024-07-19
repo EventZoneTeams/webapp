@@ -11,7 +11,7 @@ import {
 import { useEventProductStore } from "@/stores/event-product";
 import { useMutation } from "@tanstack/react-query";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 export default function useEventProduct() {
@@ -76,7 +76,13 @@ export default function useEventProduct() {
   useEffect(() => {
     getEventProductMutation.mutate(queryObj);
   }, [queryObj, trigger]);
+
+  const products = useMemo(
+    () => getEventProductMutation.data,
+    [getEventProductMutation.data]
+  );
   return {
+    products,
     queryObj,
     setQueryObj,
     trigger,
