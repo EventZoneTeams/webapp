@@ -46,6 +46,8 @@ export type BackEndEventCampaign = {
   "target-achievement-percentage": number;
   "average-donation-amount": number;
   "highest-donation-amount": number;
+  "collected-amount": number;
+  "event-id": number;
   "event-donations": BackEndEventDonation[];
 };
 

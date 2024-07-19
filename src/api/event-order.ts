@@ -10,20 +10,44 @@ import {
   EventOrderStatusEnum,
 } from "@/types/event-order";
 
+export interface GetEventOrderByEventIdSendData {
+  id: number;
+  "search-term"?: string;
+  "from-date"?: string;
+  "to-date"?: string;
+  status?: EventOrderStatusEnum;
+  "page-number"?: number;
+  "page-size"?: number;
+}
 export interface GetEventOrderByEventIdResponse {
   status: boolean;
   data: BackEndEventOrder[];
   message: string;
 }
-export const getEventOrderByEventId = async (eventId: number) => {
+export const getEventOrderByEventId = async (
+  data: GetEventOrderByEventIdSendData
+) => {
   try {
-    const response = await axiosClient.get<GetEventOrderByEventIdResponse>(
-      `/event/${eventId}/event-orders`
-    );
+    let baseUrl = `/event/${data.id}/event-orders`;
+    const params = new URLSearchParams();
+    Object.keys(data).forEach((key) => {
+      const value = data[key as keyof GetEventOrderByEventIdSendData];
+      if (value !== null && value !== undefined) {
+        params.append(key, value.toString());
+      }
+    });
+    const queryString = params.toString();
+    if (queryString) {
+      baseUrl = baseUrl.concat(`?${queryString}`);
+    }
+
+    const response = (
+      await axiosClient.get<GetEventOrderByEventIdResponse>(baseUrl)
+    ).data;
     return {
-      status: response.data.status,
-      data: mapBackEndEventOrdersToEventOrders(response.data.data),
-      message: response.data.message,
+      status: response.status,
+      data: mapBackEndEventOrdersToEventOrders(response.data),
+      message: response.message,
     };
   } catch (error) {
     throw error;

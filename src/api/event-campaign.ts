@@ -1,4 +1,4 @@
-import { axiosClient } from "@/api/axiosClient";
+import { axiosClient, axiosClientFormData } from "@/api/axiosClient";
 import {
   mapBackEndEventCampaignsToEventCampaigns,
   mapBackEndEventCampaignToEventCampaign,
@@ -88,7 +88,10 @@ export const createEventCampaign = async (
 ) => {
   try {
     const response = (
-      await axiosClient.post<CreateEventCampaignResponse>("/campaigns", data)
+      await axiosClientFormData.post<CreateEventCampaignResponse>(
+        "/campaigns",
+        data
+      )
     ).data;
     return {
       status: response.status,

@@ -7,6 +7,7 @@ import {
   CircleDollarSign,
   CircleHelp,
   Clock,
+  Coins,
   GraduationCap,
   Layers3,
   List,
@@ -20,6 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 export default function EventDetails({ event }: { event: Event }) {
+  console.log(event);
   return (
     <div className="">
       <EventImage src={event.ThumbnailUrl ?? ""} />
@@ -70,56 +72,44 @@ export default function EventDetails({ event }: { event: Event }) {
             <dd className="text-primary sm:col-span-2">{event.University}</dd>
           </div>
 
-          <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt className="font-medium text-primary flex items-center gap-2">
-              <CircleDollarSign size={18} />
-              Donation
-            </dt>
-            <dd className="text-primary sm:col-span-2">
-              <dl className="-my-3 divide-y divide-border text-sm">
-                <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                  <dt className="font-medium text-primary flex items-center gap-2">
-                    <CheckCheck size={18} />
-                    Is Donation?
-                  </dt>
-                  <dd
-                    className={cn(
-                      "text-primary sm:col-span-2",
-                      event.IsDonation ? "text-green-500" : "text-red-500"
-                    )}
-                  >
-                    {event.IsDonation ? "Yes" : "No"}
-                  </dd>
-                </div>
-                {event.IsDonation && (
-                  <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                    <dt className="font-medium text-primary flex items-center gap-2">
-                      <Clock size={18} />
-                      Donation Time
-                    </dt>
-                    <dd className="text-primary sm:col-span-2">
-                      {format(event.DonationStartDate ?? "", "Pp")} -{" "}
-                      {format(event.DonationStartDate ?? "", "Pp")}
-                    </dd>
+          {event.EventCampaigns.length > 0 && (
+            <div className="grid grid-cols-1 gap-1 sm:grid-cols-3 sm:gap-4">
+              <dt className="font-medium text-primary flex items-center gap-2">
+                <Coins size={18} />
+                Donation Campaign
+              </dt>
+              <dd className="text-primary sm:col-span-2 divide-border divide-y ">
+                <p className="py-3 flex items-center gap-4">
+                  <span className="font-bold">Donation Title: </span>
+                  {event.EventCampaigns[0].name}
+                </p>
+                <p className="py-3">
+                  {event.EventCampaigns[0].description} Lorem ipsum dolor sit,
+                  amet consectetur adipisicing elit. Culpa itaque ratione
+                  aspernatur iusto quam esse excepturi exercitationem officia
+                  laboriosam officiis necessitatibus, fugit illum minus commodi
+                  hic harum maxime dicta adipisci?
+                </p>
+                <p className="py-3">
+                  <span className="font-semibold">Target:</span>{" "}
+                  {Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(event.EventCampaigns[0].goalAmount)}
+                </p>
+                <p className="py-3 flex items-center gap-2">
+                  <span className="font-semibold">Donation Time:</span>
+                  <div className="flex items-center gap-4">
+                    <span>
+                      {format(event.EventCampaigns[0].startDate, "Pp")}
+                    </span>
+                    <span>-</span>
+                    <span>{format(event.EventCampaigns[0].endDate, "Pp")}</span>
                   </div>
-                )}
-                {event.IsDonation && (
-                  <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                    <dt className="font-medium text-primary flex items-center gap-2">
-                      <WalletMinimal size={18} />
-                      Donation Total
-                    </dt>
-                    <dd className="text-primary sm:col-span-2">
-                      {Intl.NumberFormat("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      }).format(event.TotalCost ?? 0)}
-                    </dd>
-                  </div>
-                )}
-              </dl>
-            </dd>
-          </div>
+                </p>
+              </dd>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
             <dt className="font-medium text-primary flex items-center gap-2">

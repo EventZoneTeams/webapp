@@ -52,14 +52,20 @@ export default function page({ params }: { params: { id: string } }) {
               {eventCampaigns && eventCampaigns.length > 0
                 ? eventCampaigns.map((eventCampaign) => (
                     <section className="ml-4 mb-4 bg-muted rounded-lg">
-                      <Campaign campaignId={eventCampaign.id} eventName = {event.Name} />
+                      <Campaign
+                        campaignId={eventCampaign.id}
+                        eventName={event.Name}
+                      />
                     </section>
                   ))
                 : null}
 
-              {event.EventPackage && event.EventPackage.length > 0 ? (
+              {event.EventPackages && event.EventPackages.length > 0 ? (
                 <section className="ml-4 bg-muted rounded-lg">
-                  <Package eventId={event.Id} eventPackages={event.EventPackage} />
+                  <Package
+                    eventId={event.Id}
+                    eventPackages={event.EventPackages}
+                  />
                 </section>
               ) : null}
             </div>
