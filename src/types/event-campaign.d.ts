@@ -40,7 +40,7 @@ export type BackEndEventCampaign = {
   "end-date": string;
   status: EventCampaignStatusEnum;
   "goal-amount": number;
-  "colelcted-amount": number;
+  "collected-amount": number;
   "event-id": number;
   "event-donations": BackEndEventDonation[];
 };

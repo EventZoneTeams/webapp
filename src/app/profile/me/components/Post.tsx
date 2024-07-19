@@ -25,7 +25,7 @@ export const Post = (event: Event) => {
         <div className="flex-1">
           <div className="text-lg font-semibold flex items-center gap-2">
             {event.Name}
-            {event.IsDonation ? (
+            {event.EventCampaigns ? (
               <Badge className="bg-green-100 text-green-800">Donation</Badge>
             ) : (
               <Badge className="bg-red-100 text-red-800">No Donation</Badge>
@@ -43,7 +43,7 @@ export const Post = (event: Event) => {
             explicabo.
           </div>
         </div>
-        {event.IsDonation ? (
+        {event.EventCampaigns ? (
           <div>
             <Progress
               value={33}

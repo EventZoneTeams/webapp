@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { SidebarItem } from "@/types/sidebar";
-import { Barcode, Home, Package } from "lucide-react";
+import { Barcode, Coins, Home, Package } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -26,6 +26,11 @@ const MiniSidebarItem: SidebarItem[] = [
     title: "Order",
     href: "/orders",
     icon: <Barcode className="h-4 w-4" />,
+  },
+  {
+    title: "Donation",
+    href: "/donations",
+    icon: <Coins className="h-4 w-4" />,
   },
   // {
   //   title: "Ticket",

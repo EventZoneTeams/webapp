@@ -40,7 +40,7 @@ export const mapBackEndEventCampaignToEventCampaign = (
     endDate: new Date(eventCampaign["end-date"]),
     status: eventCampaign.status,
     goalAmount: eventCampaign["goal-amount"],
-    collectedAmount: eventCampaign["colelcted-amount"],
+    collectedAmount: eventCampaign["collected-amount"],
     eventId: eventCampaign["event-id"],
     eventDonations: mapBackEndEventDonationsToEventDonations(
       eventCampaign["event-donations"]
