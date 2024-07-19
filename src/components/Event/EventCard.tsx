@@ -48,12 +48,12 @@ export default function EventCard({
             <Badge
               className={cn(
                 "line-clamp-1",
-                event.IsDonation
+                event.EventCampaigns
                   ? "bg-green-200 text-green-700"
                   : "bg-red-200 text-red-700"
               )}
             >
-              {event.IsDonation ? "Donation" : "No Donation"}
+              {event.EventCampaigns ? "Donation" : "No Donation"}
             </Badge>
           </div>
           <div className="flex items-center justify-between gap-2 mt-2">
