@@ -11,19 +11,17 @@ interface PriceDetailsProps {
   cartIsEmpty: boolean;
 }
 
-function PriceDetails({
+export default function PriceDetails({
   subTotal,
   totalAmount,
   onPlaceOrder,
-  isLoading = false, 
+  isLoading = false,
   cartIsEmpty,
 }: PriceDetailsProps) {
   const [couponCode, setCouponCode] = useState("");
 
   const handleApplyCoupon = () => {
-    // Implement coupon application logic here
     console.log("Applying coupon:", couponCode);
-    // Reset input after applying coupon
     setCouponCode("");
   };
 
@@ -78,5 +76,3 @@ function PriceDetails({
     </div>
   );
 }
-
-export default PriceDetails;

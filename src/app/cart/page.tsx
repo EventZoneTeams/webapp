@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import CartItem from "./components/CartItem";
 import PriceDetails from "./components/PriceDetails";
@@ -7,8 +7,19 @@ import { ShoppingCart } from "lucide-react";
 import useEventOrder from "@/hooks/useEventOrder";
 import { CreateEventOrderSendData } from "@/api/event-order";
 
+export interface IPackage {
+  id: number;
+  quantity: number;
+  price?: number; // Optional price field
+}
+
+interface ICartItem {
+  eventId: string;
+  packages: IPackage[];
+}
+
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [cartItems, setCartItems] = useState<ICartItem[]>([]);
   const [subTotal, setSubTotal] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
@@ -20,40 +31,81 @@ export default function CartPage() {
     const cart = localStorage.getItem("cart");
     if (cart) {
       const parsedCart = JSON.parse(cart);
-      const sortedCart = parsedCart.sort((a: any, b: any) => b.id - a.id);
-      setCartItems(sortedCart);
+      setCartItems(parsedCart);
     }
   }, []);
 
   useEffect(() => {
     const subtotal = cartItems.reduce((sum, item) => {
-      return sum + item.quantity * item.totalPrice;
+      return (
+        sum +
+        item.packages.reduce((pkgSum, pkg) => {
+          return pkgSum + pkg.quantity * (pkg.price || 0); // Use actual package price
+        }, 0)
+      );
     }, 0);
     setSubTotal(subtotal);
     setTotalAmount(subtotal);
   }, [cartItems]);
 
-  const handleQuantityChange = (itemId: string, newQuantity: number) => {
+  const handleQuantityChange = (
+    eventId: string,
+    packageId: number,
+    newQuantity: number
+  ) => {
     const updatedCartItems = cartItems.map((item) =>
-      item.id === itemId ? { ...item, quantity: newQuantity } : item
+      item.eventId === eventId
+        ? {
+            ...item,
+            packages: item.packages.map((pkg) =>
+              pkg.id === packageId ? { ...pkg, quantity: newQuantity } : pkg
+            ),
+          }
+        : item
     );
     setCartItems(updatedCartItems);
     localStorage.setItem("cart", JSON.stringify(updatedCartItems));
   };
 
-  const handleRemoveItem = (itemId: string) => {
-    const updatedCartItems = cartItems.filter((item) => item.id !== itemId);
+  const handleRemoveItem = (eventId: string, packageId: number) => {
+    const updatedCartItems = cartItems
+      .map((item) =>
+        item.eventId === eventId
+          ? {
+              ...item,
+              packages: item.packages.filter((pkg) => pkg.id !== packageId),
+            }
+          : item
+      )
+      .filter((item) => item.packages.length > 0);
     setCartItems(updatedCartItems);
     localStorage.setItem("cart", JSON.stringify(updatedCartItems));
   };
 
-  const handlePlaceOrder = async () => {
-    setIsLoading(true); // Start loading
+  const handlePriceUpdate = useCallback(
+    (packageId: number, price: number) => {
+      setCartItems((prevItems) =>
+        prevItems.map((item) => ({
+          ...item,
+          packages: item.packages.map((pkg) =>
+            pkg.id === packageId ? { ...pkg, price } : pkg
+          ),
+        }))
+      );
+    },
+    [setCartItems]
+  );
 
-    const orderDetails = cartItems.map((item) => ({
-      "package-id": item.id,
-      quantity: item.quantity,
-    }));
+  const handlePlaceOrder = async () => {
+    setIsLoading(true);
+
+    // Flatten order details
+    const orderDetails = cartItems.flatMap((item) =>
+      item.packages.map((pkg) => ({
+        "package-id": pkg.id,
+        quantity: pkg.quantity,
+      }))
+    );
 
     const sendData: CreateEventOrderSendData = {
       "event-id": 2,
@@ -70,7 +122,7 @@ export default function CartPage() {
     } catch (error) {
       console.error("Error placing order:", error);
     } finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
 
@@ -90,13 +142,28 @@ export default function CartPage() {
               </div>
             ) : (
               <div className="p-6 rounded-lg shadow-md">
-                {cartItems?.map((item) => (
-                  <CartItem
-                    key={item.id}
-                    item={item}
-                    onQuantityChange={handleQuantityChange}
-                    onRemoveItem={handleRemoveItem}
-                  />
+                {cartItems.map((item, index) => (
+                  <div key={index}>
+                    {item.packages.map((pkg) => (
+                      <CartItem
+                        key={pkg.id}
+                        item={{
+                          ...pkg,
+                        }}
+                        onQuantityChange={(packageId, newQuantity) =>
+                          handleQuantityChange(
+                            item.eventId,
+                            packageId,
+                            newQuantity
+                          )
+                        }
+                        onRemoveItem={(packageId) =>
+                          handleRemoveItem(item.eventId, packageId)
+                        }
+                        onPriceUpdate={handlePriceUpdate}
+                      />
+                    ))}
+                  </div>
                 ))}
               </div>
             )}
@@ -107,7 +174,7 @@ export default function CartPage() {
               totalAmount={totalAmount}
               onPlaceOrder={handlePlaceOrder}
               isLoading={isLoading}
-              cartIsEmpty = {cartIsEmpty}
+              cartIsEmpty={cartIsEmpty}
             />
           </div>
         </div>

@@ -27,8 +27,14 @@ export default function Home() {
           <EventTop event={event2} />
         </div>
         <EventCarousel category={"Education"} categoryId={1} />
+        <EventCarousel category={"Music"} categoryId={2} />
+        <EventCarousel category={"Sports"} categoryId={3} />
+        <EventCarousel category={"Technology"} categoryId={4} />
         <EventCarousel category={"Business"} categoryId={5} />
         <EventCarousel category={"Art"} categoryId={6} />
+        <EventCarousel category={"Food and Drink"} categoryId={7} />
+        <EventCarousel category={"Travel"} categoryId={8} />
+        <EventCarousel category={"Film"} categoryId={9} />
         <EventCarousel category={"Other"} categoryId={10} />
       </div>
     </main>

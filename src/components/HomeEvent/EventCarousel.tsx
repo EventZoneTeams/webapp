@@ -26,6 +26,10 @@ export function EventCarousel({
     eventsMutation.mutate({ ...queryObj, "event-category-id": categoryId });
   }, [queryObj]);
 
+  const approvedEvents = eventsMutation.data?.Data.filter(
+    (event) => event.Status === "APPROVED"
+  );
+
   return (
     <div className="mt-8">
       <div className="flex items-center mb-4">
@@ -36,7 +40,7 @@ export function EventCarousel({
       </div>
       <Carousel className="w-full">
         <CarouselContent className="w-full">
-          {eventsMutation.data?.Data.map((event, index) => (
+          {approvedEvents?.map((event, index) => (
             <CarouselItem key={index} className="p-0 ml-4 basis-[26%] ">
               <Link key={index} href={`/event/${event.Id}`}>
                 <EventCard event={event} />

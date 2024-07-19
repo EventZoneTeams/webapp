@@ -62,7 +62,10 @@ export default function page({ params }: { params: { id: string } }) {
 
               {event.EventPackages && event.EventPackages.length > 0 ? (
                 <section className="ml-4 bg-muted rounded-lg">
-                  <Package eventPackages={event.EventPackages} />
+                  <Package
+                    eventId={event.Id}
+                    eventPackages={event.EventPackages}
+                  />
                 </section>
               ) : null}
             </div>
