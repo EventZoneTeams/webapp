@@ -56,7 +56,7 @@ export default function CartPage() {
     }));
 
     const sendData: CreateEventOrderSendData = {
-      "event-id": 14,
+      "event-id": 2,
       "event-order-details": orderDetails,
     };
 

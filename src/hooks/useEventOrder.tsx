@@ -33,7 +33,7 @@ export default function useEventOrder() {
         confirmButtonColor: "#30a5e8",
       }).then((result) => {
         if (result.isConfirmed) {
-          router.push("/orders");
+          router.push("/profile/orders");
         }
       });
     },

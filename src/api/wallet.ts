@@ -110,7 +110,7 @@ export const purchaseOrder = async (orderId: number) => {
   try {
     const response = (
       await axiosClient.post<PurchaseOrderResponse>(
-        `/api/v1/payment/event-orders/${orderId}`
+        `payment/event-orders/${orderId}`
       )
     ).data;
     return {

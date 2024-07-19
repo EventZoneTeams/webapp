@@ -13,12 +13,13 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import Swal from "sweetalert2";
 
 export default function useWallet() {
   const { authUser } = useAuth();
   const { wallets, transactions, setTransaction, setWallet } = useWalletStore();
   const router = useRouter();
-  const getuserWalletMutation = useMutation({
+  const getUserWalletMutation = useMutation({
     mutationFn: () => getUserWallets(),
     onSuccess: (data) => {
       if (data.success) {
@@ -76,14 +77,25 @@ export default function useWallet() {
     },
   });
 
-  const purchaseOrderMuatation = useMutation({
+  const purchaseOrderMutation = useMutation({
     mutationFn: (orderId: number) => purchaseOrder(orderId),
+    onSuccess: () => {
+      Swal.fire({
+        icon: "success",
+        title: "Successfully",
+        text: "Payment is successfully!",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#30a5e8",
+      }).then((result) => {
+        window.location.reload();
+      });
+    },
   });
 
   useEffect(() => {
     if (authUser) {
       Promise.all([
-        getuserWalletMutation.mutateAsync(),
+        getUserWalletMutation.mutateAsync(),
         getWalletTransactionsMutation.mutateAsync({
           walletTypeEnums: "ALL",
         }),
@@ -94,10 +106,10 @@ export default function useWallet() {
   return {
     wallets,
     transactions,
-    getuserWalletMutation,
+    getUserWalletMutation,
     getWalletTransactionsMutation,
     addDepositTransactionMutation,
     completePendingTransactionMutation,
-    purchaseOrderMuatation,
+    purchaseOrderMutation,
   };
 }
