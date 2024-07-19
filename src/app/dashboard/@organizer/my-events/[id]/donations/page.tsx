@@ -22,72 +22,70 @@ export default function page({ params }: { params: { id: string } }) {
 
   console.log(campaign);
 
-  return (
-    campaign && (
-      <div className="p-4">
-        <div className="bg-background rounded-md p-4">
+  return campaign ? (
+    <div className="p-4">
+      <div className="bg-background rounded-md p-4">
+        <div className="flex items-center gap-4">
+          <p>{campaign[0].name}</p>
+          <Badge className="">{campaign[0].status}</Badge>
+        </div>
+        <div className="mt-4">
+          <div className="text-2xl font-bold">
+            <span>Collected: </span>
+            <span>
+              {Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }).format(campaign[0].collectedAmount)}
+            </span>
+            <span> / </span>
+            <span>
+              {Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }).format(campaign[0].goalAmount)}
+            </span>
+          </div>
+          <Progress
+            value={(campaign[0].collectedAmount / campaign[0].goalAmount) * 100}
+            max={campaign[0].goalAmount}
+            indicatorColor="bg-gradient-to-r from-primary to-tertiary"
+            className="mt-4"
+          />
+        </div>
+        <div className="mt-4 text-gray-500">
           <div className="flex items-center gap-4">
-            <p>{campaign[0].name}</p>
-            <Badge className="">{campaign[0].status}</Badge>
-          </div>
-          <div className="mt-4">
-            <div className="text-2xl font-bold">
-              <span>Collected: </span>
-              <span>
-                {Intl.NumberFormat("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(campaign[0].collectedAmount)}
-              </span>
-              <span> / </span>
-              <span>
-                {Intl.NumberFormat("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(campaign[0].goalAmount)}
-              </span>
-            </div>
-            <Progress
-              value={
-                (campaign[0].collectedAmount / campaign[0].goalAmount) * 100
-              }
-              max={campaign[0].goalAmount}
-              indicatorColor="bg-gradient-to-r from-primary to-tertiary"
-              className="mt-4"
-            />
-          </div>
-          <div className="mt-4 text-gray-500">
-            <div className="flex items-center gap-4">
-              <span>{format(campaign[0].startDate, "Pp")}</span>
-              <span>-</span>
-              <span>{format(campaign[0].endDate, "Pp")}</span>
-            </div>
+            <span>{format(campaign[0].startDate, "Pp")}</span>
+            <span>-</span>
+            <span>{format(campaign[0].endDate, "Pp")}</span>
           </div>
         </div>
-        <dl className="-my-3 divide-y divide-border text-sm mt-4">
-          {campaign[0].eventDonations.map((donation, index) => {
-            console.log(donation);
-            return (
-              <div
-                className="grid grid-cols-3 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
-                key={index}
-              >
-                <div className="col-span-1">{donation.userId}</div>
-                <div className="col-span-1">
-                  +
-                  {Intl.NumberFormat("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(donation.amount)}
-                </div>
-                <div className="col-span-1">
-                  {format(donation.createdAt, "Pp")}
-                </div>
-              </div>
-            );
-          })}
-        </dl>
       </div>
-    )
+      <dl className="-my-3 divide-y divide-border text-sm mt-4">
+        {campaign[0].eventDonations.map((donation, index) => {
+          console.log(donation);
+          return (
+            <div
+              className="grid grid-cols-3 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
+              key={index}
+            >
+              <div className="col-span-1">{donation.userId}</div>
+              <div className="col-span-1">
+                +
+                {Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(donation.amount)}
+              </div>
+              <div className="col-span-1">
+                {format(donation.createdAt, "Pp")}
+              </div>
+            </div>
+          );
+        })}
+      </dl>
+    </div>
+  ) : (
+    <div className="text-center">No donation</div>
   );
 }
