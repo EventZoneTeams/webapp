@@ -32,6 +32,7 @@ export function UserMenu() {
     router.push("/");
     removeLocalToken();
     useUserStore.setState({ authUser: null });
+    localStorage.removeItem("cart");
   };
 
   return (

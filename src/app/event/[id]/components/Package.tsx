@@ -7,8 +7,10 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function Package({
+  eventId,
   eventPackages,
 }: {
+  eventId: number;
   eventPackages: EventPackage[];
 }) {
   const [quantity, setQuantity] = useState<number>(1);
@@ -21,14 +23,22 @@ export default function Package({
     try {
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-      const existingPackageIndex = cart.findIndex(
-        (item: { id: number }) => item.id === eventPackage.id
+      const eventIndex = cart.findIndex(
+        (item: { eventId: number }) => item.eventId === eventId
       );
 
-      if (existingPackageIndex !== -1) {
-        cart[existingPackageIndex].quantity += quantity;
+      if (eventIndex !== -1) {
+        const existingPackageIndex = cart[eventIndex].packages.findIndex(
+          (item: { id: number }) => item.id === eventPackage.id
+        );
+
+        if (existingPackageIndex !== -1) {
+          cart[eventIndex].packages[existingPackageIndex].quantity += quantity;
+        } else {
+          cart[eventIndex].packages.push({ id: eventPackage.id, quantity });
+        }
       } else {
-        cart.push({ ...eventPackage, quantity });
+        cart.push({ eventId, packages: [{ id: eventPackage.id, quantity }] });
       }
 
       localStorage.setItem("cart", JSON.stringify(cart));
@@ -40,6 +50,7 @@ export default function Package({
       toast.error(`Failed to add ${eventPackage.title} to cart.`);
     }
   };
+
 
   return (
     <div className="p-6 w-[500px]">
