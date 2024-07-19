@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import useUser from "@/hooks/useUser";
 import { getUserById } from "@/api/user";
 import { User } from "@/types/authuser";
+import Image from "next/image";
 
 export default function page({ params }: { params: { id: string } }) {
   const { getEventCampaignByEventIdMutation } = useEventCampaign();
@@ -69,15 +70,37 @@ export default function page({ params }: { params: { id: string } }) {
               className="grid grid-cols-3 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
               key={index}
             >
-              <div className="col-span-1">{donation.userId}</div>
               <div className="col-span-1">
+                <div className="px-4 py-2 rounded-md bg-secondary flex gap-4 w-72">
+                  <Image
+                    src={
+                      donation.user?.Image ||
+                      `https://avatar.iran.liara.run/public/boy?username=${
+                        donation.user?.FullName || ""
+                      }`
+                    }
+                    width={40}
+                    height={40}
+                    alt={donation.user?.FullName || ""}
+                    className="h-full"
+                  />
+
+                  <div className="">
+                    <div>{donation.user?.FullName || ""}</div>
+                    <div className="text-gray-500 line-clamp-1">
+                      {donation.user?.Email || ""}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-span-1 flex gap-4 items-center">
                 +
                 {Intl.NumberFormat("vi-VN", {
                   style: "currency",
                   currency: "VND",
                 }).format(donation.amount)}
               </div>
-              <div className="col-span-1">
+              <div className="col-span-1 flex items-center text-gray-500">
                 {format(donation.createdAt, "Pp")}
               </div>
             </div>
