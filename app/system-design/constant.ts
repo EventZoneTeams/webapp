@@ -65,4 +65,24 @@ export const colors: Color[] = [
     backgroundColorClassName: "bg-card",
     textColorClassName: "text-card-foreground",
   },
+  {
+    name: "success",
+    backgroundColorClassName: "bg-success",
+    textColorClassName: "text-success-foreground",
+  },
+  {
+    name: "warning",
+    backgroundColorClassName: "bg-warning",
+    textColorClassName: "text-warning-foreground",
+  },
+  {
+    name: "error",
+    backgroundColorClassName: "bg-error",
+    textColorClassName: "text-error-foreground",
+  },
+  {
+    name: "info",
+    backgroundColorClassName: "bg-info",
+    textColorClassName: "text-info-foreground",
+  },
 ];
