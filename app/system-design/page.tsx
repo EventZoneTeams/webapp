@@ -32,7 +32,7 @@ const sidebarItems: SidebarItem[] = [
 
 const SystemDesign = () => {
   return (
-    <div className="container relative grid min-h-[5000px] grid-cols-12 gap-4">
+    <div className="container relative grid min-h-[5000px] grid-cols-12 gap-4 bg-white">
       <nav className="col-span-2">
         <ul className="sticky top-0 min-h-screen py-5">
           {sidebarItems.map((item, index) => (

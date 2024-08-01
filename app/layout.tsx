@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import Background from "@/components/Background";
+import Background from "@/components/background/Background";
+import AnimatedGridBackground from "@/components/background/AnimatedGridBackground";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -23,8 +24,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("", fontSans.variable)}>
-        {children}
-        {/* <Background /> */}
+        <div className="z-10">{children}</div>x{/* <Background /> */}
+        <AnimatedGridBackground
+          numSquares={30}
+          maxOpacity={0.1}
+          className={cn(
+            "fixed inset-x-0 inset-y-[-30%] -z-10 h-[200%] skew-y-12",
+          )}
+        />
       </body>
     </html>
   );
