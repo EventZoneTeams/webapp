@@ -24,14 +24,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("", fontSans.variable)}>
-        <div className="z-10">{children}</div>x{/* <Background /> */}
-        <AnimatedGridBackground
+        {children}
+        {/* <AnimatedGridBackground
           numSquares={30}
           maxOpacity={0.1}
           className={cn(
             "fixed inset-x-0 inset-y-[-30%] -z-10 h-[200%] skew-y-12",
           )}
-        />
+        /> */}
       </body>
     </html>
   );

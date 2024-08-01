@@ -1,5 +1,7 @@
+import ExamplePhoneInput from "@/app/system-design/components/ExamplePhoneInput";
 import { colors } from "@/app/system-design/constant";
-import { DatePicker } from "@/components/DatePicker";
+import { DatePicker } from "@/components/input/DatePicker";
+import { InputBlock } from "@/components/input/InputVariant";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -129,7 +131,34 @@ const SystemDesign = () => {
             <Input placeholder="Input" className="bg-[#f9fafb]" />
             <DatePicker />
             <DatePicker showTime />
+            <InputBlock
+              root={{ variant: "default", size: "lg" }}
+              placeholder="Default"
+            />
+            <InputBlock
+              root={{ variant: "filled", size: "lg" }}
+              placeholder="Filled"
+            />
+            <InputBlock
+              root={{ variant: "ghost", size: "lg" }}
+              placeholder="Ghost"
+            />
+            <InputBlock
+              root={{ variant: "neubrutalism", size: "lg" }}
+              placeholder="Neubrutalism"
+            />
+            <InputBlock
+              root={{ variant: "underlined", size: "lg" }}
+              placeholder="Underlined"
+            />
+            <ExamplePhoneInput />
           </div>
+        </section>
+        <section className="space-y-6 py-5">
+          <h1 className="text-2xl font-bold" id="button">
+            Card
+          </h1>
+          <div className="space-y-4"></div>
         </section>
       </div>
     </div>
