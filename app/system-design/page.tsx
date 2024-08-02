@@ -1,3 +1,4 @@
+import ExampleImageInput from "@/app/system-design/components/ExampleImageInput";
 import ExamplePhoneInput from "@/app/system-design/components/ExamplePhoneInput";
 import { colors } from "@/app/system-design/constant";
 import { DatePicker } from "@/components/input/DatePicker";
@@ -30,11 +31,23 @@ const sidebarItems: SidebarItem[] = [
     name: "Button",
     href: "#button",
   },
+  {
+    name: "Dialog",
+    href: "#dialog",
+  },
+  {
+    name: "Checkbox",
+    href: "#checkbox",
+  },
+  {
+    name: "Input",
+    href: "#input",
+  },
 ];
 
 const SystemDesign = () => {
   return (
-    <div className="container relative grid min-h-[5000px] grid-cols-12 gap-4 bg-white">
+    <div className="container relative grid min-h-[5000px] grid-cols-12 gap-4 backdrop-blur-md">
       <nav className="col-span-2">
         <ul className="sticky top-0 min-h-screen py-5">
           {sidebarItems.map((item, index) => (
@@ -92,7 +105,7 @@ const SystemDesign = () => {
           </div>
         </section>
         <section className="space-y-6 py-5">
-          <h1 className="text-2xl font-bold" id="button">
+          <h1 className="text-2xl font-bold" id="dialog">
             Dialog
           </h1>
           <div className="grid grid-cols-6 gap-4">
@@ -113,7 +126,7 @@ const SystemDesign = () => {
           </div>
         </section>
         <section className="space-y-6 py-5">
-          <h1 className="text-2xl font-bold" id="button">
+          <h1 className="text-2xl font-bold" id="checkbox">
             Checkbox
           </h1>
           <div className="flex items-center gap-4">
@@ -124,13 +137,12 @@ const SystemDesign = () => {
           </div>
         </section>
         <section className="space-y-6 py-5">
-          <h1 className="text-2xl font-bold" id="button">
+          <h1 className="text-2xl font-bold" id="input">
             Input
           </h1>
           <div className="space-y-4">
             <Input placeholder="Input" className="bg-[#f9fafb]" />
-            <DatePicker />
-            <DatePicker showTime />
+
             <InputBlock
               root={{ variant: "default", size: "lg" }}
               placeholder="Default"
@@ -151,7 +163,13 @@ const SystemDesign = () => {
               root={{ variant: "underlined", size: "lg" }}
               placeholder="Underlined"
             />
+            <h2 className="font-semibold">Date</h2>
+            <DatePicker />
+            <DatePicker showTime />
+            <h2 className="font-semibold">Phone</h2>
             <ExamplePhoneInput />
+            <h2 className="font-semibold">Image</h2>
+            <ExampleImageInput />
           </div>
         </section>
         <section className="space-y-6 py-5">
