@@ -26,11 +26,13 @@ const accept = {
 interface ImageCropperProps {
   ratio: Ratios;
   setFinalImage: (image: File) => void;
+  defaultImage?: string;
 }
 
 export function ImageCropper({
   ratio = "1:1",
   setFinalImage,
+  defaultImage,
 }: ImageCropperProps) {
   const aspect = getAspectRatio(ratio);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -134,8 +136,31 @@ export function ImageCropper({
               alt="Selected Image"
               width={1000}
               height={1000}
-              className={cn("w-full", getAspectRatioClass(ratio))}
+              className={cn(
+                "w-full object-cover object-center",
+                getAspectRatioClass(ratio),
+              )}
             />
+          </div>
+        ) : defaultImage ? (
+          <div
+            className={cn(
+              "w-full overflow-hidden rounded outline outline-offset-2 outline-gray-300 hover:cursor-pointer hover:outline-gray-400",
+              getAspectRatioClass(ratio),
+            )}
+            {...getRootProps()}
+          >
+            <Image
+              src={defaultImage}
+              alt="Selected Image"
+              width={1000}
+              height={1000}
+              className={cn(
+                "w-full object-cover object-center",
+                getAspectRatioClass(ratio),
+              )}
+            />
+            <input {...getInputProps()} />
           </div>
         ) : (
           <div
@@ -169,8 +194,8 @@ export function ImageCropper({
                   alt="Image Cropper Shell"
                   src={selectedFile?.preview}
                   onLoad={onImageLoad}
-                  width={1000}
-                  height={1000}
+                  width={500}
+                  height={500}
                 />
               </div>
             </ReactCrop>
