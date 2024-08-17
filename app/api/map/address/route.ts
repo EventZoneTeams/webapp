@@ -1,4 +1,4 @@
-import { NominationResponse } from "@/types/address";
+import { NominationResponse } from "@/types/map";
 import { NextRequest, NextResponse } from "next/server";
 
 interface ApiResponse<T> {
@@ -21,13 +21,13 @@ export async function GET(req: NextRequest) {
       },
       {
         status: 400,
-      }
+      },
     );
   }
 
   try {
     const response = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`,
     );
 
     if (!response.ok) {
@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }

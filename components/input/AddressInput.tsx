@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MyAddress, NominationResponse } from "@/types/address";
-import { ApiResponse } from "@/types/api";
+import { Map } from "@/lib/map";
+import { MyAddress } from "@/types/map";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -59,14 +59,6 @@ function DraggableMarker({
   );
 }
 
-const getLocationFromLatLng = async (coordinates: L.LatLng) => {
-  const response = await fetch(
-    `/api/map/address?lat=${coordinates.lat}&lon=${coordinates.lng}`,
-  );
-  const data: ApiResponse<NominationResponse> = await response.json();
-  return data;
-};
-
 interface MapProps {
   onChange: (address: MyAddress) => void;
   defaultAddress?: MyAddress;
@@ -81,7 +73,7 @@ export default function AddressInput({ onChange, defaultAddress }: MapProps) {
 
   useEffect(() => {
     if (currentLocation) {
-      getLocationFromLatLng(currentLocation).then((data) => {
+      Map.getLocationFromLatLng(currentLocation).then((data) => {
         if (data.isSuccess && data.data) {
           setAddress({
             displayName: data.data.display_name,

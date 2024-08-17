@@ -1,9 +1,9 @@
+import AnimatedGridBackground from "@/components/background/AnimatedGridBackground";
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
+import { ViewTransitions } from "next-view-transitions";
 import { Plus_Jakarta_Sans as FontSans } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
-import Background from "@/components/background/Background";
-import AnimatedGridBackground from "@/components/background/AnimatedGridBackground";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -22,17 +22,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={cn("", fontSans.variable)}>
-        {children}
-        <AnimatedGridBackground
-          numSquares={30}
-          maxOpacity={0.1}
-          className={cn(
-            "fixed inset-x-0 inset-y-[-30%] -z-10 h-[200%] skew-y-12",
-          )}
-        />
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="en">
+        <body className={cn("", fontSans.variable)}>
+          {children}
+          <AnimatedGridBackground
+            numSquares={30}
+            maxOpacity={0.1}
+            className={cn(
+              "fixed inset-x-0 inset-y-[-30%] -z-10 h-[200%] skew-y-12",
+            )}
+          />
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }
