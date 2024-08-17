@@ -31,11 +31,11 @@ jobs:
       - name: SSH into VPS and deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            mkdir -p ./eventzone-webapp
-            cd ./eventzone-webapp
-            docker compose pull
+            cd ./webapp
+            git pull origin main
+            docker compose down
             docker compose up -d
