@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
+import { getRandomColor } from "@/lib/random-color";
 
 interface AnimatedGridBackgroundProps {
   width?: number;
@@ -41,15 +42,6 @@ export function AnimatedGridBackground({
       Math.floor((Math.random() * dimensions.width) / width),
       Math.floor((Math.random() * dimensions.height) / height),
     ];
-  }
-
-  function getRandomColor() {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
   }
 
   // Adjust the generateSquares function to return objects with an id, x, y, and color

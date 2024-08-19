@@ -22,7 +22,7 @@
     --destructive-foreground: #f8faf8;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --input-background: #f9fafb;
+    --input-background: #ffffff;
     --ring: #000000;
     --radius: 0.5rem;
     --chart-1: 12 76% 61%;
@@ -55,7 +55,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --input-background: #f9fafb;
+    --input-background: #ffffff;
     --ring: 212.7 26.8% 83.9%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
