@@ -1,6 +1,6 @@
 "use client";
 
-import { MyAddress } from "@/types/map";
+import { MyAddress } from "@/types/api/map";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 const AddressInput = dynamic(() => import("@/components/input/AddressInput"), {

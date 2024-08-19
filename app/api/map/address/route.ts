@@ -1,11 +1,6 @@
-import { NominationResponse } from "@/types/map";
+import { ApiResponse } from "@/types/api";
+import { NominationResponse } from "@/types/api/map";
 import { NextRequest, NextResponse } from "next/server";
-
-interface ApiResponse<T> {
-  isSuccess: boolean;
-  error: string | null;
-  data: T | null;
-}
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
@@ -15,7 +10,7 @@ export async function GET(req: NextRequest) {
   if (!lat || !lon) {
     return NextResponse.json<ApiResponse<null>>(
       {
-        error: "Missing lat and lon query parameters",
+        message: "Missing lat and lon query parameters",
         isSuccess: false,
         data: null,
       },
@@ -38,14 +33,14 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json<ApiResponse<NominationResponse>>({
       isSuccess: true,
-      error: null,
+      message: null,
       data,
     });
   } catch (error) {
     return NextResponse.json<ApiResponse<null>>(
       {
         isSuccess: false,
-        error: (error as Error).message,
+        message: (error as Error).message,
         data: null,
       },
       {

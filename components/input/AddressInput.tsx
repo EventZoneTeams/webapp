@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Map } from "@/lib/map";
-import { MyAddress } from "@/types/map";
+import { Map } from "@/lib/api/map";
+import { MyAddress } from "@/types/api/map";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";

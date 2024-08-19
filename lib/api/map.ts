@@ -1,4 +1,4 @@
-import { NominationResponse } from "@/types/map";
+import { NominationResponse } from "@/types/api/map";
 import { ApiResponse } from "@/types/api";
 
 export namespace Map {
