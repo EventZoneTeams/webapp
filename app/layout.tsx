@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { ViewTransitions } from "next-view-transitions";
 import { Plus_Jakarta_Sans as FontSans } from "next/font/google";
 import "./globals.css";
-import { BackgroundGradientAnimation } from "@/components/background/BackgroundGradientAnimation";
 
 const fontSans = FontSans({
   subsets: ["latin"],

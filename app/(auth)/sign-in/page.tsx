@@ -18,9 +18,9 @@ import ShineBorder from "@/components/ShineBorder";
 
 const SignIn = () => {
   return (
-    <Card className={cn("w-[500px] bg-white")}>
+    <Card className={cn("w-[500px] border-none bg-transparent shadow-none")}>
       <CardHeader>
-        <CardTitle>Sign in</CardTitle>
+        <CardTitle className="text-center text-3xl">Sign in</CardTitle>
       </CardHeader>
       <CardContent>
         <SignInForm />

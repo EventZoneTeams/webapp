@@ -12,28 +12,30 @@ export const metadata: Metadata = {
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-white/50 p-10 backdrop-blur-sm">
-      <div className="mb-4 flex items-center justify-between">
-        <Link href="/system-design" className={cn("text-base font-normal")}>
-          <Button
-            variant={"outline"}
-            className="flex items-center gap-2 backdrop-blur-sm"
-          >
-            <ArrowLeftIcon size={20} />
-            Home
-          </Button>
-        </Link>
-        <Link href="/sign-up" className={cn("text-base font-normal")}>
-          <Button
-            variant={"outline"}
-            className="flex items-center gap-2 backdrop-blur-sm"
-          >
-            <UserPlusIcon size={20} />
-            Sign Up
-          </Button>
-        </Link>
+    <div className="flex h-full items-center justify-center border px-6 backdrop-blur-lg">
+      <div>
+        {/* <div className="mb-4 flex items-center justify-between">
+          <Link href="/system-design" className={cn("text-base font-normal")}>
+            <Button
+              variant={"outline"}
+              className="flex items-center gap-2 backdrop-blur-sm"
+            >
+              <ArrowLeftIcon size={20} />
+              Home
+            </Button>
+          </Link>
+          <Link href="/sign-up" className={cn("text-base font-normal")}>
+            <Button
+              variant={"outline"}
+              className="flex items-center gap-2 backdrop-blur-sm"
+            >
+              <UserPlusIcon size={20} />
+              Sign Up
+            </Button>
+          </Link>
+        </div> */}
+        {children}
       </div>
-      {children}
     </div>
   );
 }
