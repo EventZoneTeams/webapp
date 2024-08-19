@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { ViewTransitions } from "next-view-transitions";
 import { Plus_Jakarta_Sans as FontSans } from "next/font/google";
 import "./globals.css";
+import GlassProvider from "glass-js";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -25,14 +26,16 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en">
         <body className={cn("", fontSans.variable)}>
-          {children}
-          <AnimatedGridBackground
-            numSquares={30}
-            maxOpacity={0.1}
-            className={cn(
-              "fixed inset-x-0 inset-y-[-30%] -z-10 h-[200%] skew-y-12",
-            )}
-          />
+          <GlassProvider>
+            {children}
+            <AnimatedGridBackground
+              numSquares={30}
+              maxOpacity={0.1}
+              className={cn(
+                "fixed inset-x-0 inset-y-[-30%] -z-10 h-[200%] skew-y-12",
+              )}
+            />
+          </GlassProvider>
         </body>
       </html>
     </ViewTransitions>
