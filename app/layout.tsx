@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { ViewTransitions } from "next-view-transitions";
 import { Plus_Jakarta_Sans as FontSans } from "next/font/google";
 import "./globals.css";
+import { BackgroundGradientAnimation } from "@/components/background/BackgroundGradientAnimation";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -27,12 +28,15 @@ export default function RootLayout({
         <body className={cn("", fontSans.variable)}>
           {children}
           <AnimatedGridBackground
-            numSquares={30}
-            maxOpacity={0.1}
+            numSquares={50}
+            maxOpacity={0.2}
+            duration={4}
+            repeatDelay={0.5}
             className={cn(
               "fixed inset-x-0 inset-y-[-30%] -z-10 h-[200%] skew-y-12",
             )}
           />
+          {/* <BackgroundGradientAnimation /> */}
         </body>
       </html>
     </ViewTransitions>

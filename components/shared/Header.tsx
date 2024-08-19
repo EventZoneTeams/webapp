@@ -44,10 +44,10 @@ export default function Header() {
           ))}
         </ul>
         <div className="flex items-center gap-4">
-          <Link href={"/login"}>
+          <Link href={"/sign-in"}>
             <p className="block py-2">Login</p>
           </Link>
-          <Link href={"/register"}>
+          <Link href={"/sign-up"}>
             <p className="block py-2">Register</p>
           </Link>
         </div>

@@ -1,3 +1,4 @@
+import { World } from "@/components/Globe";
 import React from "react";
 
 export default function layout({ children }: { children: React.ReactNode }) {
