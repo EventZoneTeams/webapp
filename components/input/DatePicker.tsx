@@ -12,15 +12,19 @@ const DatePicker = React.forwardRef<HTMLInputElement, InputProps>(
     return showTime ? (
       <input
         type="datetime-local"
+        defaultValue={props.defaultValue}
+        onChange={props.onChange}
         className={cn(
-          "bg-input-background border-input focus-visible:ring-ring w-full rounded border p-2 focus-visible:outline-none focus-visible:ring-2",
+          "w-full rounded border border-input bg-input-background p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         )}
       />
     ) : (
       <input
         type="date"
+        defaultValue={props.defaultValue}
+        onChange={props.onChange}
         className={cn(
-          "bg-input-background border-input focus-visible:ring-ring w-full rounded border p-2 focus-visible:outline-none focus-visible:ring-2",
+          "w-full rounded border border-input bg-input-background p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         )}
       />
     );
