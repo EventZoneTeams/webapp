@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-full items-center justify-center border px-6 backdrop-blur-lg">
+    <div className="flex h-full items-center justify-center border px-6 backdrop-blur-md">
       <div>
         {/* <div className="mb-4 flex items-center justify-between">
           <Link href="/system-design" className={cn("text-base font-normal")}>

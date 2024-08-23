@@ -8,6 +8,7 @@ const AnimatedGridPattern = dynamic(
 );
 import "./globals.css";
 import dynamic from "next/dynamic";
+import { Toaster } from "sonner";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -39,7 +40,7 @@ export default function RootLayout({
               "fixed inset-x-0 inset-y-[-30%] -z-10 h-[200%] skew-y-12",
             )}
           />
-          {/* <BackgroundGradientAnimation /> */}
+          <Toaster richColors position="top-center" />
         </body>
       </html>
     </ViewTransitions>

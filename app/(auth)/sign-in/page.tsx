@@ -5,16 +5,13 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import React from "react";
 import GoogleLogo from "@/public/assets/logos/google-logo.svg";
 import Image from "next/image";
-import ShineBorder from "@/components/ShineBorder";
 
 const SignIn = () => {
   return (

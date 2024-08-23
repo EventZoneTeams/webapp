@@ -37,11 +37,11 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({ email, password }),
     });
 
-    if (!response.ok) {
-      throw new Error("Failed to login");
-    }
-
     const data: BackendLoginResponse = await response.json();
+
+    if (!response.ok || !data.status) {
+      throw new Error(data.message);
+    }
 
     const nextResponse = NextResponse.json<ApiResponse<LoginResponse>>({
       isSuccess: true,

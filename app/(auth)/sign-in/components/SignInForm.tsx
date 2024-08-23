@@ -1,27 +1,19 @@
 "use client";
 
+import CustomFormField from "@/components/CustomFormField";
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import { User } from "@/lib/api/user";
 import {
   SignInSchema,
   SignInSchemaDefaultValue,
   SignInSchemaType,
 } from "@/schemas/signInSchema";
+import { LoginRequest } from "@/types/api/user";
+import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { login } from "@/lib/api/login";
-import { LoginRequest } from "@/types/api/login";
-import CustomFormField from "@/components/CustomFormField";
+import { toast } from "sonner";
 
 export default function SignInForm() {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -33,15 +25,26 @@ export default function SignInForm() {
 
   const onSubmit = async (data: SignInSchemaType) => {
     setIsLoading(true);
-    login({
+    User.login({
       email: data.email,
       password: data.password,
     } as LoginRequest).then((response) => {
+      console.log(response);
       if (response.isSuccess) {
         console.log(response.data);
-        setIsLoading(false);
+        User.getMe().then((response) => {
+          if (response.isSuccess) {
+            console.log(response.data);
+            setIsLoading(false);
+          } else {
+            console.log(response.message);
+            toast.error(response.message);
+            setIsLoading(false);
+          }
+        });
       } else {
         console.log(response.message);
+        toast.error(response.message);
         setIsLoading(false);
       }
     });
@@ -64,7 +67,12 @@ export default function SignInForm() {
           placeholder="Enter your password"
           label="Password"
         />
-        <Button type="submit" className="w-full" isLoading={isLoading}>
+        <Button
+          type="submit"
+          className="w-full"
+          isLoading={isLoading}
+          disabled={!form.formState.isValid}
+        >
           {isLoading ? "Loading..." : "Sign In"}
         </Button>
       </form>
