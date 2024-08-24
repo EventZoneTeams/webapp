@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,6 +13,7 @@ import { EventBoardColumn } from "@/types/eventBoard";
 import { useSortable } from "@dnd-kit/sortable";
 import { Ellipsis, Trash2 } from "lucide-react";
 import { CSS } from "@dnd-kit/utilities";
+import { useState } from "react";
 
 interface ColumnContainerProps {
   column: EventBoardColumn;
@@ -19,6 +22,8 @@ interface ColumnContainerProps {
 
 function ColumnContainer(props: ColumnContainerProps) {
   const { column, deleteColumn } = props;
+
+  const [editMode, setEditMode] = useState(false);
 
   const {
     attributes,
@@ -108,12 +113,28 @@ function ColumnContainer(props: ColumnContainerProps) {
     >
       {/* Column title */}
       <section className="flex min-h-[2.5rem] items-start justify-between">
-        <div {...attributes} {...listeners} className="flex items-start gap-2 w-full">
+        <div
+          {...attributes}
+          {...listeners}
+          onClick={() => setEditMode(true)}
+          className="flex w-full items-start gap-3 focus:cursor-grabbing"
+        >
           <div className="flex h-[2rem] items-center">
-            <p className="flex h-6 w-6 items-start justify-center rounded-sm bg-gray-200 text-xs"></p>
+            <p className="flex h-6 w-6 items-center justify-center rounded-sm bg-gray-200 text-xs">
+              0
+            </p>
           </div>
           <div className="mt-1">
-            <p className="flex items-start font-semibold">{column.name}</p>
+            {!editMode ? (
+              <p className="flex items-start font-semibold">{column.name}</p>
+            ) : (
+              <input
+                autoFocus
+                className="w-full bg-background px-2 -ml-2"
+                defaultValue={column.name}
+                onBlur={() => setEditMode(false)}
+              />
+            )}
           </div>
         </div>
 
