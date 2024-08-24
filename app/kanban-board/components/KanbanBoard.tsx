@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { EventBoardColumn } from "@/types/eventBoard";
+import { EventBoardColumn, EventBoardTask } from "@/types/eventBoard";
 import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import ColumnContainer from "./ColumnContainer";
@@ -19,6 +19,7 @@ import { createPortal } from "react-dom";
 
 function KanbanBoard() {
   const [columns, setColumns] = useState<EventBoardColumn[]>([]);
+  const [task, setTask] = useState<EventBoardTask[]>([]);
   const columnsId = useMemo(
     () => columns.map((column) => column.id),
     [columns],
