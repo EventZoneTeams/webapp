@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { EventBoardColumn } from "@/types/eventBoard";
 import { useSortable } from "@dnd-kit/sortable";
-import { Ellipsis, Trash2 } from "lucide-react";
+import { Ellipsis, Plus, Trash2 } from "lucide-react";
 import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
 
@@ -19,10 +19,11 @@ interface ColumnContainerProps {
   column: EventBoardColumn;
   deleteColumn: (id: string) => void;
   updateColumn: (id: string, name: string) => void;
+  createTask: (columnId: string) => void;
 }
 
 function ColumnContainer(props: ColumnContainerProps) {
-  const { column, deleteColumn, updateColumn } = props;
+  const { column, deleteColumn, updateColumn, createTask } = props;
 
   const [editMode, setEditMode] = useState(false);
 
@@ -111,7 +112,7 @@ function ColumnContainer(props: ColumnContainerProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className="flex h-[500px] max-h-[500px] w-[16rem] flex-col rounded-md border bg-white px-4 py-2"
+      className="flex h-[500px] max-h-[500px] w-[18rem] flex-col rounded-md border bg-white px-4 py-2"
     >
       {/* Column title */}
       <section className="flex min-h-[2.5rem] items-start justify-between">
@@ -119,7 +120,7 @@ function ColumnContainer(props: ColumnContainerProps) {
           {...attributes}
           {...listeners}
           onClick={() => setEditMode(true)}
-          className="flex w-[11.5rem] items-start gap-3"
+          className="flex w-[13.5rem] items-start gap-3"
         >
           <div className="flex h-[2rem] items-center">
             <p className="flex h-6 w-6 items-center justify-center rounded-sm bg-gray-200 text-xs">
@@ -172,13 +173,22 @@ function ColumnContainer(props: ColumnContainerProps) {
       <hr />
 
       {/* Column task container */}
-      <section>
-        <div className="flex flex-grow">Content</div>
+      <section className="flex flex-grow">
+        <div>Content</div>
       </section>
 
       {/* Column footer */}
       <section>
-        <div>Footer</div>
+        <div>
+          <Button
+          onClick={() => createTask(column.id)}
+            className="flex w-[16rem] items-center justify-start gap-2"
+            variant={"outline"}
+          >
+            <Plus size={20} />
+            Add a card
+          </Button>
+        </div>
       </section>
     </div>
   );

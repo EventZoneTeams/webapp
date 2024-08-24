@@ -19,7 +19,8 @@ import { createPortal } from "react-dom";
 
 function KanbanBoard() {
   const [columns, setColumns] = useState<EventBoardColumn[]>([]);
-  const [task, setTask] = useState<EventBoardTask[]>([]);
+  const [tasks, setTasks] = useState<EventBoardTask[]>([]);
+
   const columnsId = useMemo(
     () => columns.map((column) => column.id),
     [columns],
@@ -38,13 +39,13 @@ function KanbanBoard() {
   console.log(columns);
 
   const createColumn = () => {
-    const columnToAdd: EventBoardColumn = {
+    const newColumn: EventBoardColumn = {
       id: Math.random().toString(36).substring(7),
       name: `Column ${columns.length + 1}`,
       color: null,
       eventBoardTasks: [],
     };
-    setColumns([...columns, columnToAdd]);
+    setColumns([...columns, newColumn]);
   };
 
   const deleteColumn = (id: string) => {
@@ -60,6 +61,21 @@ function KanbanBoard() {
       return column;
     });
     setColumns(updatedColumns);
+  };
+
+  const createTask = (columnId: string) => {
+    const newTask: EventBoardTask = {
+      id: Math.random().toString(36).substring(7),
+      // columnId,
+      title: `Task ${tasks.length + 1}`,
+      description: "",
+      dueDate: "",
+      priority: null,
+      eventBoardTaskAssignments: [],
+      eventBoardTaskLabels: [],
+    };
+
+    setTasks([...tasks, newTask]);
   };
 
   const onDragStart = (event: DragStartEvent) => {
@@ -106,6 +122,7 @@ function KanbanBoard() {
                     column={column}
                     deleteColumn={deleteColumn}
                     updateColumn={updateColumn}
+                    createTask={createTask}
                   />
                 </div>
               ))}
@@ -127,6 +144,7 @@ function KanbanBoard() {
                 column={activeColumn}
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
+                createTask={createTask}
               />
             )}
           </DragOverlay>,

@@ -45,9 +45,7 @@ export type EventBoardTask = {
   eventBoardTaskAssignments: {
     id: string;
   }[];
-  eventBoardTaskLabels: {
-    id: string;
-  }[];
+  eventBoardTaskLabels: EventBoardLabel[];
 };
 
 export type EventBoardLabel = {
