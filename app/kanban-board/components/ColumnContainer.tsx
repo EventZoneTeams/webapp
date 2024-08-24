@@ -18,10 +18,11 @@ import { useState } from "react";
 interface ColumnContainerProps {
   column: EventBoardColumn;
   deleteColumn: (id: string) => void;
+  updateColumn: (id: string, name: string) => void;
 }
 
 function ColumnContainer(props: ColumnContainerProps) {
-  const { column, deleteColumn } = props;
+  const { column, deleteColumn, updateColumn } = props;
 
   const [editMode, setEditMode] = useState(false);
 
@@ -38,6 +39,7 @@ function ColumnContainer(props: ColumnContainerProps) {
       type: "Column",
       column,
     },
+    disabled: editMode,
   });
 
   const style = {
@@ -117,22 +119,28 @@ function ColumnContainer(props: ColumnContainerProps) {
           {...attributes}
           {...listeners}
           onClick={() => setEditMode(true)}
-          className="flex w-full items-start gap-3 focus:cursor-grabbing"
+          className="flex w-[11.5rem] items-start gap-3"
         >
           <div className="flex h-[2rem] items-center">
             <p className="flex h-6 w-6 items-center justify-center rounded-sm bg-gray-200 text-xs">
               0
             </p>
           </div>
-          <div className="mt-1">
+          <div className="mt-1 w-full">
             {!editMode ? (
-              <p className="flex items-start font-semibold">{column.name}</p>
+              <p className="flex w-full items-start overflow-hidden text-ellipsis font-semibold">
+                {column.name}
+              </p>
             ) : (
               <input
                 autoFocus
-                className="w-full bg-background px-2 -ml-2"
-                defaultValue={column.name}
+                className="-ml-2 w-full overflow-hidden text-ellipsis bg-background px-2"
+                value={column.name}
                 onBlur={() => setEditMode(false)}
+                onChange={(e) => updateColumn(column.id, e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") setEditMode(false);
+                }}
               />
             )}
           </div>
