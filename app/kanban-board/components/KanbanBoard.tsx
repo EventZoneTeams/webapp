@@ -38,6 +38,7 @@ function KanbanBoard() {
 
   console.log(columns);
 
+  // COLUMN
   const createColumn = () => {
     const newColumn: EventBoardColumn = {
       id: Math.random().toString(36).substring(7),
@@ -46,11 +47,6 @@ function KanbanBoard() {
       eventBoardTasks: [],
     };
     setColumns([...columns, newColumn]);
-  };
-
-  const deleteColumn = (id: string) => {
-    const filteredColumns = columns.filter((column) => column.id !== id);
-    setColumns(filteredColumns);
   };
 
   const updateColumn = (id: string, name: string) => {
@@ -63,6 +59,13 @@ function KanbanBoard() {
     setColumns(updatedColumns);
   };
 
+  const deleteColumn = (id: string) => {
+    const filteredColumns = columns.filter((column) => column.id !== id);
+    setColumns(filteredColumns);
+  };
+
+
+  // TASK
   const createTask = (columnId: string) => {
     const newTask: EventBoardTask = {
       id: Math.random().toString(36).substring(7),
@@ -78,11 +81,20 @@ function KanbanBoard() {
     setTasks([...tasks, newTask]);
   };
 
+  const updateTask = (id: string, title: string) => {
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, title };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+  };
+
   const deleteTask = (id: string) => {
     const newTasks = tasks.filter((task) => task.id !== id);
     setTasks(newTasks);
-  }
-
+  };
   const onDragStart = (event: DragStartEvent) => {
     console.log(event);
     if (event.active.data.current?.type === "Column") {
@@ -125,10 +137,11 @@ function KanbanBoard() {
                 <div key={column.id}>
                   <ColumnContainer
                     column={column}
-                    deleteColumn={deleteColumn}
                     updateColumn={updateColumn}
-                    createTask={createTask}
+                    deleteColumn={deleteColumn}
                     tasks={tasks.filter((task) => task.columnId === column.id)}
+                    createTask={createTask}
+                    updateTask={updateTask}
                     deleteTask={deleteTask}
                   />
                 </div>
@@ -149,10 +162,13 @@ function KanbanBoard() {
             {activeColumn && (
               <ColumnContainer
                 column={activeColumn}
-                deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
+                deleteColumn={deleteColumn}
+                tasks={tasks.filter(
+                  (task) => task.columnId === activeColumn.id,
+                )}
                 createTask={createTask}
-                tasks={tasks.filter((task) => task.columnId === activeColumn.id)}
+                updateTask={updateTask}
                 deleteTask={deleteTask}
               />
             )}

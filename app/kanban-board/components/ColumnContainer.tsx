@@ -16,19 +16,21 @@ import TaskCard from "./TaskCard";
 
 interface ColumnContainerProps {
   column: EventBoardColumn;
-  deleteColumn: (id: string) => void;
   updateColumn: (id: string, name: string) => void;
-  createTask: (columnId: string) => void;
+  deleteColumn: (id: string) => void;
   tasks: EventBoardTask[];
+  createTask: (columnId: string) => void;
+  updateTask: (id: string, title: string) => void;
   deleteTask: (id: string) => void;
 }
 
 function ColumnContainer({
   column,
-  deleteColumn,
   updateColumn,
-  createTask,
+  deleteColumn,
   tasks,
+  createTask,
+  updateTask,
   deleteTask,
 }: ColumnContainerProps) {
   const [editMode, setEditMode] = useState(false);
@@ -144,7 +146,8 @@ function ColumnContainer({
                 onBlur={() => setEditMode(false)}
                 onChange={(e) => updateColumn(column.id, e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") setEditMode(false);
+                  if (e.key === "Enter" || e.key === "Escape")
+                    setEditMode(false);
                 }}
               />
             )}
@@ -178,7 +181,12 @@ function ColumnContainer({
       <section className="flex flex-grow">
         <div className="flex w-full flex-col gap-4 overflow-auto">
           {tasks.map((task) => (
-            <TaskCard key={task.id} task={task} deleteTask={deleteTask} />
+            <TaskCard
+              key={task.id}
+              task={task}
+              deleteTask={deleteTask}
+              updateTask={updateTask}
+            />
           ))}
         </div>
       </section>
