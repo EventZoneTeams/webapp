@@ -38,6 +38,7 @@ export type EventBoardColumn = {
 
 export type EventBoardTask = {
   id: string;
+  columnId: string;
   title: string;
   description: string;
   dueDate: string;

@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,22 +7,30 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { EventBoardColumn } from "@/types/eventBoard";
+import { EventBoardColumn, EventBoardTask } from "@/types/eventBoard";
 import { useSortable } from "@dnd-kit/sortable";
 import { Ellipsis, Plus, Trash2 } from "lucide-react";
 import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
+import TaskCard from "./TaskCard";
 
 interface ColumnContainerProps {
   column: EventBoardColumn;
   deleteColumn: (id: string) => void;
   updateColumn: (id: string, name: string) => void;
   createTask: (columnId: string) => void;
+  tasks: EventBoardTask[];
+  deleteTask: (id: string) => void;
 }
 
-function ColumnContainer(props: ColumnContainerProps) {
-  const { column, deleteColumn, updateColumn, createTask } = props;
-
+function ColumnContainer({
+  column,
+  deleteColumn,
+  updateColumn,
+  createTask,
+  tasks,
+  deleteTask,
+}: ColumnContainerProps) {
   const [editMode, setEditMode] = useState(false);
 
   const {
@@ -53,7 +59,7 @@ function ColumnContainer(props: ColumnContainerProps) {
       <div
         ref={setNodeRef}
         style={style}
-        className="flex h-[500px] max-h-[500px] w-[16rem] flex-col rounded-md border border-primary bg-white px-4 py-2 opacity-50"
+        className="flex max-h-[500px] w-[18rem] flex-col rounded-md border border-primary bg-white px-4 py-2 opacity-50"
       >
         {/* Column title */}
         <section
@@ -93,8 +99,6 @@ function ColumnContainer(props: ColumnContainerProps) {
           </div>
         </section>
 
-        <hr />
-
         {/* Column task container */}
         <section>
           <div className="flex flex-grow">Content</div>
@@ -112,7 +116,7 @@ function ColumnContainer(props: ColumnContainerProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className="flex h-[500px] max-h-[500px] w-[18rem] flex-col rounded-md border bg-white px-4 py-2"
+      className="flex max-h-[500px] w-[18rem] flex-col rounded-md border bg-white px-4 py-2"
     >
       {/* Column title */}
       <section className="flex min-h-[2.5rem] items-start justify-between">
@@ -135,7 +139,7 @@ function ColumnContainer(props: ColumnContainerProps) {
             ) : (
               <input
                 autoFocus
-                className="-ml-2 w-full overflow-hidden text-ellipsis bg-background px-2"
+                className="-ml-2 w-full overflow-hidden text-ellipsis bg-background px-2 font-semibold"
                 value={column.name}
                 onBlur={() => setEditMode(false)}
                 onChange={(e) => updateColumn(column.id, e.target.value)}
@@ -170,20 +174,22 @@ function ColumnContainer(props: ColumnContainerProps) {
         </div>
       </section>
 
-      <hr />
-
       {/* Column task container */}
       <section className="flex flex-grow">
-        <div>Content</div>
+        <div className="flex w-full flex-col gap-4 overflow-auto">
+          {tasks.map((task) => (
+            <TaskCard key={task.id} task={task} deleteTask={deleteTask} />
+          ))}
+        </div>
       </section>
 
       {/* Column footer */}
       <section>
         <div>
           <Button
-          onClick={() => createTask(column.id)}
+            onClick={() => createTask(column.id)}
             className="flex w-[16rem] items-center justify-start gap-2"
-            variant={"outline"}
+            variant={"ghost"}
           >
             <Plus size={20} />
             Add a card
