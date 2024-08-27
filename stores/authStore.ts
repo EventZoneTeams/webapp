@@ -1,6 +1,7 @@
+import { decryptData, encryptData } from "@/lib/crypto";
 import { User } from "@/types/user";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
 interface AuthState {
   user: User | null;
@@ -17,7 +18,19 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: "auth-storage",
-      storage: createJSONStorage(() => localStorage),
+      storage: {
+        getItem: (name: string) => {
+          const data = localStorage.getItem(name);
+          return data ? JSON.parse(decryptData(data)) : null;
+        },
+        setItem: (name: string, value: any) => {
+          const encryptedValue = encryptData(JSON.stringify(value));
+          localStorage.setItem(name, encryptedValue);
+        },
+        removeItem: (name: string) => {
+          localStorage.removeItem(name);
+        },
+      },
     },
   ),
 );

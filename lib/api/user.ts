@@ -1,7 +1,17 @@
 import { axiosInstance } from "@/lib/api";
-import { setTokens } from "@/lib/api/token";
+import {
+  getAccessToken,
+  getRefreshToken,
+  getTokens,
+  setTokens,
+} from "@/lib/api/token";
 import { ApiResponse } from "@/types/api";
-import { LoginRequest, LoginResponse } from "@/types/api/user";
+import {
+  LoginRequest,
+  LoginResponse,
+  RefreshTokenRequest,
+  RefreshTokenResponse,
+} from "@/types/api/user";
 import { User as Usertype } from "@/types/user";
 
 export namespace User {
@@ -15,8 +25,6 @@ export namespace User {
           data,
         )
       ).data;
-
-      console.log(response);
 
       if (response.isSuccess && response.data) {
         setTokens(response.data.accessToken, response.data.refreshToken);
@@ -44,6 +52,44 @@ export namespace User {
       ).data;
 
       if (response.isSuccess && response.data) {
+        return {
+          isSuccess: true,
+          message: response.message,
+          data: response.data,
+        };
+      } else {
+        throw new Error(response.message || "An error occurred");
+      }
+    } catch (error: any) {
+      return {
+        isSuccess: false,
+        message: error.message,
+        data: null,
+      };
+    }
+  }
+
+  export async function refreshToken(): Promise<
+    ApiResponse<RefreshTokenResponse>
+  > {
+    try {
+      const { accessToken, refreshToken } = getTokens();
+
+      if (!accessToken || !refreshToken) {
+        throw new Error("No token found");
+      }
+      const response = (
+        await axiosInstance.post<ApiResponse<RefreshTokenResponse>>(
+          "/users/refresh-token",
+          {
+            accessToken,
+            refreshToken,
+          },
+        )
+      ).data;
+
+      if (response.isSuccess && response.data) {
+        setTokens(response.data.accessToken, response.data.refreshToken);
         return {
           isSuccess: true,
           message: response.message,

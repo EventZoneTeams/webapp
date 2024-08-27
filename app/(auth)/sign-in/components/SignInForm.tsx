@@ -9,6 +9,7 @@ import {
   SignInSchemaDefaultValue,
   SignInSchemaType,
 } from "@/schemas/signInSchema";
+import { useAuthStore } from "@/stores/authStore";
 import { LoginRequest } from "@/types/api/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
@@ -17,6 +18,7 @@ import { toast } from "sonner";
 
 export default function SignInForm() {
   const [isLoading, setIsLoading] = React.useState(false);
+  const { setUser } = useAuthStore();
 
   const form = useForm<SignInSchemaType>({
     resolver: zodResolver(SignInSchema),
@@ -25,29 +27,18 @@ export default function SignInForm() {
 
   const onSubmit = async (data: SignInSchemaType) => {
     setIsLoading(true);
-    User.login({
-      email: data.email,
-      password: data.password,
-    } as LoginRequest).then((response) => {
-      console.log(response);
-      if (response.isSuccess) {
-        console.log(response.data);
-        User.getMe().then((response) => {
-          if (response.isSuccess) {
-            console.log(response.data);
-            setIsLoading(false);
-          } else {
-            console.log(response.message);
-            toast.error(response.message);
-            setIsLoading(false);
-          }
-        });
+    const loginResponse = await User.login(data as LoginRequest);
+    if (loginResponse.isSuccess) {
+      const userResponse = await User.getMe();
+      if (userResponse.isSuccess && userResponse.data) {
+        setUser(userResponse.data);
       } else {
-        console.log(response.message);
-        toast.error(response.message);
-        setIsLoading(false);
+        toast.error(userResponse.message);
       }
-    });
+    } else {
+      toast.error(loginResponse.message);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -74,6 +65,23 @@ export default function SignInForm() {
           disabled={!form.formState.isValid}
         >
           {isLoading ? "Loading..." : "Sign In"}
+        </Button>
+        <Button
+          type="button"
+          variant={"outline"}
+          className="w-full"
+          onClick={() => {
+            User.refreshToken().then((response) => {
+              if (response.isSuccess) {
+                console.log(response.data);
+                toast.success("Token refreshed successfully");
+              } else {
+                toast.error(response.message);
+              }
+            });
+          }}
+        >
+          refreshToken
         </Button>
       </form>
     </Form>

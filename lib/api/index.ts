@@ -16,3 +16,15 @@ axiosInstance.interceptors.request.use(async (config) => {
   }
   return config;
 });
+
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error: AxiosError) => {
+    if (error.response?.status === 401) {
+      console.log("Unauthorized");
+    }
+    return Promise.reject(error);
+  },
+);
