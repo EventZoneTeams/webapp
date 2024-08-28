@@ -184,7 +184,7 @@ export default function AddressInput({ onChange, defaultAddress }: MapProps) {
       <MapContainer
         center={currentLocation}
         zoom={13}
-        className="relative aspect-video w-full rounded"
+        className="relative z-0 aspect-video w-full rounded"
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
