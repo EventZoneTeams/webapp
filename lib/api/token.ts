@@ -38,11 +38,3 @@ export const removeAllCookies = () => {
   Cookies.remove(ACCESS_TOKEN);
   Cookies.remove(REFRESH_TOKEN);
 };
-
-export const isTokenExpired = () => {
-  const accessToken = getAccessToken();
-  if (!accessToken) return true;
-  const decodedToken = JSON.parse(atob(accessToken.split(".")[1]));
-  const currentTime = Date.now() / 1000;
-  return decodedToken.exp < currentTime;
-};

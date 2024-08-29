@@ -14,7 +14,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 export default function SignInForm() {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -65,23 +64,6 @@ export default function SignInForm() {
           disabled={!form.formState.isValid}
         >
           {isLoading ? "Loading..." : "Sign In"}
-        </Button>
-        <Button
-          type="button"
-          variant={"outline"}
-          className="w-full"
-          onClick={() => {
-            User.refreshToken().then((response) => {
-              if (response.isSuccess) {
-                console.log(response.data);
-                toast.success("Token refreshed successfully");
-              } else {
-                toast.error(response.message);
-              }
-            });
-          }}
-        >
-          refreshToken
         </Button>
       </form>
     </Form>

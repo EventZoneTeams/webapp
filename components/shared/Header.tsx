@@ -37,7 +37,7 @@ export default function Header() {
                 className={cn(
                   "flex h-full items-center px-4 py-2",
                   pathname === item.href
-                    ? "h-full border-b-2 border-primary text-primary"
+                    ? "h-full border-b-2 border-primary bg-blue-500/10 text-primary"
                     : "hover:bg-gray-100",
                 )}
               >

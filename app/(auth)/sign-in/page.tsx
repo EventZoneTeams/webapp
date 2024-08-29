@@ -1,5 +1,3 @@
-"use client";
-
 import SignInForm from "@/app/(auth)/sign-in/components/SignInForm";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +10,8 @@ import {
 import { cn } from "@/lib/utils";
 import GoogleLogo from "@/public/assets/logos/google-logo.svg";
 import Image from "next/image";
+import { Link } from "next-view-transitions";
+import { ArrowLeftIcon, UserPlusIcon } from "lucide-react";
 
 const SignIn = () => {
   return (
@@ -36,6 +36,27 @@ const SignIn = () => {
             <Image src={GoogleLogo} alt="Google Logo" width={20} height={20} />
             <span>Google</span>
           </Button>
+        </div>
+
+        <div className="mb-4 flex w-full items-center justify-between">
+          <Link href="/system-design" className={cn("text-base font-normal")}>
+            <Button
+              variant={"outline"}
+              className="flex items-center gap-2 backdrop-blur-sm"
+            >
+              <ArrowLeftIcon size={20} />
+              Home
+            </Button>
+          </Link>
+          <Link href="/sign-up" className={cn("text-base font-normal")}>
+            <Button
+              variant={"outline"}
+              className="flex items-center gap-2 backdrop-blur-sm"
+            >
+              <UserPlusIcon size={20} />
+              Sign Up
+            </Button>
+          </Link>
         </div>
       </CardFooter>
     </Card>

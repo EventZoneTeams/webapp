@@ -10,7 +10,6 @@ import { ApiResponse } from "@/types/api";
 import {
   LoginRequest,
   LoginResponse,
-  RefreshTokenRequest,
   RefreshTokenResponse,
 } from "@/types/api/user";
 import { User as Usertype } from "@/types/user";
