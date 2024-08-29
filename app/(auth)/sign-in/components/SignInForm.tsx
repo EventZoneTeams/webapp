@@ -9,17 +9,16 @@ import {
   SignInSchemaDefaultValue,
   SignInSchemaType,
 } from "@/schemas/signInSchema";
-import { useAuthStore } from "@/stores/authStore";
 import { LoginRequest } from "@/types/api/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 export default function SignInForm() {
   const [isLoading, setIsLoading] = React.useState(false);
-  const { setUser } = useAuthStore();
-
+  const router = useRouter();
   const form = useForm<SignInSchemaType>({
     resolver: zodResolver(SignInSchema),
     defaultValues: SignInSchemaDefaultValue,
@@ -27,18 +26,19 @@ export default function SignInForm() {
 
   const onSubmit = async (data: SignInSchemaType) => {
     setIsLoading(true);
-    const loginResponse = await User.login(data as LoginRequest);
-    if (loginResponse.isSuccess) {
-      const userResponse = await User.getMe();
-      if (userResponse.isSuccess && userResponse.data) {
-        setUser(userResponse.data);
-      } else {
-        toast.error(userResponse.message);
-      }
-    } else {
-      toast.error(loginResponse.message);
-    }
-    setIsLoading(false);
+    User.login(data as LoginRequest)
+      .then((response) => {
+        if (response.isSuccess) {
+          User.getMe().then((data) => {
+            if (data.isSuccess) {
+              router.push("/");
+            }
+          });
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (

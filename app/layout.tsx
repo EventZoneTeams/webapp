@@ -9,6 +9,7 @@ const AnimatedGridPattern = dynamic(
 import "./globals.css";
 import dynamic from "next/dynamic";
 import { Toaster } from "sonner";
+import RefreshUser from "@/providers/RefreshUser";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -30,7 +31,7 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en">
         <body className={cn("", fontSans.variable)}>
-          {children}
+          <RefreshUser>{children}</RefreshUser>
           <AnimatedGridPattern
             numSquares={50}
             maxOpacity={0.2}

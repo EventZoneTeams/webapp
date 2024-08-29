@@ -161,6 +161,7 @@ export default function AddressInput({ onChange, defaultAddress }: MapProps) {
           placeholder="Pick yout location on map..."
           value={address?.displayName}
           className="line-clamp-1 flex-1"
+          onChange={(e) => {}}
         />
         <Button
           className=" "

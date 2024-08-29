@@ -5,6 +5,7 @@ import {
   getTokens,
   setTokens,
 } from "@/lib/api/token";
+import { useAuthStore } from "@/stores/authStore";
 import { ApiResponse } from "@/types/api";
 import {
   LoginRequest,
@@ -13,6 +14,7 @@ import {
   RefreshTokenResponse,
 } from "@/types/api/user";
 import { User as Usertype } from "@/types/user";
+import { toast } from "sonner";
 
 export namespace User {
   export async function login(
@@ -25,9 +27,9 @@ export namespace User {
           data,
         )
       ).data;
-
       if (response.isSuccess && response.data) {
         setTokens(response.data.accessToken, response.data.refreshToken);
+        toast.success("Login successful");
         return {
           isSuccess: true,
           message: response.message,
@@ -37,6 +39,7 @@ export namespace User {
         throw new Error(response.message || "An error occurred");
       }
     } catch (error: any) {
+      toast.error(error.message);
       return {
         isSuccess: false,
         message: error.message,
@@ -52,6 +55,7 @@ export namespace User {
       ).data;
 
       if (response.isSuccess && response.data) {
+        useAuthStore.getState().setUser(response.data);
         return {
           isSuccess: true,
           message: response.message,
@@ -61,6 +65,7 @@ export namespace User {
         throw new Error(response.message || "An error occurred");
       }
     } catch (error: any) {
+      toast.error(error.message);
       return {
         isSuccess: false,
         message: error.message,
