@@ -2,6 +2,7 @@ export type Submenu = {
   href: string;
   label: string;
   active: boolean;
+  icon: LucideIcon;
 };
 
 export type Menu = {

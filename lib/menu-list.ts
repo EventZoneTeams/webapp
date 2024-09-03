@@ -9,6 +9,7 @@ import {
   LucideIcon,
   PartyPopperIcon,
   PlusSquareIcon,
+  ListIcon,
 } from "lucide-react";
 
 export function getMenuList(pathname: string, type: DashboardType): Group[] {
@@ -33,18 +34,20 @@ export function getMenuList(pathname: string, type: DashboardType): Group[] {
             {
               href: "/dashboard/events",
               label: "Events",
-              active: pathname === "/dashboard/events",
+              active: pathname === "",
               icon: PartyPopperIcon,
               submenus: [
                 {
                   href: "/dashboard/events",
                   label: "All Events",
                   active: pathname === "/dashboard/events",
+                  icon: ListIcon,
                 },
                 {
                   href: "/dashboard/events/new",
                   label: "New Event",
                   active: pathname === "/dashboard/events/new",
+                  icon: PlusSquareIcon,
                 },
               ],
             },
@@ -64,11 +67,13 @@ export function getMenuList(pathname: string, type: DashboardType): Group[] {
                   href: "/posts",
                   label: "All Posts",
                   active: pathname === "/posts",
+                  icon: SquarePen,
                 },
                 {
                   href: "/posts/new",
                   label: "New Post",
                   active: pathname === "/posts/new",
+                  icon: PlusSquareIcon,
                 },
               ],
             },
