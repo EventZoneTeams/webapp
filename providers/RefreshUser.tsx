@@ -17,11 +17,13 @@ export default function RefreshUser({
     const accessToken = getAccessToken();
 
     if (!accessToken) {
+      console.log("no access token");
       clearAuth();
     } else {
       setIsLoading(true);
       User.getMe()
         .then((data) => {
+          console.log(data);
           if (data.isSuccess && data.data) {
             setUser(data.data);
           } else {

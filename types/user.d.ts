@@ -8,4 +8,8 @@ export type User = {
   isDeleted: boolean;
   roleName: string;
   workingAt: string;
+  role: {
+    roleId: string;
+    roleName: string;
+  };
 };

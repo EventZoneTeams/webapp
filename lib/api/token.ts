@@ -12,7 +12,7 @@ const getDateByminutes = (minutes: number) => {
 export const setTokens = (accessToken: string, refreshToken: string) => {
   Cookies.set(ACCESS_TOKEN, accessToken, {
     path: "/",
-    expires: getDateByminutes(15),
+    expires: getDateByminutes(30),
     secure: true,
     sameSite: "strict",
   });

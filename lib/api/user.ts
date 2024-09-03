@@ -39,6 +39,7 @@ export namespace User {
       }
     } catch (error: any) {
       toast.error(error.message);
+      console;
       return {
         isSuccess: false,
         message: error.message,

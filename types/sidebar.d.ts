@@ -1,7 +1,20 @@
-export type SidebarItem = {
-  name: string;
-  icon: React.ReactNode;
+export type Submenu = {
   href: string;
-  children?: SidebarItem[];
-  isActive?: boolean;
+  label: string;
+  active: boolean;
 };
+
+export type Menu = {
+  href: string;
+  label: string;
+  active: boolean;
+  icon: LucideIcon;
+  submenus: Submenu[];
+};
+
+export type Group = {
+  groupLabel: string;
+  menus: Menu[];
+};
+
+export type DashboardType = "admin" | "manager" | "organizer";
