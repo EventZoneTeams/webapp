@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/shared/DashBoardPanel/navbar";
+import { Navbar } from "@/components/shared/DashBoardPanel/Navbar";
 
 interface ContentLayoutProps {
   title: string;

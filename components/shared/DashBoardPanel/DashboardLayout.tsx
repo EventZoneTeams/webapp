@@ -1,10 +1,11 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { useStore } from "@/hooks/use-store";
-import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
+import { ContentLayout } from "@/components/shared/DashBoardPanel/ContentLayout";
 import { Footer } from "@/components/shared/DashBoardPanel/Footer";
 import { Sidebar } from "@/components/shared/DashBoardPanel/Sidebar";
+import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
+import { useStore } from "@/hooks/use-store";
+import { cn } from "@/lib/utils";
 import { DashboardType } from "@/types/sidebar";
 export default function DashBoardLayout({
   children,
@@ -14,6 +15,7 @@ export default function DashBoardLayout({
   type: DashboardType;
 }) {
   const sidebar = useStore(useSidebarToggle, (state) => state);
+  const title = document.title;
 
   if (!sidebar) return null;
 
@@ -22,11 +24,11 @@ export default function DashBoardLayout({
       <Sidebar type={type} />
       <main
         className={cn(
-          "min-h-[calc(100vh_-_56px)] transition-[margin-left] duration-300 ease-in-out dark:bg-zinc-900",
+          "min-h-[calc(100vh_-_56px)] bg-gray-200 transition-[margin-left] duration-300 ease-in-out dark:bg-zinc-900",
           sidebar?.isOpen === false ? "lg:ml-[90px]" : "lg:ml-72",
         )}
       >
-        {children}
+        <ContentLayout title={title}>{children}</ContentLayout>
       </main>
       <footer
         className={cn(

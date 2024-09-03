@@ -6,8 +6,8 @@ import { useStore } from "@/hooks/use-store";
 import { Button } from "@/components/ui/button";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { SidebarToggle } from "@/components/shared/DashBoardPanel/SidebarToggle";
-import { Menu } from "@/components/shared/DashBoardPanel/Menu";
 import { DashboardType } from "@/types/sidebar";
+import { Menu } from "@/components/shared/DashBoardPanel/menu";
 
 export function Sidebar({ type }: { type: DashboardType }) {
   const sidebar = useStore(useSidebarToggle, (state) => state);
@@ -25,7 +25,7 @@ export function Sidebar({ type }: { type: DashboardType }) {
       <div className="relative flex h-full flex-col overflow-y-auto px-3 shadow-md dark:shadow-zinc-800">
         <Button
           className={cn(
-            "mb-1 transition-transform duration-300 ease-in-out",
+            "mb-1 h-14 transition-transform duration-300 ease-in-out",
             sidebar?.isOpen === false ? "translate-x-1" : "translate-x-0",
           )}
           variant="link"
@@ -41,7 +41,7 @@ export function Sidebar({ type }: { type: DashboardType }) {
                   : "translate-x-0 opacity-100",
               )}
             >
-              Brand
+              EventZone
             </h1>
           </Link>
         </Button>

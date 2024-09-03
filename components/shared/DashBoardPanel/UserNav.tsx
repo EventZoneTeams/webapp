@@ -9,7 +9,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  TooltipProvider
+  TooltipProvider,
 } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
@@ -18,10 +18,12 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuthStore } from "@/stores/authStore";
 
 export function UserNav() {
+  const { user } = useAuthStore();
   return (
     <DropdownMenu>
       <TooltipProvider disableHoverableContent>
@@ -33,8 +35,10 @@ export function UserNav() {
                 className="relative h-8 w-8 rounded-full"
               >
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src="#" alt="Avatar" />
-                  <AvatarFallback className="bg-transparent">JD</AvatarFallback>
+                  <AvatarImage src={user?.image} alt="Avatar" />
+                  <AvatarFallback className="bg-transparent">
+                    {user && user.fullName.charAt(0).toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
@@ -46,9 +50,9 @@ export function UserNav() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">John Doe</p>
+            <p className="text-sm font-medium leading-none">{user?.fullName}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              johndoe@example.com
+              {user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -56,20 +60,20 @@ export function UserNav() {
         <DropdownMenuGroup>
           <DropdownMenuItem className="hover:cursor-pointer" asChild>
             <Link href="/dashboard" className="flex items-center">
-              <LayoutGrid className="w-4 h-4 mr-3 text-muted-foreground" />
+              <LayoutGrid className="mr-3 h-4 w-4 text-muted-foreground" />
               Dashboard
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="hover:cursor-pointer" asChild>
             <Link href="/account" className="flex items-center">
-              <User className="w-4 h-4 mr-3 text-muted-foreground" />
+              <User className="mr-3 h-4 w-4 text-muted-foreground" />
               Account
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="hover:cursor-pointer" onClick={() => {}}>
-          <LogOut className="w-4 h-4 mr-3 text-muted-foreground" />
+          <LogOut className="mr-3 h-4 w-4 text-muted-foreground" />
           Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>

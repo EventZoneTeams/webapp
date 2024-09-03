@@ -5,7 +5,7 @@ import LoadingScreen from "@/components/shared/LoadingScreen";
 import { useAuthStore } from "@/stores/authStore";
 import React from "react";
 
-export default function layout({
+export default function Layout({
   admin,
   organizer,
   manager,

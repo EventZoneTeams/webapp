@@ -32,7 +32,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={cn("", fontSans.variable)}>
           <RefreshUser>{children}</RefreshUser>
-          <AnimatedGridPattern
+          {/* <AnimatedGridPattern
             numSquares={50}
             maxOpacity={0.2}
             duration={4}
@@ -40,7 +40,7 @@ export default function RootLayout({
             className={cn(
               "fixed inset-x-0 inset-y-[-30%] -z-10 h-[200%] skew-y-12",
             )}
-          />
+          /> */}
           <Toaster richColors position="top-center" />
         </body>
       </html>

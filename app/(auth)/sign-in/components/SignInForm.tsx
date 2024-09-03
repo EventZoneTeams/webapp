@@ -30,7 +30,7 @@ export default function SignInForm() {
         if (response.isSuccess) {
           User.getMe().then((data) => {
             if (data.isSuccess) {
-              router.push("/");
+              router.push("/dashboard");
             }
           });
         }
