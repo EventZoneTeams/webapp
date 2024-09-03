@@ -60,8 +60,12 @@ export function Menu({ isOpen, type }: MenuProps) {
                         <Tooltip delayDuration={100}>
                           <TooltipTrigger asChild>
                             <Button
-                              variant={active ? "secondary" : "ghost"}
-                              className="mb-1 h-10 w-full justify-start"
+                              className={cn(
+                                "mb-1 h-10 w-full justify-start",
+                                active
+                                  ? "text-primary-background bg-primary-foreground"
+                                  : "",
+                              )}
                               asChild
                             >
                               <Link href={href}>

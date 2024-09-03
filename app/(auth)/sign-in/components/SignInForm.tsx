@@ -8,7 +8,7 @@ import {
   SignInSchema,
   SignInSchemaDefaultValue,
   SignInSchemaType,
-} from "@/schemas/signInSchema";
+} from "@/app/(auth)/sign-in/components/signInSchema";
 import { LoginRequest } from "@/types/api/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
