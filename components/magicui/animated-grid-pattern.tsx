@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
@@ -36,12 +36,26 @@ export function GridPattern({
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [squares, setSquares] = useState(() => generateSquares(numSquares));
 
-  function getPos() {
+  // Memoize the getPos function to avoid unnecessary re-creations
+  const getPos = useCallback(() => {
     return [
       Math.floor((Math.random() * dimensions.width) / width),
       Math.floor((Math.random() * dimensions.height) / height),
     ];
-  }
+  }, [dimensions, width, height]);
+
+  // Memoize the generateSquares function to avoid unnecessary re-creations
+  const generateSquares = useCallback(
+    (count: number) => {
+      return Array.from({ length: count }, (_, i) => ({
+        id: i,
+        pos: getPos(),
+        color: getRandomColor(),
+      }));
+    },
+    [getPos], // Add getPos as a dependency
+  );
+
   function getRandomColor() {
     const letters = "0123456789ABCDEF";
     let color = "#";
@@ -49,15 +63,6 @@ export function GridPattern({
       color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
-  }
-
-  // Adjust the generateSquares function to return objects with an id, x, and y
-  function generateSquares(count: number) {
-    return Array.from({ length: count }, (_, i) => ({
-      id: i,
-      pos: getPos(),
-      color: getRandomColor(),
-    }));
   }
 
   // Function to update a single square's position
@@ -75,12 +80,12 @@ export function GridPattern({
     );
   };
 
-  // Update squares to animate in
+  // Update squares to animate in when dimensions change
   useEffect(() => {
     if (dimensions.width && dimensions.height) {
       setSquares(generateSquares(numSquares));
     }
-  }, [dimensions, numSquares]);
+  }, [dimensions, numSquares, generateSquares]);
 
   // Resize observer to update container dimensions
   useEffect(() => {
@@ -93,13 +98,15 @@ export function GridPattern({
       }
     });
 
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
+    const ref = containerRef.current;
+
+    if (ref) {
+      resizeObserver.observe(ref);
     }
 
     return () => {
-      if (containerRef.current) {
-        resizeObserver.unobserve(containerRef.current);
+      if (ref) {
+        resizeObserver.unobserve(ref);
       }
     };
   }, [containerRef]);

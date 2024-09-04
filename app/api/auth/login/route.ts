@@ -1,6 +1,6 @@
 import { BASE_URL } from "@/lib/api";
 import { ApiResponse } from "@/types/api";
-import { LoginRequest, LoginResponse } from "@/types/api/login";
+import { LoginRequest, LoginResponse } from "@/types/api/user";
 import { NextRequest, NextResponse } from "next/server";
 
 interface BackendLoginResponse {

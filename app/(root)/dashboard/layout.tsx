@@ -17,7 +17,8 @@ export default function Layout({
   const { user } = useAuthStore();
 
   if (!user) {
-    return <LoadingScreen message="Loading User..." />;
+    // return <LoadingScreen message="Loading User..." />;
+    return <DashBoardLayout type="admin">{admin}</DashBoardLayout>;
   }
 
   switch (user?.role.roleName.toUpperCase()) {

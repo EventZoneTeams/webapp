@@ -15,7 +15,6 @@ export default function DashBoardLayout({
   type: DashboardType;
 }) {
   const sidebar = useStore(useSidebarToggle, (state) => state);
-  const title = document.title;
 
   if (!sidebar) return null;
 
@@ -28,7 +27,7 @@ export default function DashBoardLayout({
           sidebar?.isOpen === false ? "lg:ml-[90px]" : "lg:ml-72",
         )}
       >
-        <ContentLayout title={title}>{children}</ContentLayout>
+        <ContentLayout type={type}>{children}</ContentLayout>
       </main>
       <footer
         className={cn(

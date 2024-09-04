@@ -9,9 +9,10 @@ import {
   SheetTrigger,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { Menu } from "@/components/shared/DashBoardPanel/menu";
+import { Menu } from "@/components/shared/DashBoardPanel/Menu";
+import { DashboardType } from "@/types/sidebar";
 
-export function SheetMenu() {
+export function SheetMenu({ type }: { type: DashboardType }) {
   return (
     <Sheet>
       <SheetTrigger className="lg:hidden" asChild>
@@ -32,7 +33,7 @@ export function SheetMenu() {
             </Link>
           </Button>
         </SheetHeader>
-        <Menu isOpen />
+        <Menu isOpen type={type} />
       </SheetContent>
     </Sheet>
   );

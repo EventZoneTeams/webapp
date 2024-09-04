@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { SidebarToggle } from "@/components/shared/DashBoardPanel/SidebarToggle";
 import { DashboardType } from "@/types/sidebar";
-import { Menu } from "@/components/shared/DashBoardPanel/menu";
+import { Menu } from "@/components/shared/DashBoardPanel/Menu";
 
 export function Sidebar({ type }: { type: DashboardType }) {
   const sidebar = useStore(useSidebarToggle, (state) => state);
