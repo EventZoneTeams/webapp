@@ -23,7 +23,6 @@ export default function RefreshUser({
       setIsLoading(true);
       User.getMe()
         .then((data) => {
-          console.log(data);
           if (data.isSuccess && data.data) {
             setUser(data.data);
           } else {

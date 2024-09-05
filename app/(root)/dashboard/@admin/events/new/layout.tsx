@@ -33,7 +33,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="/events">Events</Link>
+              <Link href="/dashboard/events">Events</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />

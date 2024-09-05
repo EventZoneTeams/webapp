@@ -1,14 +1,21 @@
 "use client";
 
-import CustomFormField from "@/components/CustomFormField";
-import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
-import { User } from "@/lib/api/user";
 import {
   SignInSchema,
   SignInSchemaDefaultValue,
   SignInSchemaType,
 } from "@/app/(auth)/sign-in/components/signInSchema";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { User } from "@/lib/api/user";
 import { LoginRequest } from "@/types/api/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -43,19 +50,31 @@ export default function SignInForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <CustomFormField
+        <FormField
           control={form.control}
           name="email"
-          type="text"
-          placeholder="Enter your email"
-          label="Email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="Your email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        <CustomFormField
+        <FormField
           control={form.control}
           name="password"
-          type="password"
-          placeholder="Enter your password"
-          label="Password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input placeholder="Your password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
         <Button
           type="submit"

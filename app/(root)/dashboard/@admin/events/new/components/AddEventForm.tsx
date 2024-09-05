@@ -5,11 +5,20 @@ import {
   AddEventSchemaDefaultValue,
   AddEventSchemaType,
 } from "@/app/(root)/dashboard/@admin/events/new/components/addEventSchema";
-import CustomFormField from "@/components/CustomFormField";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormDescription,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/input/DatePicker";
 
 export default function AddEventForm() {
   const form = useForm<AddEventSchemaType>({
@@ -21,41 +30,54 @@ export default function AddEventForm() {
     console.log(data);
   };
 
-  console.log(form.getValues("eventStartDate"), form.getValues("eventEndDate"));
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <CustomFormField
+        <FormField
           control={form.control}
           name="name"
-          placeholder="Event's Title"
-          type="text"
-          label="Title"
-          desc="Title of the event"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input placeholder="Event's title" {...field} />
+              </FormControl>
+              <FormDescription>Title of the event</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
         />
         <div className="flex w-full items-center gap-6">
           <div className="w-1/2">
-            <CustomFormField
+            <FormField
               control={form.control}
               name="eventStartDate"
-              placeholder="Event's Start date"
-              type="date"
-              label="Start Date"
-              desc="Start date of the event"
-              showTime
-              minDate={new Date()}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Event start date</FormLabel>
+                  <FormControl>
+                    <DatePicker />
+                  </FormControl>
+                  <FormDescription>Start date of the event</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div className="w-1/2">
-            <CustomFormField
+            <FormField
               control={form.control}
-              name="eventEndDate"
-              placeholder="Event's End date"
-              type="date"
-              label="End Date"
-              desc="End date of the event"
-              showTime
-              minDate={new Date()}
+              name="eventStartDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Event end date</FormLabel>
+                  <FormControl>
+                    <DatePicker />
+                  </FormControl>
+                  <FormDescription>End date of the event</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
         </div>
