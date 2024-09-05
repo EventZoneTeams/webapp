@@ -1,4 +1,3 @@
-import ExampleAddressInput from "@/app/system-design/components/ExampleAddressInput";
 import ExampleImageInput from "@/app/system-design/components/ExampleImageInput";
 import ExamplePhoneInput from "@/app/system-design/components/ExamplePhoneInput";
 import { colors } from "@/app/system-design/constant";
@@ -175,8 +174,6 @@ const SystemDesign = () => {
               <ExamplePhoneInput />
               <h2 className="font-semibold">Image</h2>
               <ExampleImageInput />
-              <h2 className="font-semibold">Address</h2>
-              <ExampleAddressInput />
             </div>
           </section>
           <section className="space-y-6 py-5">

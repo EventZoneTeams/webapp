@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 export interface DatePickerProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "defaultValue"> {
   showTime?: boolean;
-  defaultValue?: string | number | readonly string[] | undefined;
   minDate?: Date;
   maxDate?: Date;
 }
