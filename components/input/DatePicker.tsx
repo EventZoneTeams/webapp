@@ -23,15 +23,25 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
     },
     ref,
   ) => {
+    const padZero = (num: number) => (num < 10 ? `0${num}` : num);
+
     const formatDate = (date: Date | string) => {
       if (typeof date === "string") {
         date = new Date(date);
       }
-      const dateStr = date.toISOString().split("T")[0];
+
+      const year = date.getFullYear();
+      const month = padZero(date.getMonth() + 1);
+      const day = padZero(date.getDate());
+
+      const dateStr = `${year}-${month}-${day}`;
+
       if (showTime) {
-        const timeStr = date.toISOString().split("T")[1].split(".")[0];
-        return `${dateStr}T${timeStr}`;
+        const hours = padZero(date.getHours());
+        const minutes = padZero(date.getMinutes());
+        return `${dateStr}T${hours}:${minutes}`;
       }
+
       return dateStr;
     };
 

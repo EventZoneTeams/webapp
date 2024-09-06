@@ -11,7 +11,7 @@ import { Link } from "next-view-transitions";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "New Event",
+  title: "Create Event",
 };
 
 export default function layout({ children }: { children: React.ReactNode }) {
@@ -39,7 +39,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage className="font-semibold text-primary">
-              New
+              Create
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
