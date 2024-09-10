@@ -35,14 +35,14 @@ export default function RootLayout({
           <TooltipProvider>
             <RefreshUser>{children}</RefreshUser>
             {/* <AnimatedGridPattern
-            numSquares={50}
-            maxOpacity={0.2}
-            duration={4}
-            repeatDelay={0.5}
-            className={cn(
-              "fixed inset-x-0 inset-y-[-30%] -z-10 h-[200%] skew-y-12",
-            )}
-          /> */}
+              numSquares={50}
+              maxOpacity={0.2}
+              duration={4}
+              repeatDelay={0.5}
+              className={cn(
+                "fixed inset-x-0 inset-y-[-30%] -z-10 h-[200%] skew-y-12",
+              )}
+            /> */}
           </TooltipProvider>
           <Toaster richColors position="top-center" />
         </body>

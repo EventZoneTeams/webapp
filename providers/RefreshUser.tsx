@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getAccessToken } from "@/lib/api/token";
+import { getAccessToken, getRefreshToken } from "@/lib/api/token";
 import { User } from "@/lib/api/user";
 import { useAuthStore } from "@/stores/authStore";
 
@@ -15,6 +15,7 @@ export default function RefreshUser({
 
   useEffect(() => {
     const accessToken = getAccessToken();
+    const refreshToken = getRefreshToken();
 
     if (!accessToken) {
       console.log("no access token");
@@ -27,6 +28,21 @@ export default function RefreshUser({
             setUser(data.data);
           } else {
             clearAuth();
+            if (refreshToken) {
+              User.refreshToken().then((data) => {
+                if (data.isSuccess && data.data) {
+                  User.getMe().then((data) => {
+                    if (data.isSuccess && data.data) {
+                      setUser(data.data);
+                    } else {
+                      clearAuth();
+                    }
+                  });
+                } else {
+                  clearAuth();
+                }
+              });
+            }
           }
         })
         .finally(() => {

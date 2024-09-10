@@ -3,7 +3,12 @@
 import { useCallback, useRef, useState, type SyntheticEvent } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import ReactCrop, {
   centerCrop,
   makeAspectCrop,
@@ -103,15 +108,15 @@ export function ImageCropper({
       );
     }
 
-    return canvas.toDataURL("image/png", 1.0);
+    return canvas.toDataURL("image/webp", 0.7);
   }
 
   async function onCrop() {
     try {
       setCroppedImage(croppedImageUrl);
       const blob = await fetch(croppedImageUrl).then((r) => r.blob());
-      const file = new File([blob], "cropped-image.png", {
-        type: "image/png",
+      const file = new File([blob], "cropped-image.webp", {
+        type: "image/webp",
       });
       setFinalImage(file);
       setDialogOpen(false);
@@ -123,6 +128,7 @@ export function ImageCropper({
   return (
     <div className={cn("w-full", getAspectRatioClass(ratio))}>
       <Dialog open={isDialogOpen}>
+        <DialogTitle></DialogTitle>
         {selectedFile ? (
           <div
             className={cn(

@@ -29,6 +29,8 @@ export namespace Map {
         queryString.append("more_compound", request.more_compound.toString());
       }
 
+      console.log(GOONG_API_KEY);
+
       if (GOONG_API_KEY) {
         const response = (
           await axios.get<GoongApiResponse>(

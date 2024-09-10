@@ -26,15 +26,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Event } from "@/lib/api/event";
 import { EventCategory } from "@/lib/api/event-category";
+import { Image } from "@/lib/api/image";
+import { CreateEventRequest } from "@/types/api/event";
 import { EventCategory as EventCategoryType } from "@/types/event-category";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Content } from "@tiptap/core";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function AddEventForm() {
   const [image, setImage] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   const [eventCategories, setEventCategories] = useState<EventCategoryType[]>(
     [],
@@ -45,8 +51,40 @@ export default function AddEventForm() {
     defaultValues: AddEventSchemaDefaultValue,
   });
 
-  const onSubmit = (data: AddEventSchemaType) => {
+  const onSubmit = async (data: AddEventSchemaType) => {
     console.log(data);
+    setIsLoading(true);
+
+    try {
+      if (image) {
+        const imageUrl = await Image.uploadImage(image);
+        const payload: CreateEventRequest = {
+          name: data.name,
+          description: data.description as string,
+          thumbnailUrl: imageUrl,
+          eventStartDate: data.eventStartDate,
+          eventEndDate: data.eventEndDate,
+          location: {
+            latitude: "0",
+            longitude: "0",
+            display: data.location?.description!,
+            note: "",
+            placeId: data.location?.place_id!,
+          },
+          note: "",
+          eventCategoryId: data.eventCategoryId,
+        };
+        console.log(payload);
+
+        Event.createEvent(payload).then((response) => {
+          router.push("/dashboard/events");
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -219,7 +257,9 @@ export default function AddEventForm() {
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={false}>
+            {isLoading ? "Loading..." : "Create Event"}
+          </Button>
         </form>
       </Form>
     </>

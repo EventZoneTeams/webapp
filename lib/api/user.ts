@@ -38,7 +38,6 @@ export namespace User {
         throw new Error(response.message || "An error occurred");
       }
     } catch (error: any) {
-      toast.error(error.message);
       console;
       return {
         isSuccess: false,
@@ -65,7 +64,6 @@ export namespace User {
         throw new Error(response.message || "An error occurred");
       }
     } catch (error: any) {
-      toast.error(error.message);
       return {
         isSuccess: false,
         message: error.message,

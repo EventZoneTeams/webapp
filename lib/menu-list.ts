@@ -44,9 +44,9 @@ export function getMenuList(pathname: string, type: DashboardType): Group[] {
                   icon: ListIcon,
                 },
                 {
-                  href: "/dashboard/events/new",
+                  href: "/dashboard/events/create",
                   label: "New Event",
-                  active: pathname === "/dashboard/events/new",
+                  active: pathname === "/dashboard/events/create",
                   icon: PlusSquareIcon,
                 },
               ],
