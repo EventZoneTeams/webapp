@@ -1,4 +1,4 @@
-import AddEventForm from "@/app/(root)/dashboard/@admin/events/create/components/AddEventForm";
+import AddEventForm from "@/app/(root)/dashboard/@organizer/events/create/components/AddEventForm";
 import React from "react";
 
 export default function page() {

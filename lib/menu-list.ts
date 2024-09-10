@@ -53,43 +53,63 @@ export function getMenuList(pathname: string, type: DashboardType): Group[] {
             },
           ],
         },
-
         {
-          groupLabel: "Contents",
+          groupLabel: "Settings",
           menus: [
             {
-              href: "",
-              label: "Posts",
-              active: pathname.includes("/posts"),
-              icon: SquarePen,
+              href: "/users",
+              label: "Users",
+              active: pathname.includes("/users"),
+              icon: Users,
+              submenus: [],
+            },
+            {
+              href: "/account",
+              label: "Account",
+              active: pathname.includes("/account"),
+              icon: Settings,
+              submenus: [],
+            },
+          ],
+        },
+      ];
+
+    case "manager":
+      return [
+        {
+          groupLabel: "",
+          menus: [
+            {
+              href: "/dashboard",
+              label: "Dashboard",
+              active: pathname === "/dashboard",
+              icon: LayoutGrid,
+              submenus: [],
+            },
+          ],
+        },
+        {
+          groupLabel: "Events",
+          menus: [
+            {
+              href: "/dashboard/events",
+              label: "Events",
+              active: pathname === "",
+              icon: PartyPopperIcon,
               submenus: [
                 {
-                  href: "/posts",
-                  label: "All Posts",
-                  active: pathname === "/posts",
-                  icon: SquarePen,
+                  href: "/dashboard/events",
+                  label: "All Events",
+                  active: pathname === "/dashboard/events",
+                  icon: ListIcon,
                 },
                 {
-                  href: "/posts/new",
-                  label: "New Post",
-                  active: pathname === "/posts/new",
+                  href: "/dashboard/events/create",
+                  label: "New Event",
+                  active: pathname === "/dashboard/events/create",
                   icon: PlusSquareIcon,
                 },
               ],
-            },
-            {
-              href: "/categories",
-              label: "Categories",
-              active: pathname.includes("/categories"),
-              icon: Bookmark,
-              submenus: [],
-            },
-            {
-              href: "/tags",
-              label: "Tags",
-              active: pathname.includes("/tags"),
-              icon: Tag,
-              submenus: [],
             },
           ],
         },
@@ -113,11 +133,65 @@ export function getMenuList(pathname: string, type: DashboardType): Group[] {
           ],
         },
       ];
-
-    case "manager":
-      return [];
     case "organizer":
-      return [];
+      return [
+        {
+          groupLabel: "",
+          menus: [
+            {
+              href: "/dashboard",
+              label: "Dashboard",
+              active: pathname === "/dashboard",
+              icon: LayoutGrid,
+              submenus: [],
+            },
+          ],
+        },
+        {
+          groupLabel: "Events",
+          menus: [
+            {
+              href: "/dashboard/events",
+              label: "Events",
+              active: pathname === "",
+              icon: PartyPopperIcon,
+              submenus: [
+                {
+                  href: "/dashboard/events",
+                  label: "All Events",
+                  active: pathname === "/dashboard/events",
+                  icon: ListIcon,
+                },
+                {
+                  href: "/dashboard/events/create",
+                  label: "New Event",
+                  active: pathname === "/dashboard/events/create",
+                  icon: PlusSquareIcon,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          groupLabel: "Settings",
+          menus: [
+            {
+              href: "/users",
+              label: "Users",
+              active: pathname.includes("/users"),
+              icon: Users,
+              submenus: [],
+            },
+            {
+              href: "/account",
+              label: "Account",
+              active: pathname.includes("/account"),
+              icon: Settings,
+              submenus: [],
+            },
+          ],
+        },
+      ];
     default:
       return [];
   }

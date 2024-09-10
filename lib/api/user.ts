@@ -13,6 +13,7 @@ import {
   RefreshTokenResponse,
 } from "@/types/api/user";
 import { User as Usertype } from "@/types/user";
+import { redirect } from "next/navigation";
 import { toast } from "sonner";
 
 export namespace User {
@@ -108,5 +109,10 @@ export namespace User {
         data: null,
       };
     }
+  }
+
+  export function signOut() {
+    setTokens("", "");
+    useAuthStore.getState().clearAuth();
   }
 }

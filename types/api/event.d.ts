@@ -14,3 +14,13 @@ export type CreateEventRequest = {
   note: string;
   eventCategoryId: string;
 };
+
+export type GetEventsParams = {
+  SearchTerm?: string;
+  EventCategoryId?: string;
+  EventStartDate?: Date;
+  EventEndDate?: Date;
+  Status?: number;
+  PageNumber?: number;
+  PageSize?: number;
+};

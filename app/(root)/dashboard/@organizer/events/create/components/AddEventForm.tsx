@@ -4,7 +4,7 @@ import {
   AddEventSchema,
   AddEventSchemaDefaultValue,
   AddEventSchemaType,
-} from "@/app/(root)/dashboard/@admin/events/create/components/addEventSchema";
+} from "@/app/(root)/dashboard/@organizer/events/create/components/addEventSchema";
 import AddressInput from "@/components/input/AddressInput";
 import { DatePicker } from "@/components/input/DatePicker";
 import { ImageCropper } from "@/components/input/ImageInput";
@@ -76,7 +76,7 @@ export default function AddEventForm() {
         };
         console.log(payload);
 
-        Event.createEvent(payload).then((response) => {
+        Event.create(payload).then((response) => {
           router.push("/dashboard/events");
         });
       }

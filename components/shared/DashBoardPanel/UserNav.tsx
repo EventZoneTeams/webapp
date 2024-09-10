@@ -21,9 +21,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/stores/authStore";
+import { User as UserApi } from "@/lib/api/user";
+import { useRouter } from "next/navigation";
 
 export function UserNav() {
   const { user } = useAuthStore();
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    UserApi.signOut();
+    router.push("/sign-in");
+  };
   return (
     <DropdownMenu>
       <TooltipProvider disableHoverableContent>
@@ -72,7 +80,10 @@ export function UserNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="hover:cursor-pointer" onClick={() => {}}>
+        <DropdownMenuItem
+          className="hover:cursor-pointer"
+          onClick={handleSignOut}
+        >
           <LogOut className="mr-3 h-4 w-4 text-muted-foreground" />
           Sign out
         </DropdownMenuItem>
