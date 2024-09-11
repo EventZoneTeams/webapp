@@ -68,8 +68,6 @@ function ColumnContainer({
         {/* Column title */}
         <section className="flex min-h-[2.5rem] items-start justify-between">
           <div
-            {...attributes}
-            {...listeners}
             onClick={() => setEditMode(true)}
             className="flex w-[13.5rem] items-start gap-3"
           >

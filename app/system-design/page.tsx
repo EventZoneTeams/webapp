@@ -1,8 +1,6 @@
-import ExampleAddressInput from "@/app/system-design/components/ExampleAddressInput";
 import ExampleImageInput from "@/app/system-design/components/ExampleImageInput";
 import ExamplePhoneInput from "@/app/system-design/components/ExamplePhoneInput";
 import { colors } from "@/app/system-design/constant";
-import AddressInput from "@/components/input/AddressInput";
 import { DatePicker } from "@/components/input/DatePicker";
 import { InputBlock } from "@/components/input/InputVariant";
 import Header from "@/components/shared/Header";
@@ -53,7 +51,7 @@ const SystemDesign = () => {
     <div>
       <Header />
 
-      <div className="container relative grid min-h-[5000px] grid-cols-12 gap-4 backdrop-blur-md">
+      <div className="container relative grid min-h-[5000px] grid-cols-12 gap-4 border-x bg-background">
         <nav className="col-span-2">
           <ul className="sticky top-16 min-h-screen py-5">
             {sidebarItems.map((item, index) => (
@@ -176,8 +174,6 @@ const SystemDesign = () => {
               <ExamplePhoneInput />
               <h2 className="font-semibold">Image</h2>
               <ExampleImageInput />
-              <h2 className="font-semibold">Address</h2>
-              <ExampleAddressInput />
             </div>
           </section>
           <section className="space-y-6 py-5">

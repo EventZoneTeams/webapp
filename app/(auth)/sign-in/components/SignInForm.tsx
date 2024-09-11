@@ -1,23 +1,30 @@
 "use client";
 
-import CustomFormField from "@/components/CustomFormField";
-import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
-import { User } from "@/lib/api/user";
 import {
   SignInSchema,
   SignInSchemaDefaultValue,
   SignInSchemaType,
-} from "@/schemas/signInSchema";
+} from "@/app/(auth)/sign-in/components/signInSchema";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { User } from "@/lib/api/user";
 import { LoginRequest } from "@/types/api/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 export default function SignInForm() {
   const [isLoading, setIsLoading] = React.useState(false);
-
+  const router = useRouter();
   const form = useForm<SignInSchemaType>({
     resolver: zodResolver(SignInSchema),
     defaultValues: SignInSchemaDefaultValue,
@@ -25,47 +32,49 @@ export default function SignInForm() {
 
   const onSubmit = async (data: SignInSchemaType) => {
     setIsLoading(true);
-    User.login({
-      email: data.email,
-      password: data.password,
-    } as LoginRequest).then((response) => {
-      console.log(response);
-      if (response.isSuccess) {
-        console.log(response.data);
-        User.getMe().then((response) => {
-          if (response.isSuccess) {
-            console.log(response.data);
-            setIsLoading(false);
-          } else {
-            console.log(response.message);
-            toast.error(response.message);
-            setIsLoading(false);
-          }
-        });
-      } else {
-        console.log(response.message);
-        toast.error(response.message);
+    User.login(data as LoginRequest)
+      .then((response) => {
+        if (response.isSuccess) {
+          User.getMe().then((data) => {
+            if (data.isSuccess) {
+              router.push("/dashboard");
+            }
+          });
+        }
+      })
+      .finally(() => {
         setIsLoading(false);
-      }
-    });
+      });
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <CustomFormField
+        <FormField
           control={form.control}
           name="email"
-          type="text"
-          placeholder="Enter your email"
-          label="Email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="Your email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        <CustomFormField
+        <FormField
           control={form.control}
           name="password"
-          type="password"
-          placeholder="Enter your password"
-          label="Password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input placeholder="Your password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
         <Button
           type="submit"
