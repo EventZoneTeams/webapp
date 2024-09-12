@@ -25,6 +25,7 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const refreshToken = getRefreshToken();
+      console.log(refreshToken);
       if (refreshToken) {
         try {
           const response = await User.refreshToken();
