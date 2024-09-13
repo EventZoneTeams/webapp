@@ -3,7 +3,7 @@ import React from "react";
 
 export default function page() {
   return (
-    <div className="rounded bg-background p-6 shadow">
+    <div className="rounded bg-white/70 p-6 shadow backdrop-blur-md">
       <h1 className="mb-6 text-2xl font-bold text-primary">Create Event</h1>
       <AddEventForm />
     </div>

@@ -159,7 +159,9 @@ export function getMenuList(pathname: string, type: DashboardType): Group[] {
                 {
                   href: "/dashboard/events",
                   label: "All Events",
-                  active: pathname === "/dashboard/events",
+                  active:
+                    pathname.startsWith("/dashboard/events") &&
+                    pathname !== "/dashboard/events/create",
                   icon: ListIcon,
                 },
                 {

@@ -2,15 +2,13 @@ import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { ViewTransitions } from "next-view-transitions";
 import { Plus_Jakarta_Sans as FontSans } from "next/font/google";
-const AnimatedGridPattern = dynamic(
-  () => import("@/components/magicui/animated-grid-pattern"),
-  { ssr: false },
-);
+
 import "./globals.css";
-import dynamic from "next/dynamic";
 import { Toaster } from "sonner";
 import RefreshUser from "@/providers/RefreshUser";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import AnimatedGradientBackground from "@/components/shared/AminatedBackground";
+import "./AnimatedGradientBackground.css";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -31,20 +29,12 @@ export default function RootLayout({
   return (
     <ViewTransitions>
       <html lang="en">
-        <body className={cn("", fontSans.variable)}>
+        <body className={cn("text-container", fontSans.variable)}>
           <TooltipProvider>
             <RefreshUser>{children}</RefreshUser>
-            {/* <AnimatedGridPattern
-              numSquares={50}
-              maxOpacity={0.2}
-              duration={4}
-              repeatDelay={0.5}
-              className={cn(
-                "fixed inset-x-0 inset-y-[-30%] -z-10 h-[200%] skew-y-12",
-              )}
-            /> */}
           </TooltipProvider>
           <Toaster richColors position="top-center" />
+          <AnimatedGradientBackground />
         </body>
       </html>
     </ViewTransitions>

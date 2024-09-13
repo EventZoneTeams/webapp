@@ -18,7 +18,7 @@ import { Link } from "next-view-transitions";
 
 export default function Page() {
   const [events, setEvents] = useState<EventType[]>([]);
-  const [params, setParams] = useState<GetEventsParams | null>(null);
+  const [params, setParams] = useState<GetEventsParams>({});
 
   useEffect(() => {
     Event.get(params ?? {}).then((response) => {

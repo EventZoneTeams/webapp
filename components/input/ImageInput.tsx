@@ -171,7 +171,7 @@ export function ImageCropper({
         ) : (
           <div
             className={cn(
-              "flex w-full items-center justify-center rounded bg-gray-100 p-5 outline-dashed outline-offset-2 outline-gray-300",
+              "flex w-full items-center justify-center rounded bg-white p-5 outline-dashed outline-offset-2 outline-gray-300",
               getAspectRatioClass(ratio),
             )}
             {...getRootProps()}

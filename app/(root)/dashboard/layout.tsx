@@ -24,7 +24,7 @@ export default function Layout({
   switch (user?.role.roleName.toUpperCase()) {
     case "ADMIN":
       return <DashBoardLayout type="admin">{admin}</DashBoardLayout>;
-    case "MANAGER":
+    case "ORGANIZER":
       return <DashBoardLayout type="organizer">{organizer}</DashBoardLayout>;
     case "MANAGER":
       return <DashBoardLayout type="manager">{manager}</DashBoardLayout>;

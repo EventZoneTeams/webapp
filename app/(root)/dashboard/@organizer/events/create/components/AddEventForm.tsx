@@ -112,7 +112,7 @@ export default function AddEventForm() {
             <div className="w-1/2">
               <ImageCropper ratio="1:1" setFinalImage={setImage} />
             </div>
-            <div className="w-1/2 space-y-8">
+            <div className="w-1/2 space-y-8 rounded bg-white p-4">
               <FormField
                 control={form.control}
                 name="name"
@@ -241,7 +241,7 @@ export default function AddEventForm() {
                     value={field.value as Content}
                     onChange={field.onChange}
                     throttleDelay={2000}
-                    className="w-full"
+                    className="w-full rounded bg-white shadow-sm"
                     editorContentClassName="p-5"
                     output="html"
                     placeholder="Type your description here..."
@@ -249,7 +249,7 @@ export default function AddEventForm() {
                     immediatelyRender={true}
                     editable={true}
                     injectCSS={true}
-                    editorClassName="focus:outline-none"
+                    editorClassName="focus:outline-none "
                   />
                 </FormControl>
                 <FormDescription>Description of the event</FormDescription>
