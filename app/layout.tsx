@@ -9,6 +9,7 @@ import RefreshUser from "@/providers/RefreshUser";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import AnimatedGradientBackground from "@/components/shared/AminatedBackground";
 import "./AnimatedGradientBackground.css";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -30,11 +31,18 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en">
         <body className={cn("text-container", fontSans.variable)}>
-          <TooltipProvider>
-            <RefreshUser>{children}</RefreshUser>
-          </TooltipProvider>
-          <Toaster richColors position="top-center" />
-          <AnimatedGradientBackground />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <TooltipProvider>
+              <RefreshUser>{children}</RefreshUser>
+            </TooltipProvider>
+            <Toaster richColors position="top-center" />
+            <AnimatedGradientBackground />
+          </ThemeProvider>
         </body>
       </html>
     </ViewTransitions>

@@ -1,23 +1,23 @@
 :root {
-    --color-bg1: rgb(70, 130, 180);
-    /* Steel Blue */
-    --color-bg2: rgb(0, 70, 140);
-    /* Dark Blue */
-    --color1: 0, 128, 255;
-    /* Vivid Blue */
-    --color2: 100, 149, 237;
-    /* Cornflower Blue */
-    --color3: 135, 206, 250;
-    /* Light Sky Blue */
-    --color4: 30, 144, 255;
-    /* Dodger Blue */
-    --color5: 70, 130, 180;
-    /* Steel Blue (same as bg1) */
-    --color-interactive: 0, 191, 255;
-    /* Deep Sky Blue */
+    --color-bg1: rgb(50, 40, 80);
+    /* Dark Purple */
+    --color-bg2: rgb(30, 20, 60);
+    /* Very Dark Purple */
+    --color1: 48, 25, 52;
+    /* Dark Violet */
+    --color2: 40, 20, 85;
+    /* Dark Indigo */
+    --color3: 25, 25, 112;
+    /* Midnight Blue */
+    --color4: 72, 61, 139;
+    /* Dark Slate Blue */
+    --color5: 50, 40, 80;
+    /* Dark Purple (same as bg1) */
+    --color-interactive: 25, 25, 112;
+    /* Midnight Blue */
     --circle-size: 80%;
-    --blending: hard-light;
 }
+
 
 @keyframes moveInCircle {
     0% {
@@ -66,7 +66,7 @@
     height: 100vh;
     position: relative;
     overflow: hidden;
-    background: rgba(57, 164, 255, 0.7);
+    background: rgb(19 21 23);
     /* background: linear-gradient(121deg, rgba(255, 255, 255, 1) 0%, rgba(57, 164, 255, 1) 100%); */
     top: 0;
     left: 0;

@@ -33,7 +33,7 @@ export function Menu({ isOpen, type }: MenuProps) {
           {menuList.map(({ groupLabel, menus }, index) => (
             <li className={cn("w-full", groupLabel ? "pt-5" : "")} key={index}>
               {(isOpen && groupLabel) || isOpen === undefined ? (
-                <p className="max-w-[248px] truncate px-4 pb-2 text-sm font-medium text-black">
+                <p className="max-w-[248px] truncate px-4 pb-2 text-sm font-medium">
                   {groupLabel}
                 </p>
               ) : !isOpen && isOpen !== undefined && groupLabel ? (

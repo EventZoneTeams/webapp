@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 export function Footer() {
   return (
     <div className="z-20 w-full shadow backdrop-blur-3xl">

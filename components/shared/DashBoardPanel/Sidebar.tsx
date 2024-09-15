@@ -17,15 +17,15 @@ export function Sidebar({ type }: { type: DashboardType }) {
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-20 h-screen -translate-x-full bg-white/40 text-black transition-[width] duration-300 ease-in-out lg:translate-x-0",
+        "fixed left-0 top-0 z-20 h-screen -translate-x-full bg-background backdrop-blur-3xl transition-[width] duration-300 ease-in-out lg:translate-x-0",
         sidebar?.isOpen === false ? "w-[90px]" : "w-72",
       )}
     >
       <SidebarToggle isOpen={sidebar?.isOpen} setIsOpen={sidebar?.setIsOpen} />
-      <div className="relative flex h-full flex-col overflow-y-auto px-3 shadow-md dark:shadow-zinc-800">
+      <div className="relative flex h-full flex-col overflow-y-auto px-3 shadow-md">
         <Button
           className={cn(
-            "mb-1 h-14 text-black transition-transform duration-300 ease-in-out",
+            "mb-1 h-14 transition-transform duration-300 ease-in-out",
             sidebar?.isOpen === false ? "translate-x-1" : "translate-x-0",
           )}
           variant="link"

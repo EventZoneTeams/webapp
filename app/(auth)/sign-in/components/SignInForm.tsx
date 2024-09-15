@@ -57,7 +57,11 @@ export default function SignInForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Your email" {...field} />
+                <Input
+                  placeholder="Your email"
+                  {...field}
+                  className="bg-input-background/50"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -70,7 +74,12 @@ export default function SignInForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="Your password" {...field} />
+                <Input
+                  placeholder="Your password"
+                  {...field}
+                  type="password"
+                  className="bg-input-background/50"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
