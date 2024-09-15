@@ -61,6 +61,7 @@ export default function SignInForm() {
                   placeholder="Your email"
                   {...field}
                   className="bg-input-background/50"
+                  type="email"
                 />
               </FormControl>
               <FormMessage />

@@ -110,9 +110,13 @@ export default function AddEventForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="flex gap-8">
             <div className="w-1/2">
-              <ImageCropper ratio="1:1" setFinalImage={setImage} />
+              <ImageCropper
+                ratio="1:1"
+                setFinalImage={setImage}
+                className="rounded-xl bg-background/50 outline-none"
+              />
             </div>
-            <div className="w-1/2 space-y-8 rounded bg-white p-4">
+            <div className="w-1/2 space-y-8 rounded-xl bg-background/50 p-4">
               <FormField
                 control={form.control}
                 name="name"
@@ -241,7 +245,7 @@ export default function AddEventForm() {
                     value={field.value as Content}
                     onChange={field.onChange}
                     throttleDelay={2000}
-                    className="w-full rounded bg-white shadow-sm"
+                    className="w-full rounded-xl border-none bg-background/50 shadow-sm outline-none"
                     editorContentClassName="p-5"
                     output="html"
                     placeholder="Type your description here..."
@@ -257,9 +261,11 @@ export default function AddEventForm() {
             )}
           />
 
-          <Button type="submit" disabled={false}>
-            {isLoading ? "Loading..." : "Create Event"}
-          </Button>
+          <div className="flex w-full items-center justify-end gap-4">
+            <Button type="submit" disabled={false} className="">
+              {isLoading ? "Loading..." : "Create Event"}
+            </Button>
+          </div>
         </form>
       </Form>
     </>

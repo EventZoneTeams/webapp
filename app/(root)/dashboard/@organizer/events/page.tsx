@@ -49,7 +49,6 @@ export default function Page() {
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
-            <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbPage className="font-semibold text-primary">
                 Events
@@ -67,7 +66,7 @@ export default function Page() {
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-4 rounded bg-background p-4 shadow">
+      <div className="grid grid-cols-3 gap-4 rounded p-4">
         {events.map((event) => (
           <Link href={`/dashboard/events/${event.id}`} key={event.id}>
             <EventCard event={event} />

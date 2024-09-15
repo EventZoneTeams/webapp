@@ -100,7 +100,7 @@ export default function Filter({ params, onFilter }: FilterProps) {
 
   return (
     <div>
-      <div className="space-y-4 rounded bg-background p-4 shadow">
+      <div className="space-y-4 rounded-xl border bg-background/50 p-4 shadow backdrop-blur-xl">
         <div className="flex items-center space-x-2">
           <Input
             name="SearchTerm"

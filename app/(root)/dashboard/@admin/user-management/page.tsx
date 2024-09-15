@@ -1,49 +1,49 @@
-"use client"
-"use memo"
+"use client";
+"use memo";
 
-import type { SearchParams } from "@/types"
+import type { SearchParams } from "@/types";
 
-import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton"
-import { DateRangePicker } from "@/components/date-range-picker"
-import { Shell } from "@/components/shell"
-import { Skeleton } from "@/components/ui/skeleton"
-import { UsersTable } from "./_components/users-table"
-import { User } from "./_lib/userSchema"
-import { searchParamsSchema } from "./_lib/validations"
+import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
+import { DateRangePicker } from "@/components/date-range-picker";
+import { Shell } from "@/components/shell";
+import { Skeleton } from "@/components/ui/skeleton";
+import { UsersTable } from "./_components/users-table";
+import { User } from "./_lib/userSchema";
+import { searchParamsSchema } from "./_lib/validations";
 
 export interface IndexPageProps {
-  searchParams: SearchParams
+  searchParams: SearchParams;
 }
 
 const url = "https://localhost:8081/api/v1/";
 const table = "users";
 
 export default function IndexPage({ searchParams }: IndexPageProps) {
-  const search = searchParamsSchema.parse(searchParams)
+  const search = searchParamsSchema.parse(searchParams);
 
   // Fetch users using React Query
   const { entities } = {
-     entities: {
-        data: {
-            data: [
-               {
-                 id: 1,
-                 fullName: "John Doe",
-               },
-               {
-                 id: 2,
-                 fullName: "Jane Doe",
-               }],
-            pageCount: 2,
-
-           },
-        isLoading: false,
-        isError: false,
-        error: {
-          message: "",
-        },
-     },
-  }
+    entities: {
+      data: {
+        data: [
+          {
+            id: 1,
+            fullName: "John Doe",
+          },
+          {
+            id: 2,
+            fullName: "Jane Doe",
+          },
+        ],
+        pageCount: 2,
+      },
+      isLoading: false,
+      isError: false,
+      error: {
+        message: "",
+      },
+    },
+  };
 
   // Handle loading and error states from React Query
   if (entities.isLoading) {
@@ -69,20 +69,20 @@ export default function IndexPage({ searchParams }: IndexPageProps) {
   const usersPromise = {
     data: entities.data?.data, // This will be the users array fetched from the API
     pageCount: 2, // Adjust this if you have pagination
-  }
+  };
 
   return (
     <Shell className="gap-2">
       <div className="flex items-center justify-between gap-2">
         <h1 className="text-2xl font-bold">Users Management</h1>
-        <DateRangePicker
+        {/* <DateRangePicker
           triggerSize="sm"
           triggerClassName="ml-auto w-56 sm:w-60"
           align="end"
-        />
+        /> */}
       </div>
 
       <UsersTable usersPromise={usersPromise} />
     </Shell>
-  )
+  );
 }

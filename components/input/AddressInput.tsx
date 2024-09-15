@@ -59,12 +59,12 @@ export default function AddressInput(props: AddressInputProps) {
         onChange={handleChange}
       />
       {isOpen && suggestions.length > 0 && (
-        <ul className="absolute top-12 z-10 max-h-96 w-full overflow-y-auto rounded border border-gray-300 bg-white shadow-lg">
+        <ul className="absolute top-12 z-10 max-h-96 w-full overflow-y-auto rounded-xl bg-background shadow-lg backdrop-blur-xl">
           {suggestions.map((suggestion) => (
             <li
               key={suggestion.place_id}
               onClick={() => handleSelect(suggestion)}
-              className="line-clamp-1 w-full cursor-pointer truncate px-4 py-2 hover:bg-gray-100"
+              className="line-clamp-1 w-full cursor-pointer truncate px-4 py-2 hover:bg-secondary"
             >
               {suggestion.description}
             </li>
