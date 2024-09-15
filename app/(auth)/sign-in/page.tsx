@@ -20,7 +20,9 @@ const SignIn = () => {
       )}
     >
       <CardHeader>
-        <CardTitle className="text-2xl">Welcome to EventZone</CardTitle>
+        <CardTitle className="text-2xl font-semibold">
+          Welcome to EventZone
+        </CardTitle>
         <CardDescription className="text-base text-gray-300">
           Sign in to continue
         </CardDescription>

@@ -40,7 +40,7 @@ export default function RootLayout({
             <TooltipProvider>
               <RefreshUser>{children}</RefreshUser>
             </TooltipProvider>
-            <Toaster richColors position="top-center" />
+            <Toaster richColors position="bottom-right" />
             <AnimatedGradientBackground />
           </ThemeProvider>
         </body>
