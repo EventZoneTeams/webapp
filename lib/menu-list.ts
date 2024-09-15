@@ -59,7 +59,7 @@ export function getMenuList(pathname: string, type: DashboardType): Group[] {
             {
               href: "/users",
               label: "Users",
-              active: pathname.includes("/users"),
+              active: pathname.includes("/user-management"),
               icon: Users,
               submenus: [],
             },
