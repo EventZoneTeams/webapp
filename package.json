@@ -72,7 +72,7 @@
     "next-themes": "^0.3.0",
     "next-view-transitions": "^0.3.0",
     "react": "^18",
-    "react-day-picker": "^8.10.1",
+    "react-day-picker": "^9.0.9",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.52.1",
