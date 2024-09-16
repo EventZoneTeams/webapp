@@ -6,7 +6,7 @@ import {
   AddEventSchemaType,
 } from "@/app/(root)/dashboard/@organizer/events/create/components/addEventSchema";
 import AddressInput from "@/components/input/AddressInput";
-import { DatePicker } from "@/components/input/DatePicker";
+import { DateTimePicker } from "@/components/input/DateTimePicker";
 import { ImageCropper } from "@/components/input/ImageInput";
 import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
 import { Button } from "@/components/ui/button";
@@ -88,6 +88,10 @@ export default function AddEventForm() {
   };
 
   useEffect(() => {
+    console.log(form.getValues("eventStartDate"));
+  }, [form.getValues("eventStartDate")]);
+
+  useEffect(() => {
     EventCategory.getEventCategories().then((response) => {
       if (response.isSuccess && response.data) {
         setEventCategories(response.data);
@@ -99,7 +103,7 @@ export default function AddEventForm() {
     <>
       <div>
         {!form.formState.isValid && form.formState.isSubmitted && (
-          <ul className="mb-4 list-decimal rounded border border-red-500 bg-red-100 px-8 py-4 text-red-500">
+          <ul className="mb-4 list-decimal rounded border border-red-500 bg-red-500/30 px-8 py-4 text-red-200 backdrop-blur-xl">
             {Object.values(form.formState.errors).map((error) => (
               <li key={error.message}>{error.message}</li>
             ))}
@@ -142,10 +146,11 @@ export default function AddEventForm() {
                         Event start date <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <DatePicker
-                          showTime
-                          value={String(field.value)}
+                        <DateTimePicker
+                          value={field.value}
                           onChange={field.onChange}
+                          yearRange={5}
+                          hourCycle={24}
                         />
                       </FormControl>
                       <FormDescription>Start date of the event</FormDescription>
@@ -162,13 +167,11 @@ export default function AddEventForm() {
                         Event end date <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <DatePicker
-                          showTime
-                          value={String(field.value)}
+                        <DateTimePicker
+                          value={field.value}
                           onChange={field.onChange}
-                          minDate={
-                            form.getValues("eventStartDate") as Date | undefined
-                          }
+                          yearRange={5}
+                          hourCycle={24}
                         />
                       </FormControl>
                       <FormDescription>End date of the event</FormDescription>

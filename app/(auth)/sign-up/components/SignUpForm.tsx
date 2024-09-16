@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { DatePicker } from "@/components/input/DatePicker";
+import { DateTimePicker } from "@/components/input/DateTimePicker";
 import {
   Select,
   SelectContent,
@@ -27,6 +27,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Link } from "next-view-transitions";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function SignUpForm() {
   const form = useForm<SignUpSchemaType>({
@@ -61,7 +63,6 @@ export default function SignUpForm() {
               <FormDescription>
                 This will be used to login into your account
               </FormDescription>
-              <FormMessage />
             </FormItem>
           )}
         />
@@ -83,31 +84,31 @@ export default function SignUpForm() {
                 />
               </FormControl>
               <FormDescription>This will be your display name</FormDescription>
-              <FormMessage />
             </FormItem>
           )}
         />
-        <div className="grid grid-cols-2 gap-6">
+        <div className="flex items-center justify-center gap-4">
           <FormField
             control={form.control}
             name="dob"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex-1">
                 <FormLabel>
                   Date of Birth
                   <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <DatePicker
-                    showTime={false}
-                    value={String(field.value)}
+                  <DateTimePicker
+                    value={field.value}
                     onChange={field.onChange}
-                    placeholder="Select your date of birth"
-                    className=""
+                    yearRange={100}
+                    hourCycle={24}
+                    granularity="day"
+                    displayFormat={{ hour24: "dd/MM/yyyy" }}
                   />
                 </FormControl>
-                <FormDescription>Mus be at least 18 years old</FormDescription>
-                <FormMessage />
+
+                <FormDescription>Your Date of Birth</FormDescription>
               </FormItem>
             )}
           />
@@ -115,7 +116,7 @@ export default function SignUpForm() {
             control={form.control}
             name="gender"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex-1">
                 <FormLabel>
                   Gender
                   <span className="text-red-500">*</span>
@@ -140,8 +141,8 @@ export default function SignUpForm() {
                     </SelectContent>
                   </Select>
                 </FormControl>
-                <FormDescription>This will be your gender</FormDescription>
-                <FormMessage />
+
+                <FormDescription>Your Gender</FormDescription>
               </FormItem>
             )}
           />
@@ -185,13 +186,45 @@ export default function SignUpForm() {
                 <FormDescription>
                   Please re-enter your password to confirm
                 </FormDescription>
-                <FormMessage />
               </FormItem>
             )}
           />
         </div>
+        <FormField
+          control={form.control}
+          name="agree"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <FormLabel>
+                  I agree to the terms and conditions
+                  <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormDescription>
+                  Agree to{" "}
+                  <Link
+                    href="/examples/forms"
+                    className="text-blue-500 hover:cursor-pointer hover:text-blue-400 hover:underline"
+                  >
+                    Terms and Conditions
+                  </Link>{" "}
+                </FormDescription>
+              </div>
+            </FormItem>
+          )}
+        />
 
-        <Button type="submit" className="w-full">
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={form.formState.isSubmitting || !form.formState.isValid}
+        >
           Submit
         </Button>
       </form>

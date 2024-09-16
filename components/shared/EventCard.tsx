@@ -22,7 +22,7 @@ export default function EventCard({ event }: { event: Event }) {
           </div>
         </div>
         <div className="flex items-center gap-2 text-sm font-semibold text-primary/50">
-          <Avatar className="size-8 border-none">
+          <Avatar className="size-6 border-none">
             <AvatarImage src={event.user.imageUrl} alt={event.user.fullName} />
             <AvatarFallback className="text-sm">
               {event.user.fullName.charAt(0).toUpperCase()}

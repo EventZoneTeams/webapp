@@ -66,7 +66,7 @@ export default function Page() {
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-4 rounded p-4">
+      <div className="grid grid-cols-3 gap-4 rounded py-4">
         {events.map((event) => (
           <Link href={`/dashboard/events/${event.id}`} key={event.id}>
             <EventCard event={event} />

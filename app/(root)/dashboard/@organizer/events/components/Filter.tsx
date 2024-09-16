@@ -92,12 +92,6 @@ export default function Filter({ params, onFilter }: FilterProps) {
       }
     });
   }, []);
-
-  const statusOptions = [
-    { value: 1, label: "Active" },
-    { value: 2, label: "Inactive" },
-  ];
-
   return (
     <div>
       <div className="space-y-4 rounded-xl border bg-background/50 p-4 shadow backdrop-blur-xl">
@@ -144,29 +138,7 @@ export default function Filter({ params, onFilter }: FilterProps) {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="Status">Status</Label>
-                  <Select
-                    value={filters.Status?.toString()}
-                    onValueChange={(value) =>
-                      handleSelectChange("Status", Number(value))
-                    }
-                  >
-                    <SelectTrigger id="Status">
-                      <SelectValue placeholder="Select status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {statusOptions.map((option) => (
-                        <SelectItem
-                          key={option.value}
-                          value={option.value.toString()}
-                        >
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+
                 <div className="grid gap-2">
                   <Label>Start Date</Label>
                   <Popover>
@@ -192,7 +164,6 @@ export default function Filter({ params, onFilter }: FilterProps) {
                         onSelect={(date) =>
                           handleDateChange("EventStartDate", date)
                         }
-                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
@@ -222,7 +193,6 @@ export default function Filter({ params, onFilter }: FilterProps) {
                         onSelect={(date) =>
                           handleDateChange("EventEndDate", date)
                         }
-                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>

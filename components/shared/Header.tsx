@@ -43,21 +43,21 @@ export default function Header() {
   const pathname = usePathname();
   const { user } = useAuthStore();
   return (
-    <div className="fixed left-0 right-0 top-0 z-50 h-12 backdrop-blur-md">
-      <div className="flex h-full items-center px-10">
+    <div className="fixed left-0 right-0 top-0 z-50 h-12 backdrop-blur-3xl">
+      <div className="flex h-full items-center justify-between px-10">
         <Link href={"/"} className="flex items-center">
           <p className="text-2xl font-bold">EventZone</p>
         </Link>
 
-        <ul className="flex h-full flex-1 items-center justify-center gap-4">
+        <ul className="absolute left-1/2 flex h-full flex-1 -translate-x-1/2 items-center justify-center gap-4">
           {menuItems.map((item, index) => (
             <li key={index} className="flex h-full items-center">
               <Link
                 href={item.href}
                 className={cn(
-                  "text-nav-text-secondary flex h-full items-center px-4 py-2",
+                  "flex h-full items-center px-4 py-2 text-nav-text-secondary",
                   pathname === item.href
-                    ? "text-nav-text h-full border-b-2 border-primary"
+                    ? "h-full border-b-2 border-primary text-nav-text"
                     : "hover:text-nav-text",
                 )}
               >

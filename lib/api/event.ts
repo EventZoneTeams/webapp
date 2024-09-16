@@ -74,4 +74,32 @@ export namespace Event {
       };
     }
   }
+
+  export async function getById(id: string): Promise<ApiResponse<EventType>> {
+    try {
+      const response = (
+        await axiosInstance.get<ApiResponse<EventType>>(`/events/${id}`)
+      ).data;
+
+      if (response.isSuccess) {
+        return {
+          isSuccess: true,
+          message: "Success",
+          data: response.data,
+        };
+      } else {
+        return {
+          isSuccess: false,
+          message: response.message,
+          data: null,
+        };
+      }
+    } catch (error: any) {
+      return {
+        isSuccess: false,
+        message: error.message,
+        data: null,
+      };
+    }
+  }
 }

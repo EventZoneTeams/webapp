@@ -1,7 +1,7 @@
 import ExampleImageInput from "@/app/system-design/components/ExampleImageInput";
 import ExamplePhoneInput from "@/app/system-design/components/ExamplePhoneInput";
 import { colors } from "@/app/system-design/constant";
-import { DatePicker } from "@/components/input/DatePicker";
+import { DatePicker } from "@/components/input/DateTimePicker";
 import { InputBlock } from "@/components/input/InputVariant";
 import Header from "@/components/shared/Header";
 import { Button } from "@/components/ui/button";

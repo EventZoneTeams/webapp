@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function layout({ children }: { children: React.ReactNode }) {
-  return children;
+  return <div className="h-full pt-24">{children}</div>;
 }

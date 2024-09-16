@@ -10,6 +10,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import AnimatedGradientBackground from "@/components/shared/AminatedBackground";
 import "./AnimatedGradientBackground.css";
 import { ThemeProvider } from "@/providers/ThemeProvider";
+import BackgroundImage from "@/public/assets/gradient-dark.webp";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -41,6 +42,17 @@ export default function RootLayout({
               <RefreshUser>{children}</RefreshUser>
             </TooltipProvider>
             <Toaster richColors position="bottom-right" />
+            <div
+              className={cn(
+                "pointer-events-none fixed left-0 top-0 z-[-1] h-full w-full bg-gradient-to-br from-background to-transparent",
+                "transition-all duration-300 ease-in-out",
+                "bg-cover bg-center",
+                "blur-[20px] brightness-50 filter",
+                "opacity-50",
+              )}
+              style={{ backgroundImage: `url(${BackgroundImage.src})` }}
+            ></div>
+
             <AnimatedGradientBackground />
           </ThemeProvider>
         </body>
