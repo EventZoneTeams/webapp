@@ -3,8 +3,7 @@
 import { Event } from "@/lib/api/event";
 import React, { useEffect, useState } from "react";
 import { Event as EventType } from "@/types/event";
-import EventCard from "@/components/shared/EventCard";
-import Filter from "@/app/(root)/dashboard/@organizer/events/components/Filter";
+import EventCard from "@/components/shared/Event/EventCard";
 import { GetEventsParams } from "@/types/api/event";
 import {
   Breadcrumb,
@@ -15,6 +14,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Link } from "next-view-transitions";
+import Filter from "@/components/shared/Event/Filter";
 
 export default function Page() {
   const [events, setEvents] = useState<EventType[]>([]);
@@ -58,12 +58,7 @@ export default function Page() {
         </Breadcrumb>
       </div>
       <div className="mb-6">
-        <Filter
-          params={params}
-          onFilter={(params) => {
-            setParams(params);
-          }}
-        />
+        <Filter />
       </div>
 
       <div className="grid grid-cols-3 gap-4 rounded py-4">

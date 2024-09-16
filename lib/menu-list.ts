@@ -74,24 +74,11 @@ export function getMenuList(pathname: string, type: DashboardType): Group[] {
           groupLabel: "Events",
           menus: [
             {
-              href: "/dashboard/events",
-              label: "Events",
+              href: "/dashboard/manage-events",
+              label: "Manage Events",
               active: pathname === "",
               icon: PartyPopperIcon,
-              submenus: [
-                {
-                  href: "/dashboard/events",
-                  label: "All Events",
-                  active: pathname === "/dashboard/events",
-                  icon: ListIcon,
-                },
-                {
-                  href: "/dashboard/events/create",
-                  label: "New Event",
-                  active: pathname === "/dashboard/events/create",
-                  icon: PlusSquareIcon,
-                },
-              ],
+              submenus: [],
             },
           ],
         },
