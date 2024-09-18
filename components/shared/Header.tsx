@@ -21,24 +21,44 @@ const menuItems: MenuItem[] = [
     name: "System Design",
     href: "/system-design",
   },
+  {
+    name: "Events",
+    href: "/events",
+  },
+  {
+    name: "Dashboard",
+    href: "/dashboard",
+  },
+  {
+    name: "Profile",
+    href: "/profile",
+  },
+  {
+    name: "Settings",
+    href: "/settings",
+  },
 ];
 
 export default function Header() {
   const pathname = usePathname();
   const { user } = useAuthStore();
   return (
-    <div className="sticky left-0 right-0 top-0 z-50 h-16 border-b backdrop-blur-md">
-      <div className="container flex h-full items-center">
-        <ul className="flex h-full flex-1 items-center gap-4">
+    <div className="fixed left-0 right-0 top-0 z-50 h-12 backdrop-blur-3xl">
+      <div className="flex h-full items-center justify-between px-10">
+        <Link href={"/"} className="flex items-center">
+          <p className="text-2xl font-bold">EventZone</p>
+        </Link>
+
+        <ul className="absolute left-1/2 flex h-full flex-1 -translate-x-1/2 items-center justify-center gap-4">
           {menuItems.map((item, index) => (
             <li key={index} className="flex h-full items-center">
               <Link
                 href={item.href}
                 className={cn(
-                  "flex h-full items-center px-4 py-2",
+                  "flex h-full items-center px-4 py-2 text-nav-text-secondary",
                   pathname === item.href
-                    ? "h-full border-b-2 border-primary bg-blue-500/10 text-primary"
-                    : "hover:bg-gray-100",
+                    ? "h-full border-b-2 border-primary text-nav-text"
+                    : "hover:text-nav-text",
                 )}
               >
                 {item.name}
@@ -50,11 +70,7 @@ export default function Header() {
           <div className="">
             <Avatar>
               <AvatarImage src={user?.image} />
-              <AvatarFallback>
-                {user?.fullName
-                  ?.split(" ")
-                  .map((name) => name[0].toUpperCase())}
-              </AvatarFallback>
+              <AvatarFallback>{user?.fullName[0].toUpperCase()}</AvatarFallback>
             </Avatar>
           </div>
         ) : (

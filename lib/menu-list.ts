@@ -10,6 +10,7 @@ import {
   PartyPopperIcon,
   PlusSquareIcon,
   ListIcon,
+  UsersIcon,
 } from "lucide-react";
 
 export function getMenuList(pathname: string, type: DashboardType): Group[] {
@@ -29,40 +30,21 @@ export function getMenuList(pathname: string, type: DashboardType): Group[] {
           ],
         },
         {
-          groupLabel: "Events",
+          groupLabel: "Users",
           menus: [
             {
-              href: "/dashboard/events",
-              label: "Events",
-              active: pathname === "",
-              icon: PartyPopperIcon,
-              submenus: [
-                {
-                  href: "/dashboard/events",
-                  label: "All Events",
-                  active: pathname === "/dashboard/events",
-                  icon: ListIcon,
-                },
-                {
-                  href: "/dashboard/events/create",
-                  label: "New Event",
-                  active: pathname === "/dashboard/events/create",
-                  icon: PlusSquareIcon,
-                },
-              ],
+              href: "/dashboard/user-management",
+              label: "Users Management",
+              active: pathname === "/dashboard/user-management",
+              icon: UsersIcon,
+              submenus: [],
             },
           ],
         },
+
         {
           groupLabel: "Settings",
           menus: [
-            {
-              href: "/users",
-              label: "Users",
-              active: pathname.includes("/users"),
-              icon: Users,
-              submenus: [],
-            },
             {
               href: "/account",
               label: "Account",
@@ -159,7 +141,9 @@ export function getMenuList(pathname: string, type: DashboardType): Group[] {
                 {
                   href: "/dashboard/events",
                   label: "All Events",
-                  active: pathname === "/dashboard/events",
+                  active:
+                    pathname.startsWith("/dashboard/events") &&
+                    pathname !== "/dashboard/events/create",
                   icon: ListIcon,
                 },
                 {

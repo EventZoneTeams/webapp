@@ -6,7 +6,7 @@ import {
   AddEventSchemaType,
 } from "@/app/(root)/dashboard/@organizer/events/create/components/addEventSchema";
 import AddressInput from "@/components/input/AddressInput";
-import { DatePicker } from "@/components/input/DatePicker";
+import { DateTimePicker } from "@/components/input/DateTimePicker";
 import { ImageCropper } from "@/components/input/ImageInput";
 import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
 import { Button } from "@/components/ui/button";
@@ -88,6 +88,10 @@ export default function AddEventForm() {
   };
 
   useEffect(() => {
+    console.log(form.getValues("eventStartDate"));
+  }, [form.getValues("eventStartDate")]);
+
+  useEffect(() => {
     EventCategory.getEventCategories().then((response) => {
       if (response.isSuccess && response.data) {
         setEventCategories(response.data);
@@ -99,7 +103,7 @@ export default function AddEventForm() {
     <>
       <div>
         {!form.formState.isValid && form.formState.isSubmitted && (
-          <ul className="mb-4 list-decimal rounded border border-red-500 bg-red-100 px-8 py-4 text-red-500">
+          <ul className="mb-4 list-decimal rounded border border-red-500 bg-red-500/30 px-8 py-4 text-red-200 backdrop-blur-xl">
             {Object.values(form.formState.errors).map((error) => (
               <li key={error.message}>{error.message}</li>
             ))}
@@ -110,9 +114,13 @@ export default function AddEventForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="flex gap-8">
             <div className="w-1/2">
-              <ImageCropper ratio="1:1" setFinalImage={setImage} />
+              <ImageCropper
+                ratio="1:1"
+                setFinalImage={setImage}
+                className="rounded-xl bg-background/50 outline-none"
+              />
             </div>
-            <div className="w-1/2 space-y-8">
+            <div className="w-1/2 space-y-8 rounded-xl bg-background/50 p-4">
               <FormField
                 control={form.control}
                 name="name"
@@ -138,10 +146,11 @@ export default function AddEventForm() {
                         Event start date <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <DatePicker
-                          showTime
-                          value={String(field.value)}
+                        <DateTimePicker
+                          value={field.value}
                           onChange={field.onChange}
+                          yearRange={5}
+                          hourCycle={24}
                         />
                       </FormControl>
                       <FormDescription>Start date of the event</FormDescription>
@@ -158,13 +167,11 @@ export default function AddEventForm() {
                         Event end date <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <DatePicker
-                          showTime
-                          value={String(field.value)}
+                        <DateTimePicker
+                          value={field.value}
                           onChange={field.onChange}
-                          minDate={
-                            form.getValues("eventStartDate") as Date | undefined
-                          }
+                          yearRange={5}
+                          hourCycle={24}
                         />
                       </FormControl>
                       <FormDescription>End date of the event</FormDescription>
@@ -241,7 +248,7 @@ export default function AddEventForm() {
                     value={field.value as Content}
                     onChange={field.onChange}
                     throttleDelay={2000}
-                    className="w-full"
+                    className="w-full rounded-xl border-none bg-background/50 shadow-sm outline-none"
                     editorContentClassName="p-5"
                     output="html"
                     placeholder="Type your description here..."
@@ -249,7 +256,7 @@ export default function AddEventForm() {
                     immediatelyRender={true}
                     editable={true}
                     injectCSS={true}
-                    editorClassName="focus:outline-none"
+                    editorClassName="focus:outline-none "
                   />
                 </FormControl>
                 <FormDescription>Description of the event</FormDescription>
@@ -257,9 +264,11 @@ export default function AddEventForm() {
             )}
           />
 
-          <Button type="submit" disabled={false}>
-            {isLoading ? "Loading..." : "Create Event"}
-          </Button>
+          <div className="flex w-full items-center justify-end gap-4">
+            <Button type="submit" disabled={false} className="">
+              {isLoading ? "Loading..." : "Create Event"}
+            </Button>
+          </div>
         </form>
       </Form>
     </>

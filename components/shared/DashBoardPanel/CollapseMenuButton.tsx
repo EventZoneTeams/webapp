@@ -64,9 +64,12 @@ export function CollapseMenuButton({
       >
         <Button
           className={cn(
-            "h-10 w-full justify-start hover:bg-blue-400",
-            active ? "bg-blue-500 text-white" : "",
+            "h-10 w-full justify-start",
+            active
+              ? "bg-blue-500 text-white hover:bg-blue-400 hover:text-white"
+              : "",
           )}
+          variant={"ghost"}
         >
           <div className="flex w-full items-center justify-between">
             <div className="flex items-center">
@@ -106,9 +109,12 @@ export function CollapseMenuButton({
             key={index}
             className={cn(
               "mb-1 h-10 w-full justify-start",
-              active ? "bg-blue-500 text-white" : "hover:bg-blue-400",
+              active
+                ? "bg-blue-500 text-white hover:bg-blue-400 hover:text-white"
+                : "",
             )}
             asChild
+            variant={"ghost"}
           >
             <Link href={href}>
               <span className="ml-6 mr-4">
@@ -138,8 +144,8 @@ export function CollapseMenuButton({
               <Button
                 variant={active ? "secondary" : "ghost"}
                 className={cn(
-                  "mb-1 h-10 w-full justify-start hover:bg-blue-400",
-                  active ? "bg-blue-500 text-white" : "",
+                  "mb-1 h-10 w-full justify-start",
+                  active ? "" : "",
                 )}
               >
                 <div className="flex w-full items-center justify-between">

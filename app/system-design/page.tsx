@@ -1,7 +1,7 @@
 import ExampleImageInput from "@/app/system-design/components/ExampleImageInput";
 import ExamplePhoneInput from "@/app/system-design/components/ExamplePhoneInput";
 import { colors } from "@/app/system-design/constant";
-import { DatePicker } from "@/components/input/DatePicker";
+import { DateTimePicker } from "@/components/input/DateTimePicker";
 import { InputBlock } from "@/components/input/InputVariant";
 import Header from "@/components/shared/Header";
 import { Button } from "@/components/ui/button";
@@ -146,7 +146,6 @@ const SystemDesign = () => {
             </h1>
             <div className="space-y-4">
               <Input placeholder="Input" className="bg-[#f9fafb]" />
-
               <InputBlock
                 root={{ variant: "default", size: "lg" }}
                 placeholder="Default"
@@ -168,8 +167,7 @@ const SystemDesign = () => {
                 placeholder="Underlined"
               />
               <h2 className="font-semibold">Date</h2>
-              <DatePicker />
-              <DatePicker showTime />
+              \ <DateTimePicker />
               <h2 className="font-semibold">Phone</h2>
               <ExamplePhoneInput />
               <h2 className="font-semibold">Image</h2>

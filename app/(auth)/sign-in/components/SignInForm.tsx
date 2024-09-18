@@ -21,6 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function SignInForm() {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -35,11 +36,15 @@ export default function SignInForm() {
     User.login(data as LoginRequest)
       .then((response) => {
         if (response.isSuccess) {
+          toast.success(response.message);
+
           User.getMe().then((data) => {
             if (data.isSuccess) {
               router.push("/dashboard");
             }
           });
+        } else {
+          toast.error(response.message);
         }
       })
       .finally(() => {
@@ -57,7 +62,12 @@ export default function SignInForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Your email" {...field} />
+                <Input
+                  placeholder="Your email"
+                  {...field}
+                  className="bg-input-background/50"
+                  type="email"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -70,7 +80,12 @@ export default function SignInForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="Your password" {...field} />
+                <Input
+                  placeholder="Your password"
+                  {...field}
+                  type="password"
+                  className="bg-input-background/50"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

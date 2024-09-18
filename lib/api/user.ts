@@ -29,7 +29,6 @@ export namespace User {
       ).data;
       if (response.isSuccess && response.data) {
         setTokens(response.data.accessToken, response.data.refreshToken);
-        toast.success("Login successful");
         return {
           isSuccess: true,
           message: response.message,
@@ -38,11 +37,10 @@ export namespace User {
       } else {
         throw new Error(response.message || "An error occurred");
       }
-    } catch (error: any) {
-      console;
+    } catch (error) {
       return {
         isSuccess: false,
-        message: error.message,
+        message: "An error occurred 2",
         data: null,
       };
     }

@@ -32,12 +32,14 @@ interface ImageCropperProps {
   ratio: Ratios;
   setFinalImage: (image: File) => void;
   defaultImage?: string;
+  className?: string;
 }
 
 export function ImageCropper({
   ratio = "1:1",
   setFinalImage,
   defaultImage,
+  className,
 }: ImageCropperProps) {
   const aspect = getAspectRatio(ratio);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -132,8 +134,9 @@ export function ImageCropper({
         {selectedFile ? (
           <div
             className={cn(
-              "w-full overflow-hidden rounded outline outline-offset-2 outline-gray-300 hover:cursor-pointer hover:outline-gray-400",
+              "w-full overflow-hidden rounded outline outline-offset-2 hover:cursor-pointer hover:outline-gray-400",
               getAspectRatioClass(ratio),
+              className,
             )}
             onClick={() => setDialogOpen(true)}
           >
@@ -151,8 +154,9 @@ export function ImageCropper({
         ) : defaultImage ? (
           <div
             className={cn(
-              "w-full overflow-hidden rounded outline outline-offset-2 outline-gray-300 hover:cursor-pointer hover:outline-gray-400",
+              "w-full overflow-hidden rounded outline outline-offset-2 hover:cursor-pointer hover:outline-gray-400",
               getAspectRatioClass(ratio),
+              className,
             )}
             {...getRootProps()}
           >
@@ -171,8 +175,9 @@ export function ImageCropper({
         ) : (
           <div
             className={cn(
-              "flex w-full items-center justify-center rounded bg-gray-100 p-5 outline-dashed outline-offset-2 outline-gray-300",
+              "flex w-full items-center justify-center rounded bg-white p-5 outline-dashed outline-offset-2",
               getAspectRatioClass(ratio),
+              className,
             )}
             {...getRootProps()}
           >

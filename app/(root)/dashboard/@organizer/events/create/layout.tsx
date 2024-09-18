@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Breadcrumb className="mb-6">
+      <Breadcrumb className="">
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>

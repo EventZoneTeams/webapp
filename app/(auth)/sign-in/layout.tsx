@@ -6,9 +6,6 @@ export const metadata: Metadata = {
 };
 
 export default function layout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex h-full items-center justify-center border bg-white px-6">
-      <div>{children}</div>
-    </div>
-  );
+  return children
+  
 }

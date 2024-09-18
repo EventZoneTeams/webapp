@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Ellipsis, LogOut } from "lucide-react";
+import { Ellipsis, Ghost, LogOut } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
@@ -33,7 +33,7 @@ export function Menu({ isOpen, type }: MenuProps) {
           {menuList.map(({ groupLabel, menus }, index) => (
             <li className={cn("w-full", groupLabel ? "pt-5" : "")} key={index}>
               {(isOpen && groupLabel) || isOpen === undefined ? (
-                <p className="max-w-[248px] truncate px-4 pb-2 text-sm font-medium text-primary-foreground">
+                <p className="max-w-[248px] truncate px-4 pb-2 text-sm font-medium">
                   {groupLabel}
                 </p>
               ) : !isOpen && isOpen !== undefined && groupLabel ? (
@@ -61,10 +61,13 @@ export function Menu({ isOpen, type }: MenuProps) {
                           <TooltipTrigger asChild>
                             <Button
                               className={cn(
-                                "mb-1 h-10 w-full justify-start hover:bg-blue-400",
-                                active ? "bg-blue-500 text-white" : "",
+                                "mb-1 h-10 w-full justify-start",
+                                active
+                                  ? "bg-blue-500 text-white hover:bg-blue-400 hover:text-white"
+                                  : "",
                               )}
                               asChild
+                              variant={"ghost"}
                             >
                               <Link href={href}>
                                 <span
