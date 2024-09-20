@@ -3,7 +3,7 @@ import { ApiResponse } from "@/types/api";
 import { EventCategory as EventCategoryType } from "@/types/event-category";
 
 export namespace EventCategory {
-  export const getEventCategories = async (
+  export const get = async (
     searchTerm?: string,
   ): Promise<ApiResponse<EventCategoryType[]>> => {
     try {

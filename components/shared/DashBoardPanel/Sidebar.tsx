@@ -17,7 +17,7 @@ export function Sidebar({ type }: { type: DashboardType }) {
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-20 h-screen -translate-x-full bg-background backdrop-blur-3xl transition-[width] duration-300 ease-in-out lg:translate-x-0",
+        "bg-background-alpha fixed left-0 top-0 z-20 h-screen -translate-x-full backdrop-blur-3xl transition-[width] duration-300 ease-in-out lg:translate-x-0",
         sidebar?.isOpen === false ? "w-[90px]" : "w-72",
       )}
     >

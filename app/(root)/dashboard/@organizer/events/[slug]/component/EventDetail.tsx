@@ -12,7 +12,7 @@ export default async function EventDetail({
   const event = (await Event.getById(params.slug)).data;
 
   console.log(event);
-  return (
+  return event ? (
     <div className="my-6 flex w-full gap-6">
       <div className="space-y-4">
         <Image
@@ -93,5 +93,7 @@ export default async function EventDetail({
         </div>
       </div>
     </div>
+  ) : (
+    <div>Event not found</div>
   );
 }

@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/select";
 import { Link } from "next-view-transitions";
 import { Checkbox } from "@/components/ui/checkbox";
+import { vi } from "date-fns/locale";
 
 export default function SignUpForm() {
   const form = useForm<SignUpSchemaType>({
@@ -105,6 +106,7 @@ export default function SignUpForm() {
                     hourCycle={24}
                     granularity="day"
                     displayFormat={{ hour24: "dd/MM/yyyy" }}
+                    locale={vi}
                   />
                 </FormControl>
 

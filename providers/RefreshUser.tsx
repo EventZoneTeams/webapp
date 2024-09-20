@@ -35,8 +35,6 @@ export default function RefreshUser({
     }
   }, [setUser, clearAuth]);
 
-  console.log(new Date().toISOString());
-
   return isLoading ? (
     <div className="flex h-screen w-screen items-center justify-center bg-background">
       loadding...

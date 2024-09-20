@@ -1,5 +1,6 @@
 import { getAccessToken, getRefreshToken, setTokens } from "@/lib/api/token";
 import { User } from "@/lib/api/user";
+import { ApiResponse } from "@/types/api";
 import axios, { AxiosError, AxiosInstance } from "axios";
 export const BASE_URL = "https://api.eventzone.id.vn/api/v1";
 
@@ -43,3 +44,20 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+export function handleApiError(error: any): ApiResponse<null> {
+  if (error instanceof AxiosError) {
+    return {
+      isSuccess: false,
+      message:
+        error.response?.data.message || error.message || "Axios error occurred",
+      data: null,
+    };
+  } else {
+    return {
+      isSuccess: false,
+      message: error.message || "An unknown error occurred",
+      data: null,
+    };
+  }
+}
