@@ -21,6 +21,7 @@ export type GetEventsParams = {
   EventStartDate?: Date;
   EventEndDate?: Date;
   Status?: number;
+  UserId?: string;
   PageNumber?: number;
   PageSize?: number;
 };

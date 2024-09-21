@@ -98,7 +98,7 @@ function TaskCard({ task, updateTask, deleteTask }: TaskCardProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className="relative rounded-md bg-gray-200 p-[8px] hover:border-2 hover:border-stone-500 hover:p-[6px]"
+      className="relative rounded-md bg-background p-[8px] hover:border-2 hover:border-stone-500 hover:p-[6px]"
       onMouseEnter={() => setMouseIsOver(true)}
       onMouseLeave={() => setMouseIsOver(false)}
     >

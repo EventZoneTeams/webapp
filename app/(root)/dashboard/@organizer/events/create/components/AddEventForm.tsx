@@ -33,6 +33,7 @@ import { CreateEventRequest } from "@/types/api/event";
 import { EventCategory as EventCategoryType } from "@/types/event-category";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Content } from "@tiptap/core";
+import { vi } from "date-fns/locale";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -61,7 +62,7 @@ export default function AddEventForm() {
         const payload: CreateEventRequest = {
           name: data.name,
           description: data.description as string,
-          thumbnailUrl: imageUrl,
+          thumbnailUrl: "",
           eventStartDate: data.eventStartDate,
           eventEndDate: data.eventEndDate,
           location: {
@@ -88,11 +89,7 @@ export default function AddEventForm() {
   };
 
   useEffect(() => {
-    console.log(form.getValues("eventStartDate"));
-  }, [form.getValues("eventStartDate")]);
-
-  useEffect(() => {
-    EventCategory.getEventCategories().then((response) => {
+    EventCategory.get().then((response) => {
       if (response.isSuccess && response.data) {
         setEventCategories(response.data);
       }
@@ -141,7 +138,7 @@ export default function AddEventForm() {
                   control={form.control}
                   name="eventStartDate"
                   render={({ field }) => (
-                    <FormItem className="w-1/2">
+                    <FormItem className="flex w-1/2 flex-col gap-2">
                       <FormLabel>
                         Event start date <span className="text-red-500">*</span>
                       </FormLabel>
@@ -151,6 +148,8 @@ export default function AddEventForm() {
                           onChange={field.onChange}
                           yearRange={5}
                           hourCycle={24}
+                          locale={vi}
+                          displayFormat={{ hour24: "HH:mm - dd/MM/yyyy" }}
                         />
                       </FormControl>
                       <FormDescription>Start date of the event</FormDescription>
@@ -162,7 +161,7 @@ export default function AddEventForm() {
                   control={form.control}
                   name="eventEndDate"
                   render={({ field }) => (
-                    <FormItem className="w-1/2">
+                    <FormItem className="flex w-1/2 flex-col gap-2">
                       <FormLabel>
                         Event end date <span className="text-red-500">*</span>
                       </FormLabel>
@@ -172,6 +171,8 @@ export default function AddEventForm() {
                           onChange={field.onChange}
                           yearRange={5}
                           hourCycle={24}
+                          locale={vi}
+                          displayFormat={{ hour24: "HH:mm - dd/MM/yyyy" }}
                         />
                       </FormControl>
                       <FormDescription>End date of the event</FormDescription>

@@ -34,6 +34,7 @@
     --warning: 22 73% 49%;
     --error: 357 79% 44%;
     --info: 209 99% 45%;
+    --background-alpla: 210, 7%, 12%;
   }
 
   .dark {
@@ -68,6 +69,7 @@
     --info: 209 99% 45%;
     --nav-text: 0 0% 98%;
     --nav-text-secondary: 220 12% 67%;
+    --background-alpla: 210, 7%, 12%;
   }
 }
 

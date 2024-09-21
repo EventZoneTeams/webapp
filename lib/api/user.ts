@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/lib/api";
+import { axiosInstance, handleApiError } from "@/lib/api";
 import {
   getAccessToken,
   getRefreshToken,
@@ -13,13 +13,14 @@ import {
   RefreshTokenResponse,
 } from "@/types/api/user";
 import { User as Usertype } from "@/types/user";
+import { AxiosError } from "axios";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
 
 export namespace User {
   export async function login(
     data: LoginRequest,
-  ): Promise<ApiResponse<LoginResponse>> {
+  ): Promise<ApiResponse<LoginResponse | null>> {
     try {
       const response = (
         await axiosInstance.post<ApiResponse<LoginResponse>>(
@@ -27,6 +28,8 @@ export namespace User {
           data,
         )
       ).data;
+
+      console.log(response);
       if (response.isSuccess && response.data) {
         setTokens(response.data.accessToken, response.data.refreshToken);
         return {
@@ -37,12 +40,8 @@ export namespace User {
       } else {
         throw new Error(response.message || "An error occurred");
       }
-    } catch (error) {
-      return {
-        isSuccess: false,
-        message: "An error occurred 2",
-        data: null,
-      };
+    } catch (error: any) {
+      return handleApiError(error);
     }
   }
 

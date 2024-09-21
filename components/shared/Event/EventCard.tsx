@@ -16,7 +16,7 @@ export default function EventCard({ event }: { event: Event }) {
       />
       <div className="flex flex-col">
         <div className="flex-1">
-          <h2 className="text-lg font-semibold">{event.name}</h2>
+          <h2 className="line-clamp-1 text-lg font-semibold">{event.name}</h2>
           <div className="text-sm text-primary/50">
             {format(new Date(event.eventStartDate), "Pp")}
           </div>

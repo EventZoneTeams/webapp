@@ -3,8 +3,7 @@
 import { Event } from "@/lib/api/event";
 import React, { useEffect, useState } from "react";
 import { Event as EventType } from "@/types/event";
-import EventCard from "@/components/shared/EventCard";
-import Filter from "@/app/(root)/dashboard/@organizer/events/components/Filter";
+import EventCard from "@/components/shared/Event/EventCard";
 import { GetEventsParams } from "@/types/api/event";
 import {
   Breadcrumb,
@@ -15,22 +14,62 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Link } from "next-view-transitions";
+import Filter from "@/components/shared/Event/Filter";
+import { useAuthStore } from "@/stores/authStore";
+import { useSearchParams } from "next/navigation";
 
 export default function Page() {
   const [events, setEvents] = useState<EventType[]>([]);
-  const [params, setParams] = useState<GetEventsParams>({});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { user } = useAuthStore();
+  const searchParams = useSearchParams();
+  const [params, setParams] = useState<GetEventsParams>({
+    UserId: user?.id,
+    SearchTerm: searchParams.get("SearchTerm") || undefined,
+    EventCategoryId: searchParams.get("EventCategoryId") || undefined,
+    Status: parseInt(searchParams.get("Status") as string) || undefined,
+    PageSize: parseInt(searchParams.get("PageSize") as string) || 10,
+    PageNumber: parseInt(searchParams.get("PageNumber") as string) || 1,
+  });
 
   useEffect(() => {
-    Event.get(params ?? {}).then((response) => {
-      if (response.isSuccess && response.data) {
-        const sortedList = response.data.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-        );
-        setEvents(sortedList);
-      }
-    });
-  }, [params]);
+    setParams((prev) => ({
+      ...prev,
+      SearchTerm: searchParams.get("SearchTerm") || undefined,
+      EventCategoryId: searchParams.get("EventCategoryId") || undefined,
+      Status: parseInt(searchParams.get("Status") as string) || undefined,
+      PageSize: parseInt(searchParams.get("PageSize") as string) || 10,
+      PageNumber: parseInt(searchParams.get("PageNumber") as string) || 1,
+    }));
+  }, [
+    searchParams.get("SearchTerm"),
+    searchParams.get("EventCategoryId"),
+    searchParams.get("Status"),
+    searchParams.get("PageSize"),
+    searchParams.get("PageNumber"),
+  ]);
+
+  useEffect(() => {
+    if (!user) return;
+    const updatedParams = {
+      ...params,
+      UserId: user.id,
+    };
+    setIsLoading(true);
+    Event.get(updatedParams)
+      .then((response) => {
+        if (response.isSuccess && response.data) {
+          const sortedList = response.data.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          );
+          setEvents(sortedList);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [params, user]);
 
   return (
     <div>
@@ -58,25 +97,24 @@ export default function Page() {
         </Breadcrumb>
       </div>
       <div className="mb-6">
-        <Filter
-          params={params}
-          onFilter={(params) => {
-            setParams(params);
-          }}
-        />
-      </div>
-
-      <div className="grid grid-cols-3 gap-4 rounded py-4">
-        {events.map((event) => (
-          <Link href={`/dashboard/events/${event.id}`} key={event.id}>
-            <EventCard event={event} />
-          </Link>
-        ))}
-        {events.length === 0 && (
-          <div className="col-span-3 flex h-52 items-center justify-center">
-            No events found
-          </div>
-        )}
+        <Filter maxPage={10}>
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <div className="grid grid-cols-3 gap-4 rounded py-4">
+              {events.map((event) => (
+                <Link href={`/dashboard/events/${event.id}`} key={event.id}>
+                  <EventCard event={event} />
+                </Link>
+              ))}
+              {events.length === 0 && (
+                <div className="col-span-3 flex h-52 items-center justify-center">
+                  No events found
+                </div>
+              )}
+            </div>
+          )}
+        </Filter>
       </div>
     </div>
   );

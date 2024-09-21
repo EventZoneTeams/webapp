@@ -63,7 +63,7 @@ function ColumnContainer({
       <div
         ref={setNodeRef}
         style={style}
-        className="flex max-h-[500px] w-[18rem] flex-col rounded-md border border-primary bg-white px-4 py-2 opacity-50"
+        className="flex max-h-[500px] w-[18rem] flex-col rounded-md border border-blue-500 bg-white px-4 py-2 opacity-50"
       >
         {/* Column title */}
         <section className="flex min-h-[2.5rem] items-start justify-between">
@@ -157,7 +157,7 @@ function ColumnContainer({
     <div
       ref={setNodeRef}
       style={style}
-      className="flex max-h-[500px] w-[18rem] flex-col rounded-md border bg-white px-4 py-2"
+      className="flex max-h-[500px] w-[18rem] flex-col rounded-md border px-4 py-2"
     >
       {/* Column title */}
       <section className="flex min-h-[2.5rem] items-start justify-between">

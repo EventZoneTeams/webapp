@@ -40,12 +40,7 @@ export type Event = {
   updatedAt: Date;
 };
 
-export enum EventStatus {
-  DRAFT = 1,
-  PENDING = 2,
-  PUBLISHED = 3,
-  REJECTED = 4,
-  COMPLETED = 5,
-  ARCHIVED = 6,
-  CANCELLED = 7,
-}
+export type EventStatus = {
+  value: number;
+  label: string;
+};
