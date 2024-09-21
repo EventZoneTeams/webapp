@@ -18,8 +18,8 @@ const menuItems: MenuItem[] = [
     href: "/",
   },
   {
-    name: "System Design",
-    href: "/system-design",
+    name: "Discover",
+    href: "/discover",
   },
   {
     name: "Events",

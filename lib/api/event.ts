@@ -1,7 +1,8 @@
 import { axiosInstance } from "@/lib/api";
-import { ApiResponse } from "@/types/api";
+import { ApiResponse, ApiResponseWithPaging } from "@/types/api";
 import { CreateEventRequest, GetEventsParams } from "@/types/api/event";
 import { Event as EventType } from "@/types/event";
+import { Paging } from "@/types/api";
 export namespace Event {
   export async function create(
     payload: CreateEventRequest,
@@ -34,7 +35,7 @@ export namespace Event {
 
   export async function get(
     params: GetEventsParams,
-  ): Promise<ApiResponse<EventType[]>> {
+  ): Promise<ApiResponseWithPaging<EventType[]>> {
     try {
       let queryString = new URLSearchParams();
 
@@ -47,17 +48,27 @@ export namespace Event {
         }
       });
 
-      const response = (
-        await axiosInstance.get<ApiResponse<EventType[]>>("/events", {
+      const axiosResponse = await axiosInstance.get<ApiResponse<EventType[]>>(
+        "/events",
+        {
           params: queryString,
-        })
-      ).data;
+        },
+      );
+
+      const response = axiosResponse.data;
+      const paginationHeader = axiosResponse.headers["pagination"];
+      let paging: Paging | undefined;
+
+      if (paginationHeader) {
+        paging = JSON.parse(paginationHeader);
+      }
 
       if (response.isSuccess) {
         return {
           isSuccess: true,
           message: "Success",
           data: response.data,
+          paging,
         };
       } else {
         return {
