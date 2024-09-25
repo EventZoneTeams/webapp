@@ -41,13 +41,7 @@ export default function Page() {
       PageSize: parseInt(searchParams.get("PageSize") as string) || 10,
       PageNumber: parseInt(searchParams.get("PageNumber") as string) || 1,
     }));
-  }, [
-    searchParams.get("SearchTerm"),
-    searchParams.get("EventCategoryId"),
-    searchParams.get("Status"),
-    searchParams.get("PageSize"),
-    searchParams.get("PageNumber"),
-  ]);
+  }, [searchParams]);
 
   useEffect(() => {
     if (!user) return;
