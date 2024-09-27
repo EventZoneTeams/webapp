@@ -8,12 +8,12 @@ export const colors: Color[] = [
   {
     name: "border",
     backgroundColorClassName: "bg-border",
-    textColorClassName: "text-forceground",
+    textColorClassName: "text-foreground",
   },
   {
     name: "input",
     backgroundColorClassName: "bg-input",
-    textColorClassName: "text-forceground",
+    textColorClassName: "text-foreground",
   },
   {
     name: "ring",
@@ -23,7 +23,7 @@ export const colors: Color[] = [
   {
     name: "background",
     backgroundColorClassName: "bg-background",
-    textColorClassName: "text-forground",
+    textColorClassName: "text-foreground",
   },
   {
     name: "foreground",
