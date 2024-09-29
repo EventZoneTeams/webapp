@@ -1,4 +1,4 @@
-import EventDetail from "@/app/(root)/dashboard/@organizer/events/[slug]/component/EventDetail";
+import EventDetail from "@/app/(root)/[slug]/component/EventDetail";
 import React, { Suspense } from "react";
 
 export default function page({ params }: { params: { slug: string } }) {

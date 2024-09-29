@@ -1,5 +1,10 @@
 import { ApiResponse } from "@/types/api";
-import { GetAutoCompleteRequest, GoongApiResponse } from "@/types/api/map";
+import {
+  GetAutoCompleteRequest,
+  GoongApiResponse,
+  PlaceApiResponse,
+  PlaceDetail,
+} from "@/types/api/map";
 import { Prediction } from "@/types/map";
 import axios from "axios";
 
@@ -58,5 +63,33 @@ export namespace Map {
     }
   };
 
-  export const getPlaceById = async (placeId: string) => {};
+  export const getPlaceById = async (
+    placeId: string,
+  ): Promise<ApiResponse<PlaceDetail>> => {
+    try {
+      // $curl "https://rsapi.goong.io/Place/Detail?place_id=Hobn8WqBW6rsKtKq2PDrVKp4BJNRtiILxTQbB__muXgRB3v8GRDTfkp_6lc4cbLw%2F5PUgWrMDrSI%2FxlqDBt5XA%3D%3D.ZXhwYW5kMA%3D%3D&api_key={YOUR_API_KEY}"
+
+      if (GOONG_API_KEY) {
+        const response = (
+          await axios.get<PlaceApiResponse>(
+            `${GOONG_BASE_URL}/Place/Detail?place_id=${placeId}&api_key=${GOONG_API_KEY}`,
+          )
+        ).data;
+
+        return {
+          isSuccess: true,
+          message: "Success",
+          data: response.result,
+        };
+      } else {
+        throw new Error("Goong API key is not provided");
+      }
+    } catch (error: any) {
+      return {
+        isSuccess: false,
+        message: error.message,
+        data: null,
+      };
+    }
+  };
 }

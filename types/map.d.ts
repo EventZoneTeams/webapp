@@ -39,3 +39,11 @@ export interface Term {
   offset: number;
   value: string;
 }
+
+export type Viewport = {
+  width: number;
+  height: number;
+  latitude: number;
+  longitude: number;
+  zoom: number;
+};
