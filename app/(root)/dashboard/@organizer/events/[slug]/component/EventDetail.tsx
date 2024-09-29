@@ -14,8 +14,6 @@ export default async function EventDetail({
   params: { slug: string };
 }) {
   const event = (await Event.getById(params.slug)).data;
-
-  console.log(event);
   return event ? (
     <div className="my-6 flex w-full gap-6">
       <div className="space-y-4">
