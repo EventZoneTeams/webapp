@@ -135,8 +135,8 @@ export default function EventTicket({
     console.log(tickets)
   
     return (
-      <div className="space-y-6">
-        <div className="flex justify-between items-center mb-4">
+      <div className="space-y-2">
+        <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold">Tickets</h2>
           <NewTicketTypeDialog onAdd={handleAddTicket} eventId={
             eventId

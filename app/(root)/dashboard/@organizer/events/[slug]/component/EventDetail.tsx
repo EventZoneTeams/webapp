@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import EventTicket from "./EventTicket";
+import EventProducts from "./EventProduct";
 
 export default async function EventDetail({
   params,
@@ -135,10 +136,9 @@ export default async function EventDetail({
           </TabsContent>
 
           <TabsContent value="products">
-            <div className="space-y-6">
-              <p className="text-sm text-primary/50">Available Products:</p>
-              {/* Products content here */}
-            </div>
+            <EventProducts
+              eventId={event.id}
+            />
           </TabsContent>
 
           <TabsContent value="tickets">
