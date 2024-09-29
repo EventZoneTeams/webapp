@@ -3,6 +3,9 @@ import { format } from "date-fns";
 import { MapPinIcon } from "lucide-react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import EventLocation from "@/app/(root)/[slug]/component/EventLocation";
+import { Map as MapService } from "@/lib/api/map";
+import Map from "@/components/shared/Map";
 
 export default async function EventDetail({
   params,
@@ -11,7 +14,11 @@ export default async function EventDetail({
 }) {
   const event = (await Event.getById(params.slug)).data;
 
-  console.log(event);
+  if (event?.location?.placeId) {
+    const place = (await MapService.getPlaceById(event?.location.placeId)).data;
+    console.log(place);
+  }
+
   return event ? (
     <div className="my-6 flex w-full gap-6">
       <div className="space-y-4">
@@ -91,6 +98,8 @@ export default async function EventDetail({
           </p>
           <div dangerouslySetInnerHTML={{ __html: event?.description! }}></div>
         </div>
+
+        <Map />
       </div>
     </div>
   ) : (
