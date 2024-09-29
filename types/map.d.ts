@@ -41,8 +41,6 @@ export interface Term {
 }
 
 export type Viewport = {
-  width: number;
-  height: number;
   latitude: number;
   longitude: number;
   zoom: number;
