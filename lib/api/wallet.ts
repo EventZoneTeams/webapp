@@ -1,120 +1,145 @@
 import { axiosInstance } from "@/lib/api";
-import { Transaction, Wallet, WalletType } from "@/types/wallet";
+import { ApiResponse } from "@/types/api";
+import {
+  Transaction,
+  Wallet as WalletType,
+  WalletType as WalletTypeEnum,
+} from "@/types/wallet";
 
-// Get user wallets
-export type GetUserWalletResponse = {
-  isSuccess: boolean;
-  data: Wallet[];
-  message: string;
-};
+export namespace Wallet {
+  // Get user wallets
+  export async function getUserWallets(): Promise<ApiResponse<WalletType[]>> {
+    try {
+      const response = (
+        await axiosInstance.get<ApiResponse<WalletType[]>>("/wallets")
+      ).data;
 
-export const getUserWallets = async (): Promise<GetUserWalletResponse> => {
-  try {
-    const response = (
-      await axiosInstance.get<GetUserWalletResponse>(`/wallets`)
-    ).data;
-    return response;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Failed to fetch wallets");
+      if (response.isSuccess) {
+        return {
+          isSuccess: true,
+          message: "Success",
+          data: response.data,
+        };
+      } else {
+        return {
+          isSuccess: false,
+          message: response.message,
+          data: [],
+        };
+      }
+    } catch (error: any) {
+      return {
+        isSuccess: false,
+        message: error.message || "Failed to fetch wallets",
+        data: [],
+      };
+    }
   }
-};
 
-// Get wallet transactions
-export type GetWalletTransactionsSendData = {
-  walletTypeEnums: WalletType;
-};
-export type GetWalletTransactionsResponse = {
-  isSuccess: boolean;
-  data: Transaction[];
-  message: string;
-};
+  // Get wallet transactions
+  export type GetWalletTransactionsSendData = {
+    walletTypeEnums: WalletTypeEnum;
+  };
 
-export const getWalletTransactions = async (
-  data: GetWalletTransactionsSendData,
-): Promise<GetWalletTransactionsResponse> => {
-  try {
-    const response = (
-      await axiosInstance.get<GetWalletTransactionsResponse>(
-        `/wallets/transactions?walletTypeEnums=${data.walletTypeEnums}`,
-      )
-    ).data;
-    return response;
-  } catch (error: any) {
-    throw new Error(
-      error.response?.data?.message || "Failed to fetch transactions",
-    );
+  export async function getWalletTransactions(
+    data: GetWalletTransactionsSendData,
+  ): Promise<ApiResponse<Transaction[]>> {
+    try {
+      const response = (
+        await axiosInstance.get<ApiResponse<Transaction[]>>(
+          `/wallets/transactions?walletTypeEnums=${data.walletTypeEnums}`,
+        )
+      ).data;
+
+      if (response.isSuccess) {
+        return {
+          isSuccess: true,
+          message: "Success",
+          data: response.data,
+        };
+      } else {
+        return {
+          isSuccess: false,
+          message: response.message,
+          data: [],
+        };
+      }
+    } catch (error: any) {
+      return {
+        isSuccess: false,
+        message: error.message || "Failed to fetch transactions",
+        data: [],
+      };
+    }
   }
-};
 
-// Add deposit
-export type AddDepositSendData = {
-  amount: number;
-};
-export type AddDepositResponse = {
-  isSuccess: boolean;
-  data: string;
-  message: string;
-};
+  // Add deposit
+  export type AddDepositSendData = {
+    amount: number;
+  };
 
-export const addDeposit = async (
-  data: AddDepositSendData,
-): Promise<AddDepositResponse> => {
-  try {
-    const response = (
-      await axiosInstance.post<AddDepositResponse>(`/wallets/transactions`, {
-        amount: data.amount,
-      })
-    ).data;
-    return response;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Failed to add deposit");
+  export async function addDeposit(
+    data: AddDepositSendData,
+  ): Promise<ApiResponse<string>> {
+    try {
+      const response = (
+        await axiosInstance.post<ApiResponse<string>>("/wallets/transactions", {
+          amount: data.amount,
+        })
+      ).data;
+
+      if (response.isSuccess) {
+        return {
+          isSuccess: true,
+          message: "Deposit added successfully",
+          data: response.data,
+        };
+      } else {
+        return {
+          isSuccess: false,
+          message: response.message,
+          data: "",
+        };
+      }
+    } catch (error: any) {
+      return {
+        isSuccess: false,
+        message: error.message || "Failed to add deposit",
+        data: "",
+      };
+    }
   }
-};
 
-// Complete Pending Transaction
-export type CompletePendingTransactionResponse = {
-  isSuccess: boolean;
-  data: string;
-  message: string;
-};
+  // Complete pending transaction
+  export async function completePendingTransaction(
+    transactionId: number,
+  ): Promise<ApiResponse<string>> {
+    try {
+      const response = (
+        await axiosInstance.post<ApiResponse<string>>(
+          `/payment/${transactionId}/complete-pending`,
+        )
+      ).data;
 
-export const completePendingTransaction = async (
-  transactionId: number,
-): Promise<CompletePendingTransactionResponse> => {
-  try {
-    const response = (
-      await axiosInstance.post<CompletePendingTransactionResponse>(
-        `/payment/${transactionId}/complete-pending`,
-      )
-    ).data;
-    return response;
-  } catch (error: any) {
-    throw new Error(
-      error.response?.data?.message || "Failed to complete transaction",
-    );
+      if (response.isSuccess) {
+        return {
+          isSuccess: true,
+          message: "Transaction completed successfully",
+          data: response.data,
+        };
+      } else {
+        return {
+          isSuccess: false,
+          message: response.message,
+          data: "",
+        };
+      }
+    } catch (error: any) {
+      return {
+        isSuccess: false,
+        message: error.message || "Failed to complete transaction",
+        data: "",
+      };
+    }
   }
-};
-
-// Purchase Order
-export interface PurchaseOrderResponse {
-  isSuccess: boolean;
-  message: string;
-  data: Transaction;
 }
-
-export const purchaseOrder = async (
-  orderId: number,
-): Promise<PurchaseOrderResponse> => {
-  try {
-    const response = (
-      await axiosInstance.post<PurchaseOrderResponse>(
-        `payment/event-orders/${orderId}`,
-      )
-    ).data;
-    return response;
-  } catch (error: any) {
-    throw new Error(
-      error.response?.data?.message || "Failed to purchase order",
-    );
-  }
-};

@@ -16,7 +16,7 @@ export default function ProfileLayout({ children }: { children: React.ReactNode 
   return (
     <React.Fragment>
       <Header />
-      <ScrollArea className="h-[calc(100vh_-_theme(spacing.24))]">
+      <ScrollArea className="mt-[4.5rem] h-[calc(100vh_-_theme(spacing.24))]">
         <div className="container rounded-md">
           <div className="h-44 w-full">
             {true ? (

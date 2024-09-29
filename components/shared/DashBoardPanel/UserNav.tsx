@@ -43,7 +43,7 @@ export function UserNav() {
                 className="relative h-8 w-8 rounded-full"
               >
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={user?.image} alt="Avatar" />
+                  <AvatarImage src={user?.imageUrl} alt="Avatar" />
                   <AvatarFallback className="bg-transparent">
                     {user && user.fullName.charAt(0).toUpperCase()}
                   </AvatarFallback>
@@ -51,7 +51,7 @@ export function UserNav() {
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
-          <TooltipContent side="bottom">Profile</TooltipContent>
+          <TooltipContent side="bottom">Account</TooltipContent>
         </Tooltip>
       </TooltipProvider>
 
@@ -67,15 +67,15 @@ export function UserNav() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem className="hover:cursor-pointer" asChild>
-            <Link href="/dashboard" className="flex items-center">
-              <LayoutGrid className="mr-3 h-4 w-4 text-muted-foreground" />
-              Dashboard
+            <Link href="/account/wallet" className="flex items-center">
+              <User className="mr-3 h-4 w-4 text-muted-foreground" />
+              Account
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="hover:cursor-pointer" asChild>
-            <Link href="/account" className="flex items-center">
-              <User className="mr-3 h-4 w-4 text-muted-foreground" />
-              Account
+            <Link href="/dashboard" className="flex items-center">
+              <LayoutGrid className="mr-3 h-4 w-4 text-muted-foreground" />
+              Dashboard
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>

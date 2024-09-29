@@ -20,41 +20,41 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { WalletType } from "@/types/wallet";
-import { addDeposit } from "@/lib/api/wallet";
+import { Wallet } from "@/lib/api/wallet";
+import { useRouter } from "next/navigation";
 
 export default function AddBalanceForm({
   walletType,
 }: {
   walletType: WalletType;
 }) {
-  // State to handle loading and form submission status
   const [isPending, setIsPending] = useState(false);
+  const router = useRouter();
+
   const form = useForm<AddDepositSchemaType>({
     resolver: zodResolver(AddDepositSchema),
     defaultValues: AddDepositSchemaDefaultValues,
   });
 
-  // Submission handler
   const onSubmit = async (data: AddDepositSchemaType) => {
-    console.log(walletType);
-    console.log(data);
     if (walletType === "PERSONAL") {
-      setIsPending(true); // Set pending state before making the API call
+      setIsPending(true);
       try {
-        const response = await addDeposit({
+        const response = await Wallet.addDeposit({
           amount: Number(data.amount),
         });
         if (response.isSuccess) {
-          // Handle success, e.g., show a success message or redirect
           console.log("Deposit added successfully", response);
+          if (typeof response.data === "string" && response.data) {
+            router.push(response.data);
+          }
         } else {
-          // Handle error from API
           console.error("Failed to add deposit:", response.message);
         }
       } catch (error) {
         console.error("An error occurred while adding deposit:", error);
       } finally {
-        setIsPending(false); // Reset the pending state
+        setIsPending(false);
       }
     }
   };
@@ -62,36 +62,39 @@ export default function AddBalanceForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {/* Deposit Amount Input */}
         <FormField
           control={form.control}
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Deposit amount</FormLabel>
+              <FormLabel>Deposit Amount</FormLabel>
               <FormControl>
                 <div className="relative">
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm">
-                    (VND)
+                    VND
                   </span>
                   <Input
                     autoFocus
-                    placeholder="Enter the amount"
+                    placeholder="Enter the deposit amount"
                     {...field}
-                    value={field.value.toLocaleString()}
+                    value={field.value}
                     onChange={(e) => {
                       const value = e.target.value.replace(/\D/g, "");
-                      field.onChange(Number(value));
+                      field.onChange(value ? Number(value) : "");
                     }}
                   />
                 </div>
               </FormControl>
               <FormDescription>
-                This is the amount you want to deposit
+                Enter the amount you want to deposit.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+
+        {/* Agreement Checkbox */}
         <FormField
           control={form.control}
           name="agree"
@@ -115,18 +118,20 @@ export default function AddBalanceForm({
                   >
                     terms and conditions
                   </Link>{" "}
-                  of the deposit
+                  of the deposit.
                 </FormDescription>
               </div>
             </FormItem>
           )}
         />
+
+        {/* Submit Button */}
         <Button
           type="submit"
           className="w-full"
           disabled={!form.formState.isValid || isPending}
         >
-          {isPending ? "Adding..." : "Add"}
+          {isPending ? "Processing..." : "Add"}
         </Button>
       </form>
     </Form>

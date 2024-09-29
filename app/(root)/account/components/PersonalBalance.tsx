@@ -13,9 +13,8 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { Wallet } from "@/types/wallet"; // Assuming you have this type defined
 import { CirclePlus } from "lucide-react";
 
-// Define props for PersonalBalance
 interface PersonalBalanceProps {
-  wallets: Wallet[]; // Accept wallets as a prop
+  wallets: Wallet[];
 }
 
 const PersonalBalance: React.FC<PersonalBalanceProps> = ({ wallets }) => {

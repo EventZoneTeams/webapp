@@ -3,25 +3,23 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import PersonalBalance from "../components/PersonalBalance";
-import {
-  getUserWallets,
-  getWalletTransactions,
-  completePendingTransaction,
-} from "@/lib/api/wallet";
+import { Wallet } from "@/lib/api/wallet";
 import { cn } from "@/lib/utils";
 import { History } from "lucide-react";
-import { Transaction, Wallet } from "@/types/wallet";
+import { Transaction, Wallet as WalletType } from "@/types/wallet";
+import { useRouter } from "next/navigation";
 
 export default function WalletPage() {
-  const [wallets, setWallets] = useState<Wallet[]>([]);
+  const [wallets, setWallets] = useState<WalletType[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUserWallets = async () => {
       try {
-        const response = await getUserWallets();
+        const response = await Wallet.getUserWallets();
         if (response.isSuccess) {
-          setWallets(response.data);
+          setWallets(response.data || []);
         } else {
           toast.error(response.message);
         }
@@ -32,11 +30,11 @@ export default function WalletPage() {
 
     const fetchWalletTransactions = async () => {
       try {
-        const response = await getWalletTransactions({
+        const response = await Wallet.getWalletTransactions({
           walletTypeEnums: "ALL",
         });
         if (response.isSuccess) {
-          setTransactions(response.data);
+          setTransactions(response.data || []);
         } else {
           toast.error(response.message);
         }
@@ -51,24 +49,25 @@ export default function WalletPage() {
 
   const handleCompleteTransaction = async (transactionId: number) => {
     try {
-      const response = await completePendingTransaction(transactionId);
+      const response = await Wallet.completePendingTransaction(transactionId);
       if (response.isSuccess) {
         toast.success("Transaction completed successfully");
-        setTransactions((prev) =>
-          prev.filter((transaction) => transaction.id !== transactionId),
-        );
+
+        if (typeof response.data === "string" && response.data) {
+          router.push(response.data);
+        }
       } else {
         toast.error(response.message);
       }
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(error.message || "Something went wrong");
     }
   };
 
   return (
     <div className="grid grid-cols-5 gap-4 bg-background pb-5">
       <div className="col-span-2">
-        <PersonalBalance wallets={wallets} /> {/* Pass the wallets prop */}
+        <PersonalBalance wallets={wallets} />
       </div>
       <div className="col-span-3 space-y-4">
         <div className="flex items-center gap-2 rounded-md bg-secondary p-2 text-lg">

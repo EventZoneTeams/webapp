@@ -10,21 +10,21 @@ type Tab = {
 };
 
 const tabs: Tab[] = [
-  { label: "Account", href: "/profile/me" },
-  { label: "Wallet", href: "/profile/wallet" },
-  { label: "Orders", href: "/profile/orders" },
+  // { label: "Profile", href: "/account/profile" },
+  { label: "Wallet", href: "/account/wallet" },
+  // { label: "Orders", href: "/account/orders" },
 ];
 
 export default function ProfileTabs() {
   const pathname = usePathname();
   return (
-    <div className="w-full h-16  flex gap-4 border-t ">
+    <div className="flex h-16 w-full gap-4 border-t">
       {tabs.map((tab) => (
         <Link
           key={tab.href}
           href={tab.href}
-          className={`flex items-center justify-center h-full w-32 ${
-            tab.href === pathname ? "border-b-2 border-tertiary" : ""
+          className={`flex h-full w-32 items-center justify-center ${
+            tab.href === pathname ? "border-tertiary border-b-2" : ""
           }`}
         >
           {tab.label}
