@@ -33,6 +33,11 @@ export default function Map(props: Props) {
       onViewportChange={(nextViewport: Viewport) => setViewport(nextViewport)}
       mapStyle={MAP_STYLE}
       goongApiAccessToken={GOONG_API_MAP_KEY}
+      scrollZoom={{
+        speed: 0.01,
+        smooth: true,
+      }}
+      doubleClickZoom={true}
     >
       <Marker
         latitude={props.defaultViewport?.latitude!}
