@@ -69,7 +69,7 @@ export default function Header() {
         {user ? (
           <div className="">
             <Avatar>
-              <AvatarImage src={user?.image} />
+              <AvatarImage src={user?.imageUrl} />
               <AvatarFallback>{user?.fullName[0].toUpperCase()}</AvatarFallback>
             </Avatar>
           </div>
