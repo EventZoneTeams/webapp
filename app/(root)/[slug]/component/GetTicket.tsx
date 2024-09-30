@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { VnDong } from "@/lib/format";
 import TicketCard from "@/app/(root)/[slug]/component/TicketCard";
+import { cn } from "@/lib/utils";
 
 interface GetTicketProps {
   event: Event;
@@ -124,7 +125,20 @@ export default function GetTicket({ event }: GetTicketProps) {
               <div className="flex h-full w-52 flex-col justify-end space-y-2 pb-2">
                 <p>
                   Total:
-                  <span className="ml-2 text-lg font-semibold">
+                  <span
+                    className={cn(
+                      "ml-2 text-lg font-semibold",
+                      selectedTickets &&
+                        wallet &&
+                        selectedTickets.reduce(
+                          (acc, { ticket, quantity }) =>
+                            acc + ticket.price * quantity,
+                          0,
+                        ) > wallet.balance
+                        ? "text-red-300"
+                        : "text-green-300",
+                    )}
+                  >
                     {selectedTickets
                       ? VnDong.format(
                           selectedTickets.reduce(
@@ -136,7 +150,17 @@ export default function GetTicket({ event }: GetTicketProps) {
                       : "0"}
                   </span>
                 </p>
-                <Button disabled={!selectedTickets}>
+                <Button
+                  disabled={
+                    !selectedTickets ||
+                    !wallet ||
+                    selectedTickets.reduce(
+                      (acc, { ticket, quantity }) =>
+                        acc + ticket.price * quantity,
+                      0,
+                    ) > wallet.balance
+                  }
+                >
                   {selectedTickets ? "Buy Ticket" : "Select Ticket"}
                 </Button>
               </div>
