@@ -19,12 +19,12 @@ import { User } from "@/lib/api/user";
 import { LoginRequest } from "@/types/api/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 export default function SignInForm() {
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const form = useForm<SignInSchemaType>({
     resolver: zodResolver(SignInSchema),
@@ -32,24 +32,21 @@ export default function SignInForm() {
   });
 
   const onSubmit = async (data: SignInSchemaType) => {
-    setIsLoading(true);
-    User.login(data as LoginRequest)
-      .then((response) => {
+    startTransition(() => {
+      User.login(data as LoginRequest).then((response) => {
         if (response.isSuccess) {
           toast.success(response.message);
 
           User.getMe().then((data) => {
             if (data.isSuccess) {
-              router.push("/dashboard");
+              router.push("/discover");
             }
           });
         } else {
           toast.error(response.message);
         }
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
+    });
   };
 
   return (
@@ -94,10 +91,10 @@ export default function SignInForm() {
         <Button
           type="submit"
           className="w-full"
-          isLoading={isLoading}
+          isLoading={isPending}
           disabled={!form.formState.isValid}
         >
-          {isLoading ? "Loading..." : "Sign In"}
+          {isPending ? "Loading..." : "Sign In"}
         </Button>
       </form>
     </Form>

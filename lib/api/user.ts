@@ -1,21 +1,14 @@
 import { axiosInstance, handleApiError } from "@/lib/api";
-import {
-  getAccessToken,
-  getRefreshToken,
-  getTokens,
-  setTokens,
-} from "@/lib/api/token";
+import { getTokens, setTokens } from "@/lib/api/token";
 import { useAuthStore } from "@/stores/authStore";
 import { ApiResponse } from "@/types/api";
 import {
   LoginRequest,
   LoginResponse,
   RefreshTokenResponse,
+  SignUpRequest,
 } from "@/types/api/user";
-import { User as Usertype } from "@/types/user";
-import { AxiosError } from "axios";
-import { redirect } from "next/navigation";
-import { toast } from "sonner";
+import { User as UserType } from "@/types/user";
 
 export namespace User {
   export async function login(
@@ -45,10 +38,10 @@ export namespace User {
     }
   }
 
-  export async function getMe(): Promise<ApiResponse<Usertype>> {
+  export async function getMe(): Promise<ApiResponse<UserType>> {
     try {
       const response = (
-        await axiosInstance.get<ApiResponse<Usertype>>("/users/me")
+        await axiosInstance.get<ApiResponse<UserType>>("/users/me")
       ).data;
 
       if (response.isSuccess && response.data) {
@@ -111,5 +104,27 @@ export namespace User {
   export function signOut() {
     setTokens("", "");
     useAuthStore.getState().clearAuth();
+  }
+
+  export async function signUp(
+    data: SignUpRequest,
+  ): Promise<ApiResponse<UserType | null>> {
+    try {
+      const response = (
+        await axiosInstance.post<ApiResponse<UserType>>("/users/register", data)
+      ).data;
+
+      if (response.isSuccess && response.data) {
+        return {
+          isSuccess: true,
+          message: response.message,
+          data: response.data,
+        };
+      } else {
+        throw new Error(response.message || "An error occurred");
+      }
+    } catch (error) {
+      return handleApiError(error);
+    }
   }
 }
