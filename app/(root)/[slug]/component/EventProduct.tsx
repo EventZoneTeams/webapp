@@ -68,7 +68,7 @@ function ProductItem({
                     </p>
                   </div>
                   <div className="flex items-center space-x-2">
-                   <div className="flex items-center space-x-1">
+                    <div className="flex items-center space-x-1">
                       <Button
                         variant="outline"
                         size="icon"
@@ -88,8 +88,8 @@ function ProductItem({
                         // onChange={(e) =>
                         //   updateQuantity(id, parseInt(e.target.value) || 1)
                         // }
-  
-                        className="h-6 w-10 p-0 text-center"
+
+                        className="h-6 w-10 p-0 text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                         onClick={(e) => e.stopPropagation()}
                       />
                       <Button
@@ -103,7 +103,7 @@ function ProductItem({
                       >
                         <span className="sr-only">Increase quantity</span>+
                       </Button>
-                   </div>
+                    </div>
                     <Button
                       // onClick={(e) => {
                       //   e.preventDefault();

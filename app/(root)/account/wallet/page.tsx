@@ -51,8 +51,6 @@ export default function WalletPage() {
     try {
       const response = await Wallet.completePendingTransaction(transactionId);
       if (response.isSuccess) {
-        toast.success("Transaction completed successfully");
-
         if (typeof response.data === "string" && response.data) {
           router.push(response.data);
         }
