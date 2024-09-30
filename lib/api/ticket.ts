@@ -11,7 +11,7 @@ export namespace Ticket {
       const response = (
         await axiosInstance.post<ApiResponse<null>>("/event-tickets", payload)
       ).data;
-      
+
       if (response.isSuccess) {
         return {
           isSuccess: true,
@@ -33,7 +33,7 @@ export namespace Ticket {
       };
     }
   }
-  
+
   // Get ticket by ID
   export async function getById(id: string): Promise<ApiResponse<TicketType>> {
     try {
@@ -63,10 +63,15 @@ export namespace Ticket {
     }
   }
 
-  export async function getTicketsByEventId(eventId: string): Promise<ApiResponse<TicketType[]>> {
+  // Get tickets by event ID
+  export async function getTicketsByEventId(
+    eventId: string,
+  ): Promise<ApiResponse<TicketType[]>> {
     try {
       const response = (
-        await axiosInstance.get<ApiResponse<TicketType[]>>(`/events/${eventId}/event-tickets`)
+        await axiosInstance.get<ApiResponse<TicketType[]>>(
+          `/events/${eventId}/event-tickets`,
+        )
       ).data;
 
       if (response.isSuccess) {
