@@ -17,7 +17,7 @@ export default async function EventDetail({
   params: { slug: string };
 }) {
   const event = (await Event.getById(params.slug)).data;
-  const place = (await MapService.getPlaceById(event?.location.placeId!)).data;
+  // const place = (await MapService.getPlaceById(event?.location.placeId!)).data;
 
   return event ? (
     <div className="space-y-6">
@@ -112,14 +112,14 @@ export default async function EventDetail({
                     </div>
                   </div>
                   <div className="aspect-video w-full rounded-xl">
-                    <EventLocation
+                    {/* <EventLocation
                       eventImage={event.thumbnailUrl}
                       defaultViewport={{
                         latitude: place?.geometry.location.lat!,
                         longitude: place?.geometry.location.lng!,
                         zoom: 15,
                       }}
-                    />
+                    /> */}
                   </div>
                 </div>
 

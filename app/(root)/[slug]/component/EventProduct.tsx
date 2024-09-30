@@ -13,7 +13,8 @@ import {
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, X } from "lucide-react";
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 
 // Component for displaying a single product item
 function ProductItem({
@@ -26,24 +27,11 @@ function ProductItem({
 }: EventProduct) {
   return (
     <div className="flex items-center justify-between rounded-lg bg-background/50 p-3 backdrop-blur-xl">
-      {/* <div>
-        <h3 className="font-medium">{name}</h3>
-        <p className="text-sm text-gray-400">{price === 0 ? 'Free' : `${price} VND`}</p>
-        <p className="text-sm text-gray-400">{`In Stock: ${quantityInStock}`}</p>
-      </div>
-      <div className="flex items-center">
-        <div className="flex space-x-2">
-          {productImages.map((image) => (
-            <img key={image.id} src={image.imageUrl} alt={image.name} className="w-12 h-12 rounded-lg object-cover" />
-          ))}
-        </div>
-      </div> */}
-
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Card className="group flex overflow-hidden border-none bg-transparent">
-              <div className="relative mr-2 h-[88px] w-[88px] flex-shrink-0 object-cover">
+              <div className="relative mr-4 h-[88px] w-[88px] flex-shrink-0 object-cover">
                 {productImages.map((image) => (
                   <Image
                     key={image.id}
@@ -63,7 +51,12 @@ function ProductItem({
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-semibold">${price.toFixed(2)}</p>
+                    <p className="text-sm font-semibold">
+                      {Intl.NumberFormat("vi-vn", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(price)}
+                    </p>
                     <p className="text-xs text-gray-500">
                       In stock: {quantityInStock}
                     </p>
@@ -154,15 +147,49 @@ export default function EventProducts({ eventId }: { eventId: string }) {
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">Products</h2>
-        <Button
-          className="hover:bg-primary/10 focus-visible:bg-primary/10"
-          variant={"ghost"}
-          // onClick={() => setIsCartVisible(!isCartVisible)}
-        >
-          <ShoppingCart className="mr-2 h-4 w-4" />
-          Cart 
-          {/* ({totalItems}) */}
-        </Button>
+        <Drawer direction="right">
+          <DrawerTrigger asChild>
+            <Button
+              className="hover:bg-primary/10 focus-visible:bg-primary/10"
+              variant={"ghost"}
+              // onClick={() => setIsCartVisible(!isCartVisible)}
+            >
+              <ShoppingCart className="mr-2 h-4 w-4" />
+              Cart
+              {/* ({totalItems}) */}
+            </Button>
+          </DrawerTrigger>
+
+          <DrawerContent className="right-0 left-auto h-full w-1/3">
+            <div className="mx-auto w-full max-w-sm">
+              <DrawerHeader>
+                <DrawerTitle>Event Cart</DrawerTitle>
+                <DrawerDescription>
+                  Review your items before checkout.
+                </DrawerDescription>
+              </DrawerHeader>
+            </div>
+            <div className="p-4">
+              {/* Sample cart content */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span>Product 1</span>
+                  <span>$19.99</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Product 2</span>
+                  <span>$29.99</span>
+                </div>
+                {/* Add more items as needed */}
+              </div>
+            </div>{" "}
+            <DrawerFooter>
+              <DrawerClose asChild>
+                <Button variant="outline">Close</Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
       </div>
       <div className="space-y-3">
         {products.map((product) => (
