@@ -69,68 +69,61 @@ export default async function EventDetail({
 
             {/* Tabs Content */}
             <TabsContent value="overview">
-              <div className="rounded-xl bg-background/50 backdrop-blur-xl">
-                <p className="w-full rounded-t-xl bg-background/50 p-2 text-center">
-                  Time
-                </p>
-                <div className="flex gap-4 p-4">
-                  <div className="flex-1 space-y-2">
-                    <p className="text-sm text-primary/50">From</p>
-                    <p className="text-3xl font-semibold">
-                      {format(event?.eventStartDate!, "pp")}
-                    </p>
-                    <p className="text-sm text-primary/50">
-                      {format(event?.eventStartDate!, "PP")}
-                    </p>
-                  </div>
-
-                  <div className="h-full w-[1px] bg-primary/50"></div>
-
-                  <div className="flex-1 space-y-2">
-                    <p className="text-sm text-primary/50">To</p>
-                    <p className="text-3xl font-semibold">
-                      {format(event?.eventEndDate!, "pp")}
-                    </p>
-                    <p className="text-sm text-primary/50">
-                      {format(event?.eventEndDate!, "PP")}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-xl bg-background/50 backdrop-blur-xl">
-                <p className="w-full rounded-t-xl bg-background/50 p-2 text-center">
-                  Address
-                </p>
-                <div className="flex gap-4 p-4">
-                  <div className="flex flex-1 items-center gap-2">
-                    <MapPinIcon size={20} className="text-primary/50" />
-                    <p className="text-base font-normal">
-                      {event?.location.display}
-                    </p>
-                  </div>
-                </div>
-                <div className="aspect-video w-full rounded-xl">
-                  <EventLocation
-                    eventImage={event.thumbnailUrl}
-                    defaultViewport={{
-                      latitude: place?.geometry.location.lat!,
-                      longitude: place?.geometry.location.lng!,
-                      zoom: 15,
-                    }}
-                  />
-                </div>
-              </div>
-              
-              <GetTicket event={event} />
-
               <div className="space-y-6">
-                <p className="border-b-[1px] border-primary/20 pb-2 text-sm font-semibold text-primary/50">
-                  About Event
-                </p>
-                <div
-                  dangerouslySetInnerHTML={{ __html: event?.description! }}
-                ></div>
+                <div className="rounded-xl bg-background/50 backdrop-blur-xl">
+                  <p className="w-full rounded-t-xl bg-background/50 p-2 text-center">
+                    Time
+                  </p>
+                  <div className="flex gap-4 p-4">
+                    <div className="flex-1 space-y-2">
+                      <p className="text-sm text-primary/50">From</p>
+                      <p className="text-3xl font-semibold">
+                        {format(event?.eventStartDate!, "pp")}
+                      </p>
+                      <p className="text-sm text-primary/50">
+                        {format(event?.eventStartDate!, "PP")}
+                      </p>
+                    </div>
+
+                    <div className="h-full w-[1px] bg-primary/50"></div>
+
+                    <div className="flex-1 space-y-2">
+                      <p className="text-sm text-primary/50">To</p>
+                      <p className="text-3xl font-semibold">
+                        {format(event?.eventEndDate!, "pp")}
+                      </p>
+                      <p className="text-sm text-primary/50">
+                        {format(event?.eventEndDate!, "PP")}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-xl bg-background/50 backdrop-blur-xl">
+                  <p className="w-full rounded-t-xl bg-background/50 p-2 text-center">
+                    Address
+                  </p>
+                  <div className="flex gap-4 p-4">
+                    <div className="flex flex-1 items-center gap-2">
+                      <MapPinIcon size={20} className="text-primary/50" />
+                      <p className="text-base font-normal">
+                        {event?.location.display}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="aspect-video w-full rounded-xl">
+                    <EventLocation
+                      eventImage={event.thumbnailUrl}
+                      defaultViewport={{
+                        latitude: place?.geometry.location.lat!,
+                        longitude: place?.geometry.location.lng!,
+                        zoom: 15,
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <GetTicket event={event} />
               </div>
             </TabsContent>
 
@@ -139,6 +132,13 @@ export default async function EventDetail({
             </TabsContent>
           </Tabs>
         </div>
+      </div>
+
+      <div className="w-full space-y-6">
+        <p className="border-b-[1px] border-primary/20 pb-2 text-sm font-semibold text-primary/50">
+          About Event
+        </p>
+        <div dangerouslySetInnerHTML={{ __html: event?.description! }}></div>
       </div>
 
       <div className="border-t-[1px] border-primary/20 py-2 text-sm text-primary/20">
