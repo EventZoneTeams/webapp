@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import MapGL, { Marker } from "@goongmaps/goong-map-react";
 import { Marker as MarkerType, Viewport } from "@/types/map";
 import Image from "next/image";
@@ -14,7 +14,7 @@ interface Props {
   placeId: string;
 }
 
-export default function Map(props: Props) {
+export default memo(function Map(props: Props) {
   const [viewport, setViewport] = useState<Viewport>({
     latitude: 21.028,
     longitude: 105.83991,
@@ -39,9 +39,9 @@ export default function Map(props: Props) {
         }
       });
     }
-  }, []);
+  }, [props.placeId]);
 
-  return (
+  return props.placeId ? (
     <MapGL
       {...viewport}
       width="100%"
@@ -84,5 +84,5 @@ export default function Map(props: Props) {
         </Marker>
       )}
     </MapGL>
-  );
-}
+  ) : null;
+});
