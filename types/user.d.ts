@@ -4,10 +4,10 @@ export type User = {
   fullName: string;
   dob: Date;
   gender: string;
-  image: string;
+  imageUrl: string;
   isDeleted: boolean;
   roleName: string;
-  workingAt: string;
+  workAt: string;
   role: {
     roleId: string;
     roleName: string;

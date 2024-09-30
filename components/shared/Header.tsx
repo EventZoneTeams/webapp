@@ -6,6 +6,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { Link } from "next-view-transitions";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { UserNav } from "./DashBoardPanel/UserNav";
 
 interface MenuItem {
   name: string;
@@ -22,20 +23,8 @@ const menuItems: MenuItem[] = [
     href: "/discover",
   },
   {
-    name: "Events",
-    href: "/events",
-  },
-  {
     name: "Dashboard",
     href: "/dashboard",
-  },
-  {
-    name: "Profile",
-    href: "/profile",
-  },
-  {
-    name: "Settings",
-    href: "/settings",
   },
 ];
 
@@ -67,12 +56,13 @@ export default function Header() {
           ))}
         </ul>
         {user ? (
-          <div className="">
-            <Avatar>
-              <AvatarImage src={user?.image} />
-              <AvatarFallback>{user?.fullName[0].toUpperCase()}</AvatarFallback>
-            </Avatar>
-          </div>
+          <UserNav/>
+          // <div className="">
+          //   <Avatar>
+          //     <AvatarImage src={user?.imageUrl} />
+          //     <AvatarFallback>{user?.fullName[0].toUpperCase()}</AvatarFallback>
+          //   </Avatar>
+          // </div>
         ) : (
           <div className="flex items-center gap-4">
             <Link href={"/sign-in"}>
