@@ -6,6 +6,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import EventLocation from "@/app/(root)/[slug]/component/EventLocation";
 import { Map as MapService } from "@/lib/api/map";
 import Map from "@/components/shared/Map";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import EventProducts from "./EventProduct";
 
 export default async function EventDetail({
   params,
@@ -47,68 +49,101 @@ export default async function EventDetail({
 
         <div className="w-1/2 space-y-6">
           <h1 className="text-3xl font-bold">{event?.name}</h1>
+          <Tabs defaultValue="overview">
+            <TabsList className="rounded-md bg-background/50 p-2 text-gray-300">
+              <TabsTrigger
+                value="overview"
+                className="border-transparent text-white data-[state=active]:border-b-2 data-[state=active]:border-white data-[state=active]:pb-2"
+              >
+                Overview
+              </TabsTrigger>
+              <TabsTrigger
+                value="products"
+                className="border-transparent text-white data-[state=active]:border-b-2 data-[state=active]:border-white data-[state=active]:pb-2"
+              >
+                Products
+              </TabsTrigger>
+              <TabsTrigger
+                value="tickets"
+                className="border-transparent text-white data-[state=active]:border-b-2 data-[state=active]:border-white data-[state=active]:pb-2"
+              >
+                Tickets
+              </TabsTrigger>
+            </TabsList>
 
-          <div className="rounded-xl bg-background/50 backdrop-blur-xl">
-            <p className="w-full rounded-t-xl bg-background/50 p-2 text-center">
-              Time
-            </p>
-            <div className="flex gap-4 p-4">
-              <div className="flex-1 space-y-2">
-                <p className="text-sm text-primary/50">From</p>
-                <p className="text-3xl font-semibold">
-                  {format(event?.eventStartDate!, "pp")}
+            {/* Tabs Content */}
+            <TabsContent value="overview">
+              <div className="rounded-xl bg-background/50 backdrop-blur-xl">
+                <p className="w-full rounded-t-xl bg-background/50 p-2 text-center">
+                  Time
                 </p>
-                <p className="text-sm text-primary/50">
-                  {format(event?.eventEndDate!, "PP")}
-                </p>
+                <div className="flex gap-4 p-4">
+                  <div className="flex-1 space-y-2">
+                    <p className="text-sm text-primary/50">From</p>
+                    <p className="text-3xl font-semibold">
+                      {format(event?.eventStartDate!, "pp")}
+                    </p>
+                    <p className="text-sm text-primary/50">
+                      {format(event?.eventEndDate!, "PP")}
+                    </p>
+                  </div>
+
+                  <div className="h-full w-[1px] bg-primary/50"></div>
+
+                  <div className="flex-1 space-y-2">
+                    <p className="text-sm text-primary/50">To</p>
+                    <p className="text-3xl font-semibold">
+                      {format(event?.eventEndDate!, "pp")}
+                    </p>
+                    <p className="text-sm text-primary/50">
+                      {format(event?.eventEndDate!, "PP")}
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div className="h-full w-[1px] bg-primary/50"></div>
-
-              <div className="flex-1 space-y-2">
-                <p className="text-sm text-primary/50">To</p>
-                <p className="text-3xl font-semibold">
-                  {format(event?.eventEndDate!, "pp")}
+              <div className="rounded-xl bg-background/50 backdrop-blur-xl">
+                <p className="w-full rounded-t-xl bg-background/50 p-2 text-center">
+                  Address
                 </p>
-                <p className="text-sm text-primary/50">
-                  {format(event?.eventEndDate!, "PP")}
-                </p>
+                <div className="flex gap-4 p-4">
+                  <div className="flex flex-1 items-center gap-2">
+                    <MapPinIcon size={20} className="text-primary/50" />
+                    <p className="text-base font-normal">
+                      {event?.location.display}
+                    </p>
+                  </div>
+                </div>
+                <div className="aspect-video w-full rounded-xl">
+                  <EventLocation
+                    eventImage={event.thumbnailUrl}
+                    defaultViewport={{
+                      latitude: place?.geometry.location.lat!,
+                      longitude: place?.geometry.location.lng!,
+                      zoom: 15,
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div className="rounded-xl bg-background/50 backdrop-blur-xl">
-            <p className="w-full rounded-t-xl bg-background/50 p-2 text-center">
-              Address
-            </p>
-            <div className="flex gap-4 p-4">
-              <div className="flex flex-1 items-center gap-2">
-                <MapPinIcon size={20} className="text-primary/50" />
-                <p className="text-base font-normal">
-                  {event?.location.display}
+              <div className="space-y-6">
+                <p className="border-b-[1px] border-primary/20 pb-2 text-sm font-semibold text-primary/50">
+                  About Event
                 </p>
+                <div
+                  dangerouslySetInnerHTML={{ __html: event?.description! }}
+                ></div>
               </div>
-            </div>
-            <div className="aspect-video w-full rounded-xl">
-              <EventLocation
-                eventImage={event.thumbnailUrl}
-                defaultViewport={{
-                  latitude: place?.geometry.location.lat!,
-                  longitude: place?.geometry.location.lng!,
-                  zoom: 15,
-                }}
-              />
-            </div>
-          </div>
+            </TabsContent>
 
-          <div className="space-y-6">
-            <p className="border-b-[1px] border-primary/20 pb-2 text-sm font-semibold text-primary/50">
-              About Event
-            </p>
-            <div
-              dangerouslySetInnerHTML={{ __html: event?.description! }}
-            ></div>
-          </div>
+            <TabsContent value="products">
+              <EventProducts eventId={event.id} />
+            </TabsContent>
+
+            <TabsContent value="tickets">
+              <div>Ticket</div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
       {/* <div className="w-full">

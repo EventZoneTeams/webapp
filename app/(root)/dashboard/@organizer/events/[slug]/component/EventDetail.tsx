@@ -4,7 +4,6 @@ import { MapPinIcon, MoreHorizontal, Plus } from "lucide-react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
 import EventTicket from "./EventTicket";
 import EventProducts from "./EventProduct";
 
