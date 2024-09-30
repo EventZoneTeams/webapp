@@ -3,9 +3,9 @@ import React from "react";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="m-auto mt-16 w-[900px] py-4">
+    <div>
       <Header />
-      {children}
+      <div className="m-auto mt-12 w-[900px] py-4">{children}</div>
     </div>
   );
 }

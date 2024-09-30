@@ -87,7 +87,8 @@ export default function AddBalanceForm({
                 </div>
               </FormControl>
               <FormDescription>
-                Enter the amount you want to deposit.
+                Enter the amount you want to deposit. Minimum deposit 10,000
+                VND.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -104,6 +105,7 @@ export default function AddBalanceForm({
                 <Checkbox
                   checked={field.value}
                   onCheckedChange={field.onChange}
+                  required
                 />
               </FormControl>
               <div className="space-y-1 leading-none">
