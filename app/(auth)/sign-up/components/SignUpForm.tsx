@@ -6,7 +6,7 @@ import {
   SignUpSchemaType,
 } from "@/app/(auth)/sign-up/components/SignUpSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +30,9 @@ import {
 import { Link } from "next-view-transitions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { vi } from "date-fns/locale";
+import { SignUpRequest } from "@/types/api/user";
+import { User as UserService } from "@/lib/api/user";
+import { toast } from "sonner";
 
 export default function SignUpForm() {
   const form = useForm<SignUpSchemaType>({
@@ -37,8 +40,31 @@ export default function SignUpForm() {
     defaultValues: SignUpSchemaDefaultValue,
   });
 
+  const [isPending, startTransition] = useTransition();
+
   const onSubmit = (data: SignUpSchemaType) => {
-    console.log(data);
+    startTransition(() => {
+      const sendData: SignUpRequest = {
+        email: data.email,
+        fullName: data.fullName,
+        dob: data.dob,
+        gender: data.gender,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+        imageUrl: "",
+        workAt: "",
+      };
+
+      UserService.signUp(sendData).then((response) => {
+        if (response.isSuccess) {
+          toast.success(response.message);
+          console.log(response);
+        } else {
+          toast.error(response.message);
+          console.error(response);
+        }
+      });
+    });
   };
 
   return (
@@ -93,7 +119,7 @@ export default function SignUpForm() {
             control={form.control}
             name="dob"
             render={({ field }) => (
-              <FormItem className="flex-1">
+              <FormItem className="flex flex-1 flex-col gap-1">
                 <FormLabel>
                   Date of Birth
                   <span className="text-red-500">*</span>
@@ -118,7 +144,7 @@ export default function SignUpForm() {
             control={form.control}
             name="gender"
             render={({ field }) => (
-              <FormItem className="flex-1">
+              <FormItem className="flex flex-1 flex-col gap-1">
                 <FormLabel>
                   Gender
                   <span className="text-red-500">*</span>
@@ -222,12 +248,16 @@ export default function SignUpForm() {
           )}
         />
 
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={form.formState.isSubmitting || !form.formState.isValid}
-        >
-          Submit
+        {!form.formState.isValid && form.formState.isSubmitted && (
+          <ul className="mb-4 list-decimal rounded border border-red-500 bg-red-500/30 px-8 py-4 text-red-200 backdrop-blur-xl">
+            {Object.values(form.formState.errors).map((error) => (
+              <li key={error.message}>{error.message}</li>
+            ))}
+          </ul>
+        )}
+
+        <Button type="submit" className="w-full">
+          {isPending ? "Loading..." : "Sign Up"}
         </Button>
       </form>
     </Form>

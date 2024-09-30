@@ -3,13 +3,15 @@ import { z } from "zod";
 export const SignUpSchema = z
   .object({
     email: z.string().email(),
-    password: z.string().min(8),
-    confirmPassword: z.string().min(8),
+    password: z.string().min(6, {
+      message: "Password must be at least 6 characters",
+    }),
+    confirmPassword: z.string().min(6, {
+      message: "Password must be at least 6 characters",
+    }),
     fullName: z.string().min(3),
     dob: z.date(),
     gender: z.enum(["male", "female"]),
-    imageUrl: z.string().url(),
-    workAt: z.string().min(3),
     agree: z.boolean(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -28,7 +30,5 @@ export const SignUpSchemaDefaultValue: SignUpSchemaType = {
   fullName: "",
   gender: "male",
   dob: new Date(new Date().setFullYear(new Date().getFullYear() - 18)),
-  imageUrl: "",
-  workAt: "",
   agree: false,
 };
