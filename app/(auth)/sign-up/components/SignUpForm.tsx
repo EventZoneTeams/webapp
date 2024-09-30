@@ -93,7 +93,7 @@ export default function SignUpForm() {
             control={form.control}
             name="dob"
             render={({ field }) => (
-              <FormItem className="flex-1">
+              <FormItem className="flex flex-1 flex-col gap-1">
                 <FormLabel>
                   Date of Birth
                   <span className="text-red-500">*</span>
@@ -118,7 +118,7 @@ export default function SignUpForm() {
             control={form.control}
             name="gender"
             render={({ field }) => (
-              <FormItem className="flex-1">
+              <FormItem className="flex flex-1 flex-col gap-1">
                 <FormLabel>
                   Gender
                   <span className="text-red-500">*</span>
