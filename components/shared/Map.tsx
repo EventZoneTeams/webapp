@@ -20,6 +20,7 @@ export default function Map(props: Props) {
     props.defaultViewport ?? {
       latitude: 21.028,
       longitude: 105.83991,
+      zoom: 18,
     },
   );
 
