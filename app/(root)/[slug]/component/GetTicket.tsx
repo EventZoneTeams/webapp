@@ -9,11 +9,12 @@ import { Ticket as TicketType } from "@/types/ticket";
 import { Wallet as WalletType } from "@/types/wallet";
 import { Wallet as WalletService } from "@/lib/api/wallet";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { VnDong } from "@/lib/format";
 import TicketCard from "@/app/(root)/[slug]/component/TicketCard";
+import { cn } from "@/lib/utils";
 
 interface GetTicketProps {
   event: Event;
@@ -24,7 +25,7 @@ interface SelectedTicket {
   quantity: number;
 }
 
-export default function GetTicket({ event }: GetTicketProps) {
+export default memo(function GetTicket({ event }: GetTicketProps) {
   const [tickets, setTicket] = useState<TicketType[] | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [wallet, setWallet] = useState<WalletType | null>(null);
@@ -124,7 +125,20 @@ export default function GetTicket({ event }: GetTicketProps) {
               <div className="flex h-full w-52 flex-col justify-end space-y-2 pb-2">
                 <p>
                   Total:
-                  <span className="ml-2 text-lg font-semibold">
+                  <span
+                    className={cn(
+                      "ml-2 text-lg font-semibold",
+                      selectedTickets &&
+                        wallet &&
+                        selectedTickets.reduce(
+                          (acc, { ticket, quantity }) =>
+                            acc + ticket.price * quantity,
+                          0,
+                        ) > wallet.balance
+                        ? "text-red-300"
+                        : "text-green-300",
+                    )}
+                  >
                     {selectedTickets
                       ? VnDong.format(
                           selectedTickets.reduce(
@@ -136,7 +150,17 @@ export default function GetTicket({ event }: GetTicketProps) {
                       : "0"}
                   </span>
                 </p>
-                <Button disabled={!selectedTickets}>
+                <Button
+                  disabled={
+                    !selectedTickets ||
+                    !wallet ||
+                    selectedTickets.reduce(
+                      (acc, { ticket, quantity }) =>
+                        acc + ticket.price * quantity,
+                      0,
+                    ) > wallet.balance
+                  }
+                >
                   {selectedTickets ? "Buy Ticket" : "Select Ticket"}
                 </Button>
               </div>
@@ -158,4 +182,4 @@ export default function GetTicket({ event }: GetTicketProps) {
       </Dialog>
     </div>
   );
-}
+});

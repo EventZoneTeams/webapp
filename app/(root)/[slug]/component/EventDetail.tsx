@@ -1,11 +1,10 @@
+import EventLocation from "@/app/(root)/[slug]/component/EventLocation";
+import GetTicket from "@/app/(root)/[slug]/component/GetTicket";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Event } from "@/lib/api/event";
 import { format } from "date-fns";
 import { MapPinIcon } from "lucide-react";
 import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import EventLocation from "@/app/(root)/[slug]/component/EventLocation";
-import { Map as MapService } from "@/lib/api/map";
-import GetTicket from "@/app/(root)/[slug]/component/GetTicket";
 import { Suspense } from "react";
 import Map from "@/components/shared/Map";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -17,7 +16,6 @@ export default async function EventDetail({
   params: { slug: string };
 }) {
   const event = (await Event.getById(params.slug)).data;
-  // const place = (await MapService.getPlaceById(event?.location.placeId!)).data;
 
   return event ? (
     <div className="space-y-6">
@@ -112,14 +110,10 @@ export default async function EventDetail({
                     </div>
                   </div>
                   <div className="aspect-video w-full rounded-xl">
-                    {/* <EventLocation
+                    <EventLocation
                       eventImage={event.thumbnailUrl}
-                      defaultViewport={{
-                        latitude: place?.geometry.location.lat!,
-                        longitude: place?.geometry.location.lng!,
-                        zoom: 15,
-                      }}
-                    /> */}
+                      placeId={event.location.placeId}
+                    />
                   </div>
                 </div>
 

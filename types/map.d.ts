@@ -45,3 +45,8 @@ export type Viewport = {
   longitude: number;
   zoom: number;
 };
+
+export type Marker = {
+  latitude: number;
+  longitude: number;
+};
