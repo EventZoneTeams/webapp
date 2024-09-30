@@ -13,6 +13,7 @@ import {
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { ShoppingCart } from "lucide-react";
 
 // Component for displaying a single product item
 function ProductItem({
@@ -153,6 +154,15 @@ export default function EventProducts({ eventId }: { eventId: string }) {
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">Products</h2>
+        <Button
+          className="hover:bg-primary/10 focus-visible:bg-primary/10"
+          variant={"ghost"}
+          // onClick={() => setIsCartVisible(!isCartVisible)}
+        >
+          <ShoppingCart className="mr-2 h-4 w-4" />
+          Cart 
+          {/* ({totalItems}) */}
+        </Button>
       </div>
       <div className="space-y-3">
         {products.map((product) => (
