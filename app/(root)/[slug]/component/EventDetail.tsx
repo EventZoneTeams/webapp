@@ -51,23 +51,6 @@ export default async function EventDetail({
         </div>
 
         <div className="w-1/2 space-y-6">
-          {/* <h1 className="text-3xl font-bold">{event?.name}</h1> */}
-
-          <div className="rounded-xl bg-background/50 backdrop-blur-xl">
-            <p className="w-full rounded-t-xl bg-background/50 p-2 text-center">
-              Time
-            </p>
-            <div className="flex gap-4 p-4">
-              <div className="flex-1 space-y-2">
-                <p className="text-sm text-primary/50">From</p>
-                <p className="text-3xl font-semibold">
-                  {format(event?.eventStartDate!, "pp")}
-                </p>
-                <p className="text-sm text-primary/50">
-                  {format(event?.eventEndDate!, "PP")}
-                </p>
-              </div>
-          <h1 className="text-3xl font-bold">{event?.name}</h1>
           <Tabs defaultValue="overview">
             <TabsList className="rounded-md bg-background/50 p-2 text-gray-300">
               <TabsTrigger
@@ -81,12 +64,6 @@ export default async function EventDetail({
                 className="border-transparent text-white data-[state=active]:border-b-2 data-[state=active]:border-white data-[state=active]:pb-2"
               >
                 Products
-              </TabsTrigger>
-              <TabsTrigger
-                value="tickets"
-                className="border-transparent text-white data-[state=active]:border-b-2 data-[state=active]:border-white data-[state=active]:pb-2"
-              >
-                Tickets
               </TabsTrigger>
             </TabsList>
 
@@ -103,7 +80,7 @@ export default async function EventDetail({
                       {format(event?.eventStartDate!, "pp")}
                     </p>
                     <p className="text-sm text-primary/50">
-                      {format(event?.eventEndDate!, "PP")}
+                      {format(event?.eventStartDate!, "PP")}
                     </p>
                   </div>
 
@@ -144,17 +121,9 @@ export default async function EventDetail({
                   />
                 </div>
               </div>
+              
+              <GetTicket event={event} />
 
-          <GetTicket event={event} />
-
-          {/* <div className="space-y-6">
-            <p className="border-b-[1px] border-primary/20 pb-2 text-sm font-semibold text-primary/50">
-              About Event
-            </p>
-            <div
-              dangerouslySetInnerHTML={{ __html: event?.description! }}
-            ></div>
-          </div> */}
               <div className="space-y-6">
                 <p className="border-b-[1px] border-primary/20 pb-2 text-sm font-semibold text-primary/50">
                   About Event
@@ -168,29 +137,12 @@ export default async function EventDetail({
             <TabsContent value="products">
               <EventProducts eventId={event.id} />
             </TabsContent>
-
-            <TabsContent value="tickets">
-              <div>Ticket</div>
-            </TabsContent>
           </Tabs>
-        </div>
-      </div>
-      {/* <div className="w-full">
-        {event.location.placeId && place && (
-          <iframe src={place.url} className="aspect-video w-full" />
-        )}
-      </div> */}
-      <div>
-        <div className="space-y-6">
-          <p className="border-b-[1px] border-primary/20 pb-2 text-sm font-semibold text-primary/50">
-            About Event
-          </p>
-          <div dangerouslySetInnerHTML={{ __html: event.description }}></div>
         </div>
       </div>
 
       <div className="border-t-[1px] border-primary/20 py-2 text-sm text-primary/20">
-        Create at {format(event.createdAt, "PPpp")}
+        Created at {format(event.createdAt, "PPpp")}
       </div>
     </div>
   ) : (
