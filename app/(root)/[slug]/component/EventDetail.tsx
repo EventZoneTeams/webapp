@@ -1,23 +1,29 @@
-import EventLocation from "@/app/(root)/[slug]/component/EventLocation";
-import GetTicket from "@/app/(root)/[slug]/component/GetTicket";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Event } from "@/lib/api/event";
+import { EventProduct as EventProductAPI } from "@/lib/api/event-product";
+import { Event as EventAPI } from "@/lib/api/event"; // Import event API
 import { format } from "date-fns";
-import { MapPinIcon } from "lucide-react";
 import Image from "next/image";
-import { Suspense } from "react";
-import Map from "@/components/shared/Map";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import EventProducts from "./EventProduct";
+import EventTabs from "./EventTabs"; // Import the EventTabs component
 
 export default async function EventDetail({
   params,
 }: {
   params: { slug: string };
 }) {
-  const event = (await Event.getById(params.slug)).data;
+  // Fetch event data
+  const eventResponse = await EventAPI.getById(params.slug);
+  const event = eventResponse?.data;
 
-  return event ? (
+  // If the event is null, show an error or fallback UI
+  if (!event) {
+    return <div>Event not found</div>;
+  }
+
+  // Fetch products data for the event
+  const productsResponse = await EventProductAPI.getProductsByEventId(event.id);
+  const products = productsResponse.isSuccess ? productsResponse.data : [];
+
+  return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">{event?.name}</h1>
       <div className="my-6 flex w-full gap-6">
@@ -48,84 +54,8 @@ export default async function EventDetail({
           </div>
         </div>
 
-        <div className="w-1/2 space-y-6">
-          <Tabs defaultValue="overview">
-            <TabsList className="rounded-md bg-background/50 p-2 text-gray-300">
-              <TabsTrigger
-                value="overview"
-                className="border-transparent text-white data-[state=active]:border-b-2 data-[state=active]:border-white data-[state=active]:pb-2"
-              >
-                Overview
-              </TabsTrigger>
-              <TabsTrigger
-                value="products"
-                className="border-transparent text-white data-[state=active]:border-b-2 data-[state=active]:border-white data-[state=active]:pb-2"
-              >
-                Products
-              </TabsTrigger>
-            </TabsList>
-
-            {/* Tabs Content */}
-            <TabsContent value="overview">
-              <div className="space-y-6">
-                <div className="rounded-xl bg-background/50 backdrop-blur-xl">
-                  <p className="w-full rounded-t-xl bg-background/50 p-2 text-center">
-                    Time
-                  </p>
-                  <div className="flex gap-4 p-4">
-                    <div className="flex-1 space-y-2">
-                      <p className="text-sm text-primary/50">From</p>
-                      <p className="text-3xl font-semibold">
-                        {format(event?.eventStartDate!, "pp")}
-                      </p>
-                      <p className="text-sm text-primary/50">
-                        {format(event?.eventStartDate!, "PP")}
-                      </p>
-                    </div>
-
-                    <div className="h-full w-[1px] bg-primary/50"></div>
-
-                    <div className="flex-1 space-y-2">
-                      <p className="text-sm text-primary/50">To</p>
-                      <p className="text-3xl font-semibold">
-                        {format(event?.eventEndDate!, "pp")}
-                      </p>
-                      <p className="text-sm text-primary/50">
-                        {format(event?.eventEndDate!, "PP")}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="rounded-xl bg-background/50 backdrop-blur-xl">
-                  <p className="w-full rounded-t-xl bg-background/50 p-2 text-center">
-                    Address
-                  </p>
-                  <div className="flex gap-4 p-4">
-                    <div className="flex flex-1 items-center gap-2">
-                      <MapPinIcon size={20} className="text-primary/50" />
-                      <p className="text-base font-normal">
-                        {event?.location.display}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="aspect-video w-full rounded-xl">
-                    <EventLocation
-                      eventImage={event.thumbnailUrl}
-                      placeId={event.location.placeId}
-                    />
-                  </div>
-                </div>
-
-                <GetTicket event={event} />
-              </div>
-            </TabsContent>
-
-            <TabsContent value="products">
-              <EventProducts eventId={event.id} />
-            </TabsContent>
-          </Tabs>
-        </div>
+        {/* Pass the event and products data to the EventTabs component */}
+        <EventTabs event={event} products={products} />
       </div>
 
       <div className="w-full space-y-6">
@@ -139,7 +69,5 @@ export default async function EventDetail({
         Created at {format(event.createdAt, "PPpp")}
       </div>
     </div>
-  ) : (
-    <div>Event not found</div>
   );
 }
