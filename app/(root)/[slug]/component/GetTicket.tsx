@@ -76,7 +76,7 @@ export default memo(function GetTicket({ event }: GetTicketProps) {
       handleGetWallet();
       setIsOpen(true);
     }
-  }, []);
+  }, [handleGetWallet, router, user]);
 
   const handleGetTicket = useCallback(async () => {
     const rs = (await TicketService.getTicketsByEventId(event.id)).data;

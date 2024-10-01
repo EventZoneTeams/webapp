@@ -67,7 +67,7 @@ export default function EventProducts({ eventId }: { eventId: string }) {
     } else {
       handleGetWallet();
     }
-  }, []);
+  }, [handleGetWallet, router, user]);
 
   const handleUpdateQuantity = (id: string, delta: number) => {
     setCartItems((prevItems) =>
