@@ -16,7 +16,7 @@ interface PaymentDetails {
   orderCode: string;
 }
 
-export default function PaymentResult() {
+export default function PaymentPage() {
   const searchParams = useSearchParams();
   const [paymentDetails, setPaymentDetails] = useState<PaymentDetails | null>(
     null,
