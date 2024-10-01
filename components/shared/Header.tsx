@@ -56,13 +56,7 @@ export default function Header() {
           ))}
         </ul>
         {user ? (
-          <UserNav/>
-          // <div className="">
-          //   <Avatar>
-          //     <AvatarImage src={user?.imageUrl} />
-          //     <AvatarFallback>{user?.fullName[0].toUpperCase()}</AvatarFallback>
-          //   </Avatar>
-          // </div>
+          <UserNav />
         ) : (
           <div className="flex items-center gap-4">
             <Link href={"/sign-in"}>

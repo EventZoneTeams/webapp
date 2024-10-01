@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { EventProduct as EventProductAPI } from "@/lib/api/event-product";
 import { EventProduct, ProductImage } from "@/types/event-product";
@@ -29,6 +29,10 @@ import { toast } from "sonner";
 import ProductItem from "./ProductItem";
 import { EventOrder as EventOrderAPI } from "@/lib/api/event-order";
 import { ApiResponse } from "@/types/api";
+import { useAuthStore } from "@/stores/authStore";
+import { Wallet as WalletType } from "@/types/wallet";
+import { Wallet as WalletService } from "@/lib/api/wallet";
+import { useRouter } from "next/navigation";
 
 // Main component for event products
 export interface CartItem {
@@ -44,6 +48,26 @@ export interface CartItem {
 export default function EventProducts({ eventId }: { eventId: string }) {
   const [products, setProducts] = useState<EventProduct[]>([]);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [wallet, setWallet] = useState<WalletType | null>(null);
+
+  const { user } = useAuthStore();
+  const router = useRouter();
+
+  const handleGetWallet = useCallback(async () => {
+    const rs = (await WalletService.getUserWallets()).data;
+    if (rs && rs.length > 0) {
+      setWallet(rs[0]);
+    }
+  }, []);
+
+  const handleOpenDialog = useCallback(() => {
+    if (!user) {
+      toast.info("Please sign in or sign up to get ticket");
+      router.push("/sign-in");
+    } else {
+      handleGetWallet();
+    }
+  }, []);
 
   const handleUpdateQuantity = (id: string, delta: number) => {
     setCartItems((prevItems) =>
@@ -149,6 +173,7 @@ export default function EventProducts({ eventId }: { eventId: string }) {
             <Button
               className="hover:bg-primary/10 focus-visible:bg-primary/10"
               variant={"ghost"}
+              onClick={handleOpenDialog}
             >
               <ShoppingCart className="mr-2 h-4 w-4" />
               Cart ({totalItems})
@@ -279,19 +304,67 @@ export default function EventProducts({ eventId }: { eventId: string }) {
               )}
             </ScrollArea>
             <DrawerFooter>
-              {cartItems.length > 0 && (
-                <div className="mb-4 flex items-center justify-between">
-                  <span className="font-bold">Total:</span>
-                  <span className="font-bold">{VnDong.format(totalPrice)}</span>
+              {wallet && (
+                <div className="flex items-center justify-between">
+                  <span className="">Balance:</span>
+                  <span className="">{VnDong.format(wallet.balance)}</span>
                 </div>
               )}
+
+              {cartItems.length > 0 && (
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="">Total:</span>
+                    <span className="">{VnDong.format(totalPrice)}</span>
+                  </div>
+
+                  <div className="mb-4 mt-2">
+                    {wallet && (
+                      <div className="flex items-center justify-between">
+                        <span className="">Remaining Balance:</span>
+                        <span
+                          className={`${
+                            wallet.balance - totalPrice < 0
+                              ? "text-red-500"
+                              : "text-green-500"
+                          }`}
+                        >
+                          {VnDong.format(wallet.balance - totalPrice)}
+                        </span>
+                      </div>
+                    )}
+
+                    {wallet && wallet.balance - totalPrice < 0 && (
+                      <div>
+                        <p className="text-sm text-red-500">
+                          Insufficient funds. Please add more funds to your
+                          wallet.
+                        </p>
+                        {/* Add Funds Button */}
+                        <Button
+                          variant="outline"
+                          className="mt-2 w-full"
+                          onClick={() => router.push("/account/wallet")}
+                        >
+                          Add Funds
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
               <Button
                 className="w-full"
-                disabled={cartItems.length === 0}
+                disabled={
+                  cartItems.length === 0 ||
+                  (wallet !== null && wallet.balance < totalPrice)
+                }
                 onClick={handleCheckout}
               >
                 Checkout
               </Button>
+
               <DrawerClose asChild>
                 <Button variant="outline" className="w-full">
                   Close
