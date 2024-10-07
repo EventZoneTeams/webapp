@@ -62,7 +62,7 @@ export default function AddEventForm() {
         const payload: CreateEventRequest = {
           name: data.name,
           description: data.description as string,
-          thumbnailUrl: "",
+          thumbnailUrl: imageUrl,
           eventStartDate: data.eventStartDate,
           eventEndDate: data.eventEndDate,
           location: {
