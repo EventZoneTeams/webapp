@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/lib/api";
+import { axiosInstance, handleApiError } from "@/lib/api";
 import { ApiResponse, ApiResponseWithPaging } from "@/types/api";
 import { CreateEventRequest, GetEventsParams } from "@/types/api/event";
 import { Event as EventType } from "@/types/event";
@@ -92,6 +92,35 @@ export namespace Event {
         await axiosInstance.get<ApiResponse<EventType>>(`/events/${id}`)
       ).data;
 
+      if (response.isSuccess) {
+        return {
+          isSuccess: true,
+          message: "Success",
+          data: response.data,
+        };
+      } else {
+        return {
+          isSuccess: false,
+          message: response.message,
+          data: null,
+        };
+      }
+    } catch (error: any) {
+      return {
+        isSuccess: false,
+        message: error.message,
+        data: null,
+      };
+    }
+  }
+
+  export async function disable(
+    id: string,
+  ): Promise<ApiResponse<EventType | null>> {
+    try {
+      const response = (
+        await axiosInstance.delete<ApiResponse<EventType>>(`/events/${id}`)
+      ).data;
       if (response.isSuccess) {
         return {
           isSuccess: true,
