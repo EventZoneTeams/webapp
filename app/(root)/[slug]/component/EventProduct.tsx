@@ -1,132 +1,147 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { EventProduct as EventProductAPI } from "@/lib/api/event-product";
-import { EventProduct } from "@/types/event-product";
+import { EventProduct, ProductImage } from "@/types/event-product";
+import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { ShoppingCart, X } from "lucide-react";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import Image from "next/image";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { ShoppingCart, X } from "lucide-react";
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import { VnDong } from "@/lib/format";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "sonner";
+import ProductItem from "./ProductItem";
+import { EventOrder as EventOrderAPI } from "@/lib/api/event-order";
+import { ApiResponse } from "@/types/api";
+import { useAuthStore } from "@/stores/authStore";
+import { Wallet as WalletType } from "@/types/wallet";
+import { Wallet as WalletService } from "@/lib/api/wallet";
+import { useRouter } from "next/navigation";
 
-// Component for displaying a single product item
-function ProductItem({
-  id,
-  name,
-  price,
-  quantityInStock,
-  description,
-  productImages,
-}: EventProduct) {
-  return (
-    <div className="flex items-center justify-between rounded-lg bg-background/50 p-3 backdrop-blur-xl">
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Card className="group flex overflow-hidden border-none bg-transparent">
-              <div className="relative mr-4 h-[88px] w-[88px] flex-shrink-0 object-cover">
-                {productImages.map((image) => (
-                  <Image
-                    key={image.id}
-                    src={image.imageUrl}
-                    alt={name}
-                    fill
-                    className="object-cover"
-                  />
-                ))}
-              </div>
-              <div className="flex flex-grow flex-col justify-between">
-                <div>
-                  <h3 className="truncate text-sm font-semibold">{name}</h3>
-                  <p className="line-clamp-1 text-xs text-gray-500 transition-all duration-300 ease-in-out">
-                    {description}
-                  </p>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-semibold">
-                      {Intl.NumberFormat("vi-vn", {
-                        style: "currency",
-                        currency: "VND",
-                      }).format(price)}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      In stock: {quantityInStock}
-                    </p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="flex items-center space-x-1">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-6 w-6"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          // updateQuantity(product.id, quantities[product.id] - 1);
-                        }}
-                      >
-                        <span className="sr-only">Decrease quantity</span>-
-                      </Button>
-                      <Input
-                        type="number"
-                        min="1"
-                        max={quantityInStock}
-                        // value={quantities[id]}
-                        // onChange={(e) =>
-                        //   updateQuantity(id, parseInt(e.target.value) || 1)
-                        // }
-
-                        className="h-6 w-10 p-0 text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-6 w-6"
-                        // onClick={(e) => {
-                        //   e.preventDefault();
-                        //   updateQuantity(id, quantities[id] + 1);
-                        // }}
-                      >
-                        <span className="sr-only">Increase quantity</span>+
-                      </Button>
-                    </div>
-                    <Button
-                      // onClick={(e) => {
-                      //   e.preventDefault();
-                      //   handleAddToCart(product);
-                      // }}
-                      size="sm"
-                      className="h-6 text-xs"
-                      disabled={quantityInStock === 0}
-                    >
-                      Add
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </TooltipTrigger>
-          <TooltipContent side="right" align="start" className="w-[300px] p-4">
-            <h3 className="mb-2 font-semibold">{name}</h3>
-            <p className="text-sm">{description}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    </div>
-  );
+// Main component for event products
+export interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  description?: string;
+  productImages: ProductImage[];
+  quantity: number;
+  quantityInStock: number;
 }
 
-// Main component for managing event products
 export default function EventProducts({ eventId }: { eventId: string }) {
   const [products, setProducts] = useState<EventProduct[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [wallet, setWallet] = useState<WalletType | null>(null);
+
+  const { user } = useAuthStore();
+  const router = useRouter();
+
+  const handleGetWallet = useCallback(async () => {
+    const rs = (await WalletService.getUserWallets()).data;
+    if (rs && rs.length > 0) {
+      setWallet(rs[0]);
+    }
+  }, []);
+
+  const handleOpenDialog = useCallback(() => {
+    if (!user) {
+      toast.info("Please sign in or sign up to get ticket");
+      router.push("/sign-in");
+    } else {
+      handleGetWallet();
+    }
+  }, [handleGetWallet, router, user]);
+
+  const handleUpdateQuantity = (id: string, delta: number) => {
+    setCartItems((prevItems) =>
+      prevItems
+        .map((item) => {
+          if (item.id === id) {
+            const newQuantity = Math.max(
+              0,
+              Math.min(item.quantityInStock, item.quantity + delta),
+            );
+            if (newQuantity === item.quantityInStock && delta > 0) {
+              toast.warning(
+                "You've reached the maximum available stock for this item.",
+              );
+            }
+            return { ...item, quantity: newQuantity };
+          }
+          return item;
+        })
+        .filter((item) => item.quantity > 0),
+    );
+  };
+
+  const handleAddToCart = (newItem: CartItem) => {
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find((item) => item.id === newItem.id);
+      if (existingItem) {
+        const totalQuantity = existingItem.quantity + newItem.quantity;
+        const updatedQuantity = Math.min(
+          existingItem.quantityInStock,
+          totalQuantity,
+        );
+        if (updatedQuantity === existingItem.quantityInStock) {
+          toast.warning(
+            "You've reached the maximum available stock for this item.",
+          );
+        }
+        return prevItems.map((item) =>
+          item.id === newItem.id
+            ? { ...item, quantity: updatedQuantity }
+            : item,
+        );
+      }
+      return [...prevItems, newItem];
+    });
+  };
+
+  const handleCheckout = async () => {
+    if (cartItems.length === 0) {
+      toast.error("Your cart is empty!");
+      return;
+    }
+
+    const payload = {
+      eventId,
+      eventOrderDetails: cartItems.map((item) => ({
+        eventProductId: item.id,
+        quantity: item.quantity,
+      })),
+    };
+
+    try {
+      const response: ApiResponse<null> = await EventOrderAPI.create(payload);
+      if (response.isSuccess) {
+        toast.success("Order placed successfully!");
+        setCartItems([]);
+      } else {
+        toast.error(response.message || "Failed to place order.");
+      }
+    } catch (error: any) {
+      toast.error("An error occurred while placing the order.");
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -143,6 +158,12 @@ export default function EventProducts({ eventId }: { eventId: string }) {
     fetchProducts();
   }, [eventId]);
 
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
@@ -152,49 +173,220 @@ export default function EventProducts({ eventId }: { eventId: string }) {
             <Button
               className="hover:bg-primary/10 focus-visible:bg-primary/10"
               variant={"ghost"}
-              // onClick={() => setIsCartVisible(!isCartVisible)}
+              onClick={handleOpenDialog}
             >
               <ShoppingCart className="mr-2 h-4 w-4" />
-              Cart
-              {/* ({totalItems}) */}
+              Cart ({totalItems})
             </Button>
           </DrawerTrigger>
 
-          <DrawerContent className="right-0 left-auto h-full w-1/3">
-            <div className="mx-auto w-full max-w-sm">
-              <DrawerHeader>
-                <DrawerTitle>Event Cart</DrawerTitle>
-                <DrawerDescription>
-                  Review your items before checkout.
-                </DrawerDescription>
-              </DrawerHeader>
-            </div>
-            <div className="p-4">
-              {/* Sample cart content */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span>Product 1</span>
-                  <span>$19.99</span>
+          <DrawerContent className="left-auto right-0 h-full w-1/3">
+            <DrawerHeader>
+              <DrawerTitle>Event Cart</DrawerTitle>
+              <DrawerDescription>
+                Review your items before checkout.
+              </DrawerDescription>
+            </DrawerHeader>
+            <ScrollArea className="h-[60vh] px-4">
+              {/* Check if the cart is empty */}
+              {cartItems.length === 0 ? (
+                <div className="flex h-full items-center justify-center text-gray-500">
+                  <p>Your cart is empty.</p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span>Product 2</span>
-                  <span>$29.99</span>
+              ) : (
+                <div className="space-y-4">
+                  {cartItems.map((item) => (
+                    <TooltipProvider key={item.id}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="flex items-start space-x-4 pb-4">
+                            <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden">
+                              {item.productImages.length > 0 && (
+                                <Image
+                                  src={item.productImages[0].imageUrl}
+                                  alt={item.productImages[0].name}
+                                  fill
+                                  className="object-cover object-center"
+                                />
+                              )}
+                            </div>
+                            <div className="flex flex-1 flex-col">
+                              <div className="flex justify-between text-base font-medium">
+                                <h3>{item.name}</h3>
+                                <p className="ml-4">
+                                  {VnDong.format(item.price * item.quantity)}
+                                </p>
+                              </div>
+                              <p className="line-clamp-1 text-sm text-gray-500">
+                                {item.description}
+                              </p>
+                              <div className="mt-2 flex items-center justify-between text-sm">
+                                <div className="flex items-center space-x-2">
+                                  <Button
+                                    className="h-6 w-6 hover:bg-primary/10 focus-visible:bg-primary/10"
+                                    size="icon"
+                                    variant="ghost"
+                                    onClick={() =>
+                                      handleUpdateQuantity(item.id, -1)
+                                    }
+                                  >
+                                    <span className="sr-only">
+                                      Decrease quantity
+                                    </span>
+                                    -
+                                  </Button>
+                                  <Input
+                                    type="number"
+                                    min="1"
+                                    max={item.quantityInStock}
+                                    value={item.quantity}
+                                    className="h-6 w-7 border-none bg-transparent p-0 text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                                    onChange={(e) => {
+                                      const inputQuantity = Math.min(
+                                        item.quantityInStock,
+                                        Math.max(
+                                          1,
+                                          parseInt(e.target.value) || 1,
+                                        ),
+                                      );
+                                      handleUpdateQuantity(
+                                        item.id,
+                                        inputQuantity - item.quantity,
+                                      );
+                                    }}
+                                  />
+                                  <Button
+                                    className="h-6 w-6 hover:bg-primary/10 focus-visible:bg-primary/10"
+                                    size="icon"
+                                    variant="ghost"
+                                    disabled={
+                                      item.quantity >= item.quantityInStock
+                                    } // Disable if max quantity is reached
+                                    onClick={() =>
+                                      handleUpdateQuantity(item.id, 1)
+                                    }
+                                  >
+                                    <span className="sr-only">
+                                      Increase quantity
+                                    </span>
+                                    +
+                                  </Button>
+                                </div>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() =>
+                                    handleUpdateQuantity(
+                                      item.id,
+                                      -item.quantity,
+                                    )
+                                  }
+                                >
+                                  <X className="mr-1 h-4 w-4" />
+                                  Remove
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent
+                          side="right"
+                          align="start"
+                          className="w-[300px] p-4"
+                        >
+                          <h3 className="mb-2 font-semibold">{item.name}</h3>
+                          <p className="text-sm">{item.description}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ))}
                 </div>
-                {/* Add more items as needed */}
-              </div>
-            </div>{" "}
+              )}
+            </ScrollArea>
             <DrawerFooter>
+              {wallet && (
+                <div className="flex items-center justify-between">
+                  <span className="">Balance:</span>
+                  <span className="">{VnDong.format(wallet.balance)}</span>
+                </div>
+              )}
+
+              {cartItems.length > 0 && (
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="">Total:</span>
+                    <span className="">{VnDong.format(totalPrice)}</span>
+                  </div>
+
+                  <div className="mb-4 mt-2">
+                    {wallet && (
+                      <div className="flex items-center justify-between">
+                        <span className="">Remaining Balance:</span>
+                        <span
+                          className={`${
+                            wallet.balance - totalPrice < 0
+                              ? "text-red-500"
+                              : "text-green-500"
+                          }`}
+                        >
+                          {VnDong.format(wallet.balance - totalPrice)}
+                        </span>
+                      </div>
+                    )}
+
+                    {wallet && wallet.balance - totalPrice < 0 && (
+                      <div>
+                        <p className="text-sm text-red-500">
+                          Insufficient funds. Please add more funds to your
+                          wallet.
+                        </p>
+                        {/* Add Funds Button */}
+                        <Button
+                          variant="outline"
+                          className="mt-2 w-full"
+                          onClick={() => router.push("/account/wallet")}
+                        >
+                          Add Funds
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <Button
+                className="w-full"
+                disabled={
+                  cartItems.length === 0 ||
+                  (wallet !== null && wallet.balance < totalPrice)
+                }
+                onClick={handleCheckout}
+              >
+                Checkout
+              </Button>
+
               <DrawerClose asChild>
-                <Button variant="outline">Close</Button>
+                <Button variant="outline" className="w-full">
+                  Close
+                </Button>
               </DrawerClose>
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
       </div>
       <div className="space-y-3">
-        {products.map((product) => (
-          <ProductItem key={product.id} {...product} />
-        ))}
+        {products.map((product) => {
+          const currentQuantityInCart =
+            cartItems.find((item) => item.id === product.id)?.quantity || 0;
+          return (
+            <ProductItem
+              key={product.id}
+              {...product}
+              currentQuantityInCart={currentQuantityInCart} // Pass current cart quantity
+              onAddToCart={handleAddToCart}
+            />
+          );
+        })}
       </div>
     </div>
   );

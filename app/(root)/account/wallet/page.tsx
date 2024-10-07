@@ -63,7 +63,7 @@ export default function WalletPage() {
   };
 
   return (
-    <div className="grid grid-cols-5 gap-4 bg-background pb-5">
+    <div className="grid grid-cols-5 gap-4 bg-transparent pb-5">
       <div className="col-span-2">
         <PersonalBalance wallets={wallets} />
       </div>
