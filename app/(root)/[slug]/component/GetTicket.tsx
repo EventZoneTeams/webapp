@@ -17,6 +17,7 @@ import TicketCard from "@/app/(root)/[slug]/component/TicketCard";
 import { cn } from "@/lib/utils";
 import { BuyTicketRequest } from "@/types/api/attendee";
 import { Attendee } from "@/lib/api/attendee";
+import { useTriggerStore } from "@/stores/triggerStore";
 
 interface GetTicketProps {
   event: Event;
@@ -37,6 +38,7 @@ export default memo(function GetTicket({ event }: GetTicketProps) {
   const router = useRouter();
   const { user } = useAuthStore();
   const [isLoading, startTransition] = useTransition();
+  const { switchTrigger } = useTriggerStore();
 
   const handleSelectTicket = useCallback(
     (ticket: TicketType, quantity: number) => {
@@ -122,6 +124,7 @@ export default memo(function GetTicket({ event }: GetTicketProps) {
         .finally(() => {
           setIsOpen(false);
           setSelectedTicket(null);
+          switchTrigger();
         });
     });
   };

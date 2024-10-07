@@ -28,11 +28,13 @@ import { Wallet as WalletService } from "@/lib/api/wallet";
 import { Wallet as WalletType } from "@/types/wallet";
 import { Badge } from "@/components/ui/badge";
 import { VnDong } from "@/lib/format";
+import { useTriggerStore } from "@/stores/triggerStore";
 
 export function UserNav() {
   const { user } = useAuthStore();
   const [wallet, setWallet] = useState<WalletType | null>(null);
   const router = useRouter();
+  const { trigger } = useTriggerStore();
 
   const handleGetWallet = useCallback(async () => {
     const rs = (await WalletService.getUserWallets()).data;
@@ -45,7 +47,7 @@ export function UserNav() {
     if (user) {
       handleGetWallet();
     }
-  }, [user]);
+  }, [user, trigger]);
 
   const handleSignOut = () => {
     UserApi.signOut();
