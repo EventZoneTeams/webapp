@@ -26,11 +26,15 @@ export default function EventSetting(props: EventSettingProps) {
   const handleDisableEvent = () => {
     if (props.event) {
       startTransition(() => {
-        EventService.disable(props.event.id).then((response) => {
-          if (response.isSuccess) {
-            toast.success("Event has been disabled successfully");
-          }
-        });
+        EventService.disable(props.event.id)
+          .then((response) => {
+            if (response.isSuccess) {
+              toast.success("Event has been disabled successfully");
+            }
+          })
+          .finally(() => {
+            setIsOpen(false);
+          });
       });
     }
   };
@@ -56,7 +60,9 @@ export default function EventSetting(props: EventSettingProps) {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <Button onClick={() => setIsOpen(false)}>Cancel</Button>
+              <Button variant={"outline"} onClick={() => setIsOpen(false)}>
+                Cancel
+              </Button>
               <Button onClick={handleDisableEvent}>Continue</Button>
             </AlertDialogFooter>
           </AlertDialogContent>

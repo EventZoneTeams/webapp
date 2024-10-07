@@ -9,12 +9,14 @@ import { Ticket as TicketType } from "@/types/ticket";
 import { Wallet as WalletType } from "@/types/wallet";
 import { Wallet as WalletService } from "@/lib/api/wallet";
 import { useRouter } from "next/navigation";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { VnDong } from "@/lib/format";
 import TicketCard from "@/app/(root)/[slug]/component/TicketCard";
 import { cn } from "@/lib/utils";
+import { BuyTicketRequest } from "@/types/api/attendee";
+import { Attendee } from "@/lib/api/attendee";
 
 interface GetTicketProps {
   event: Event;
@@ -34,6 +36,7 @@ export default memo(function GetTicket({ event }: GetTicketProps) {
   >(null);
   const router = useRouter();
   const { user } = useAuthStore();
+  const [isLoading, startTransition] = useTransition();
 
   const handleSelectTicket = useCallback(
     (ticket: TicketType, quantity: number) => {
@@ -91,6 +94,37 @@ export default memo(function GetTicket({ event }: GetTicketProps) {
     setIsOpen(false);
     setSelectedTicket(null);
   }, []);
+
+  const handleBuyTikcet = () => {
+    if (!selectedTickets || !wallet) return;
+    if (
+      selectedTickets.reduce(
+        (acc, { ticket, quantity }) => acc + ticket.price * quantity,
+        0,
+      ) > wallet.balance
+    )
+      return;
+
+    startTransition(() => {
+      const payload: BuyTicketRequest[] = selectedTickets.map(
+        ({ ticket, quantity }) => ({
+          eventTicketId: ticket.id,
+          eventId: event.id,
+          attendeeNote: "",
+          quantity,
+        }),
+      );
+
+      Attendee.buyTicket(payload)
+        .then((rs) => {
+          toast.success("Buy ticket successfully");
+        })
+        .finally(() => {
+          setIsOpen(false);
+          setSelectedTicket(null);
+        });
+    });
+  };
 
   if (!tickets || tickets.length === 0) {
     return null;
@@ -160,8 +194,13 @@ export default memo(function GetTicket({ event }: GetTicketProps) {
                       0,
                     ) > wallet.balance
                   }
+                  onClick={handleBuyTikcet}
                 >
-                  {selectedTickets ? "Buy Ticket" : "Select Ticket"}
+                  {isLoading
+                    ? "Loading..."
+                    : selectedTickets
+                      ? "Buy Ticket"
+                      : "Select Ticket"}
                 </Button>
               </div>
             </div>

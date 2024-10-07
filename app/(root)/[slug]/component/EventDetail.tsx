@@ -4,6 +4,7 @@ import { Event as EventAPI } from "@/lib/api/event"; // Import event API
 import { format } from "date-fns";
 import Image from "next/image";
 import EventTabs from "./EventTabs"; // Import the EventTabs component
+import DisplayContent from "@/components/minimal-tiptap/display-content";
 
 export default async function EventDetail({
   params,
@@ -62,7 +63,8 @@ export default async function EventDetail({
         <p className="border-b-[1px] border-primary/20 pb-2 text-sm font-semibold text-primary/50">
           About Event
         </p>
-        <div dangerouslySetInnerHTML={{ __html: event?.description! }}></div>
+        {/* <div dangerouslySetInnerHTML={{ __html: event?.description! }}></div> */}
+        <DisplayContent content={event?.description!} />
       </div>
 
       <div className="border-t-[1px] border-primary/20 py-2 text-sm text-primary/20">

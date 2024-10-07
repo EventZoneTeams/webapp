@@ -59,11 +59,14 @@ export default function DiscoverPage() {
         <div>Loading...</div>
       ) : (
         <div className="grid grid-cols-1 gap-4 rounded py-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
-          {events.map((event) => (
-            <Link href={`/${event.id}`} key={event.id}>
-              <EventCard event={event} />
-            </Link>
-          ))}
+          {events.map((event) => {
+            if (event.isDeleted) return null;
+            return (
+              <Link href={`/${event.id}`} key={event.id}>
+                <EventCard event={event} />
+              </Link>
+            );
+          })}
           {events.length === 0 && (
             <div className="col-span-full flex h-52 items-center justify-center">
               No events found
