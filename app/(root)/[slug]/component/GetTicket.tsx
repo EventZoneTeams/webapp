@@ -97,7 +97,7 @@ export default memo(function GetTicket({ event }: GetTicketProps) {
     setSelectedTicket(null);
   }, []);
 
-  const handleBuyTikcet = () => {
+  const handleBuyTicket = () => {
     if (!selectedTickets || !wallet) return;
     if (
       selectedTickets.reduce(
@@ -142,25 +142,24 @@ export default memo(function GetTicket({ event }: GetTicketProps) {
         <Button className="w-full" onClick={handleOpenDialog}>
           Get Ticket
         </Button>
-        <DialogContent className="max-w-[900px] border-none bg-background/50 backdrop-blur-3xl">
+        <DialogContent className="max-w-[900px] border-none bg-background backdrop-blur-xl">
           <div className="flex flex-col gap-4">
-            <div className="gp-4 flex border-b-[1px] border-primary/50">
-              <div className="flex-1 pb-4">
-                <p className="mb-2 text-sm text-primary/50">Your info</p>
+            <div className="flex border-b border-gray-700 pb-4">
+              <div className="flex-1">
+                <p className="mb-2 text-sm text-gray-400">Your info</p>
                 <h2 className="text-lg font-medium">{user?.fullName}</h2>
-                <p className="mb-2 text-sm italic text-primary/50">
+                <p className="mb-2 text-sm italic text-gray-400">
                   {user?.email}
                 </p>
-
-                <Badge className="text-base">
+                <Badge variant="secondary" className="text-base">
                   Balance:{" "}
                   <span className="ml-2">
                     {wallet ? VnDong.format(wallet.balance) : "Loading..."}
                   </span>
                 </Badge>
               </div>
-              <div className="flex h-full w-52 flex-col justify-end space-y-2 pb-2">
-                <p>
+              <div className="flex h-full w-52 flex-col justify-end space-y-2">
+                <p className="text-right">
                   Total:
                   <span
                     className={cn(
@@ -172,8 +171,8 @@ export default memo(function GetTicket({ event }: GetTicketProps) {
                             acc + ticket.price * quantity,
                           0,
                         ) > wallet.balance
-                        ? "text-red-300"
-                        : "text-green-300",
+                        ? "text-red-400"
+                        : "text-green-400",
                     )}
                   >
                     {selectedTickets
@@ -188,6 +187,7 @@ export default memo(function GetTicket({ event }: GetTicketProps) {
                   </span>
                 </p>
                 <Button
+                  className="w-full"
                   disabled={
                     !selectedTickets ||
                     !wallet ||
@@ -197,27 +197,25 @@ export default memo(function GetTicket({ event }: GetTicketProps) {
                       0,
                     ) > wallet.balance
                   }
-                  onClick={handleBuyTikcet}
+                  onClick={handleBuyTicket}
                 >
                   {isLoading
-                    ? "Loading..."
+                    ? "Processing..."
                     : selectedTickets
                       ? "Buy Ticket"
                       : "Select Ticket"}
                 </Button>
               </div>
             </div>
-            <div className="flex-1 rounded-lg bg-background-alpha p-4">
-              <div className="grid grid-cols-3 gap-6">
-                {tickets.map((t) => (
-                  <TicketCard
-                    key={t.id}
-                    ticket={t}
-                    event={event}
-                    handleSelectTicket={handleSelectTicket}
-                  />
-                ))}
-              </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {tickets.map((t) => (
+                <TicketCard
+                  key={t.id}
+                  ticket={t}
+                  event={event}
+                  handleSelectTicket={handleSelectTicket}
+                />
+              ))}
             </div>
           </div>
         </DialogContent>

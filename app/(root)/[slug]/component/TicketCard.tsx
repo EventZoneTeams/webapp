@@ -1,11 +1,10 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { VnDong } from "@/lib/format";
 import { Event } from "@/types/event";
 import { Ticket } from "@/types/ticket";
 import { format } from "date-fns";
-import { MinusIcon, PlusIcon } from "lucide-react";
+import { MinusIcon, PlusIcon, CalendarIcon, MapPinIcon } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 
@@ -37,70 +36,48 @@ export default function TicketCard({
   };
 
   return (
-    <div className="relative aspect-[9/16] w-64 rounded-b-lg bg-white text-primary-foreground">
-      {/* 3 dot on top */}
-      <div className="absolute left-0 top-0 size-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-background-alpha"></div>
-      <div className="absolute left-1/2 top-0 size-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-background-alpha"></div>
-      <div className="absolute right-0 top-0 size-8 -translate-y-1/2 translate-x-1/2 rounded-full bg-background-alpha"></div>
-
-      <div className="mt-6 line-clamp-1 px-2 text-center text-base font-semibold">
-        {ticket.name.toUpperCase()}
+    <div className="relative w-full rounded-lg bg-white/5 p-4 text-white shadow-lg backdrop-blur-3xl transition-all hover:shadow-xl">
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="line-clamp-1 text-lg font-semibold">{ticket.name}</h3>
+        <Badge variant="secondary" className="text-sm">
+          {ticket.price === 0 ? "Free" : VnDong.format(ticket.price)}
+        </Badge>
       </div>
       <Image
         src={event.thumbnailUrl}
         alt={ticket.name}
-        width={200}
+        width={300}
         height={200}
-        className="aspect-square w-full object-cover"
+        className="mb-4 h-40 w-full rounded-md object-cover"
       />
-
-      <div className="space-y-2 p-2 px-4">
-        <div>
-          <span className="text-base font-semibold">
-            {format(event.eventStartDate, "EEE, dd/MM")}
-          </span>
-          <span className="text-sm text-black/50">
-            {" "}
-            {format(event.eventStartDate, "hh:mm a")}
-          </span>
+      <div className="mb-4 space-y-2 text-sm">
+        <div className="flex items-center">
+          <CalendarIcon className="mr-2 h-4 w-4 text-gray-400" />
+          <span>{format(event.eventStartDate, "EEE, dd/MM - hh:mm a")}</span>
         </div>
-        <div className="text-xs">{event.location.display}</div>
+        <div className="flex items-center">
+          <MapPinIcon className="mr-2 h-4 w-4 text-gray-400" />
+          <span>{event.location.display}</span>
+        </div>
       </div>
-
-      <div className="relative h-8 w-full">
-        <div className="absolute left-0 top-0 size-8 -translate-x-1/2 rounded-full bg-background-alpha"></div>
-        <div className="absolute top-1/2 w-full -translate-y-1/2 border-[1px] border-dashed border-background-alpha"></div>
-        <div className="absolute right-0 top-0 size-8 translate-x-1/2 rounded-full bg-background-alpha"></div>
-      </div>
-
-      <div className="space-y-2 p-2 px-4">
-        <div className="text-sm text-primary-foreground/50">
-          <p>{ticket.description}</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="flex-1">
-            <span className="text-sm text-black/50">Available: </span>
-            <span className="font-semibold">{ticket.inStock}</span>
-          </div>
-          <div className="flex items-center">
-            <Badge className="bg-background font-semibold text-foreground hover:bg-background">
-              {ticket.price === 0 ? "Free" : VnDong.format(ticket.price)}
-            </Badge>
-          </div>
-        </div>
-        <div className="flex w-full items-center">
+      <p className="mb-4 text-sm text-gray-400">{ticket.description}</p>
+      <div className="mb-4 flex items-center justify-between">
+        <span className="text-sm">
+          Available: <strong>{ticket.inStock}</strong>
+        </span>
+        <div className="flex items-center space-x-2">
           <Button
-            size="icon"
+            size="sm"
+            variant="outline"
             onClick={handleDecrement}
             disabled={quantity === 0}
           >
             <MinusIcon className="h-4 w-4" />
           </Button>
-          <p className="flex-1 text-center">
-            {quantity} / {ticket.inStock}
-          </p>
+          <span className="w-8 text-center">{quantity}</span>
           <Button
-            size="icon"
+            size="sm"
+            variant="outline"
             onClick={handleIncrement}
             disabled={quantity === ticket.inStock}
           >
