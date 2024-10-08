@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { Wallet } from "@/types/wallet"; // Assuming you have this type defined
 import { CirclePlus } from "lucide-react";
+import { VnDong } from "@/lib/format";
+import { Badge } from "@/components/ui/badge";
 
 interface PersonalBalanceProps {
   wallets: Wallet[];
@@ -19,21 +21,15 @@ interface PersonalBalanceProps {
 
 const PersonalBalance: React.FC<PersonalBalanceProps> = ({ wallets }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  console.log(wallets);
 
   return (
     <div>
-      <div className="rounded-md border bg-secondary p-4">
-        <p className="flex items-center gap-2 text-lg font-bold">
-          <span className="flex-1">Balance </span>
-          <span className="text-base font-normal text-gray-500">(VND)</span>
-        </p>
-        <p className="mt-3 text-2xl font-extrabold">
-          {wallets &&
-            wallets.length > 0 &&
-            Intl.NumberFormat("vi-VN", {
-              style: "currency",
-              currency: "VND",
-            }).format(wallets[0].balance)}
+      <div className="space-y-2 rounded-md border-none bg-primary/5 p-4">
+        <Badge>{wallets && wallets.length > 0 && wallets[0].walletType}</Badge>
+        <p className="flex-1 text-sm text-primary/50">Balance (VND) </p>
+        <p className="mt-3 text-4xl font-semibold">
+          {wallets && wallets.length > 0 && VnDong.format(wallets[0].balance)}
         </p>
         <div className="flex items-center justify-end">
           <Button
@@ -47,7 +43,7 @@ const PersonalBalance: React.FC<PersonalBalanceProps> = ({ wallets }) => {
         </div>
       </div>
       <Dialog open={isOpen}>
-        <DialogContent>
+        <DialogContent className="border-none">
           <DialogHeader>
             <DialogTitle className="text-center text-2xl">
               Add balance
