@@ -40,7 +40,7 @@ export default function AddBalanceForm({
     if (walletType === "PERSONAL") {
       setIsPending(true);
       try {
-        const response = await Wallet.addDeposit({
+        const response = await Wallet.addDepositPayos({
           amount: Number(data.amount),
         });
         if (response.isSuccess) {
@@ -87,7 +87,7 @@ export default function AddBalanceForm({
                 </div>
               </FormControl>
               <FormDescription>
-                Enter the amount you want to deposit. Minimum deposit 10,000
+                Enter the amount you want to deposit. Minimum deposit 2,000
                 VND.
               </FormDescription>
               <FormMessage />

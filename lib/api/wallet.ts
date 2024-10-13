@@ -78,14 +78,49 @@ export namespace Wallet {
     amount: number;
   };
 
-  export async function addDeposit(
+  // export async function addDeposit(
+  //   data: AddDepositSendData,
+  // ): Promise<ApiResponse<string>> {
+  //   try {
+  //     const response = (
+  //       await axiosInstance.post<ApiResponse<string>>("/wallets/transactions", {
+  //         amount: data.amount,
+  //       })
+  //     ).data;
+
+  //     if (response.isSuccess) {
+  //       return {
+  //         isSuccess: true,
+  //         message: "Deposit added successfully",
+  //         data: response.data,
+  //       };
+  //     } else {
+  //       return {
+  //         isSuccess: false,
+  //         message: response.message,
+  //         data: "",
+  //       };
+  //     }
+  //   } catch (error: any) {
+  //     return {
+  //       isSuccess: false,
+  //       message: error.message || "Failed to add deposit",
+  //       data: "",
+  //     };
+  //   }
+  // }
+
+  export async function addDepositPayos(
     data: AddDepositSendData,
   ): Promise<ApiResponse<string>> {
     try {
       const response = (
-        await axiosInstance.post<ApiResponse<string>>("/wallets/transactions", {
-          amount: data.amount,
-        })
+        await axiosInstance.post<ApiResponse<string>>(
+          "/create-payment-link-payos",
+          {
+            amount: data.amount,
+          },
+        )
       ).data;
 
       if (response.isSuccess) {

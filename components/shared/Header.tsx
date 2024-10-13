@@ -22,6 +22,10 @@ const menuItems: MenuItem[] = [
     name: "Discover",
     href: "/discover",
   },
+  {
+    name: "Post",
+    href: "/post",
+  },
 ];
 
 export default function Header() {
