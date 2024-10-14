@@ -157,6 +157,6 @@ export default function EventDetails(props: { slug: string }) {
       </div>
     </div>
   ) : (
-    <div>Event not found</div>
+    <div>Loading...</div>
   );
 }
