@@ -3,6 +3,7 @@ import { getTokens, setTokens } from "@/lib/api/token";
 import { useAuthStore } from "@/stores/authStore";
 import { ApiResponse } from "@/types/api";
 import {
+  GetAllUserParams,
   LoginRequest,
   LoginResponse,
   RefreshTokenResponse,
@@ -125,6 +126,42 @@ export namespace User {
       }
     } catch (error) {
       return handleApiError(error);
+    }
+  }
+
+  export async function getUserById(
+    id: string,
+  ): Promise<ApiResponse<UserType | null>> {
+    try {
+      const response = (
+        await axiosInstance.get<ApiResponse<UserType>>(`/users/${id}`)
+      ).data;
+      return response;
+    } catch (error) {
+      return {
+        isSuccess: false,
+        message: "Failed to get user by id",
+        data: null,
+      };
+    }
+  }
+
+  export async function getAll(
+    payload: GetAllUserParams,
+  ): Promise<ApiResponse<UserType[] | null>> {
+    try {
+      const response = (
+        await axiosInstance.get<ApiResponse<UserType[]>>("/users", {
+          params: payload,
+        })
+      ).data;
+      return response;
+    } catch (error) {
+      return {
+        isSuccess: false,
+        message: "Failed to get all user",
+        data: null,
+      };
     }
   }
 }
