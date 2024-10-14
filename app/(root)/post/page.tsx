@@ -36,7 +36,7 @@ import { EventPost as EventPostType } from "@/types/event-post";
 import { EventPost } from "@/lib/api/event-post";
 import { Event } from "@/lib/api/event";
 import { Event as EventType } from "@/types/event";
-import { EventCarousel } from "../discover/page";
+import EventCarousel from "@/components/shared/Event/EventCarousel";
 import { useSearchParams } from "next/navigation";
 import { GetEventsParams } from "@/types/api/event";
 
@@ -438,18 +438,17 @@ export default function Component() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  const specialEvents = events;
-  // .filter((event) => event.status === "PUBLISHED");
+  const specialEvents = events.filter((event) => event.status === "PUBLISHED");
 
   return (
     <div>
+      <div className="mx-auto mt-4 max-w-4xl">
       {/* Special Events Carousel */}
       <EventCarousel
         title="Recommended Events"
         events={specialEvents}
         textSize="small"
       />
-      <div className="mx-auto mt-4 max-w-4xl">
         {posts.slice(0, visiblePosts).map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
