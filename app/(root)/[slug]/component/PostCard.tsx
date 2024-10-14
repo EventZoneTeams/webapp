@@ -1,16 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   ChevronDownIcon,
   Heart,
   MessageCircle,
   UserIcon,
-  ReplyIcon,
   SendHorizontal,
-  ChevronLeftIcon,
-  ChevronRightIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,8 +25,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { EventPost as EventPostType } from "@/types/event-post";
+import { EventPost } from "@/lib/api/event-post";
 
 // Simulated user data (in a real app, this would come from authentication)
 const currentUser = {
@@ -38,81 +42,7 @@ const currentUser = {
   avatar: "/placeholder.svg?height=32&width=32",
 };
 
-// This would also typically come from an API
-const postsData = [
-  {
-    id: "1",
-    title: "Keynote Speaker Announcement",
-    content:
-      "We're excited to announce our keynote speaker for TechConf 2024...",
-    date: "2024-05-01",
-    images: [
-      "/placeholder.svg?height=300&width=400&text=Keynote+1",
-      "/placeholder.svg?height=300&width=400&text=Keynote+2",
-      "/placeholder.svg?height=300&width=400&text=Keynote+3",
-    ],
-    likes: ["user2", "user3"],
-    comments: [
-      {
-        id: "1",
-        user: "Alice",
-        content: "Can't wait to hear the keynote!",
-        replies: [],
-      },
-      {
-        id: "2",
-        user: "Bob",
-        content: "This is going to be amazing!",
-        replies: [],
-      },
-    ],
-  },
-  {
-    id: "2",
-    title: "Early Bird Tickets Now Available",
-    content: "Get your early bird tickets for TechConf 2024 now and save...",
-    date: "2024-05-15",
-    images: [
-      "/placeholder.svg?height=300&width=400&text=Early+Bird",
-      "/placeholder.svg?height=300&width=400&text=Tickets",
-    ],
-    likes: ["user1", "user3"],
-    comments: [
-      { id: "1", user: "Charlie", content: "Just got my ticket!", replies: [] },
-      {
-        id: "2",
-        user: "Diana",
-        content: "Are group discounts available?",
-        replies: [],
-      },
-    ],
-  },
-  {
-    id: "3",
-    title: "Call for Speakers Open",
-    content:
-      "Are you an industry expert? Submit your speaker proposal for TechConf 2024...",
-    date: "2024-06-01",
-    images: ["/placeholder.svg?height=300&width=400&text=Call+for+Speakers"],
-    likes: ["user2"],
-    comments: [
-      {
-        id: "1",
-        user: "Eve",
-        content: "Just submitted my proposal!",
-        replies: [],
-      },
-      {
-        id: "2",
-        user: "Frank",
-        content: "What topics are you looking for?",
-        replies: [],
-      },
-    ],
-  },
-];
-
-function ImageCarousel({ images, title }) {
+function ImageCarousel({ images, title }: { images: string[]; title: string }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const totalImages = images.length;
@@ -142,7 +72,7 @@ function ImageCarousel({ images, title }) {
                       alt={`${title} - Image ${index + 1}`}
                       width={400}
                       height={300}
-                      className="h-64 w-full object-cover"
+                      className="h-[600px] object-center w-full object-cover"
                     />
                   </Button>
                 </DialogTrigger>
@@ -197,13 +127,13 @@ function ImageCarousel({ images, title }) {
   );
 }
 
-function PostCard({ post }) {
-  const [likes, setLikes] = useState(post.likes);
-  const [comments, setComments] = useState(post.comments);
+function PostCard({ post }: { post: EventPostType }) {
+  const [likes, setLikes] = useState<string[]>([]);
+  const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState("");
-  const [mentionedUsers, setMentionedUsers] = useState([]);
+  const [mentionedUsers, setMentionedUsers] = useState<string[]>([]);
   const [showAllComments, setShowAllComments] = useState(false);
-  const [replyTo, setReplyTo] = useState(null); // Track which comment is being replied to
+  const [replyTo, setReplyTo] = useState<any>(null);
 
   const isLiked = likes.includes(currentUser.id);
 
@@ -215,11 +145,10 @@ function PostCard({ post }) {
     }
   };
 
-  const handleAddCommentOrReply = (e) => {
+  const handleAddCommentOrReply = (e: React.FormEvent) => {
     e.preventDefault();
     if (newComment.trim()) {
       if (replyTo) {
-        // Handle reply to a comment
         const updatedComments = comments.map((comment) => {
           if (comment.id === replyTo.id) {
             return {
@@ -233,9 +162,8 @@ function PostCard({ post }) {
           return comment;
         });
         setComments(updatedComments);
-        setReplyTo(null); // Reset the reply context
+        setReplyTo(null);
       } else {
-        // Handle adding a new comment
         const newCommentObj = {
           id: String(comments.length + 1),
           user: currentUser.name,
@@ -249,17 +177,17 @@ function PostCard({ post }) {
     }
   };
 
-  const handleReplyClick = (comment) => {
-    setReplyTo(comment); // Set the comment being replied to
-    setNewComment(``); // Clear the textarea for the reply
+  const handleReplyClick = (comment: any) => {
+    setReplyTo(comment);
+    setNewComment("");
   };
 
   const handleCancelReply = () => {
-    setReplyTo(null); // Reset the reply context
-    setNewComment(""); // Clear the textarea
+    setReplyTo(null);
+    setNewComment("");
   };
 
-  const handleMention = (user) => {
+  const handleMention = (user: string) => {
     setNewComment(newComment + `@${user} `);
     setMentionedUsers([]);
   };
@@ -268,11 +196,16 @@ function PostCard({ post }) {
     <Card className="mb-8 bg-primary/5">
       <CardHeader>
         <CardTitle>{post.title}</CardTitle>
-        <p className="text-sm">{new Date(post.date).toLocaleDateString()}</p>
+        <p className="text-sm">
+          {new Date(post.createdAt).toLocaleDateString()}
+        </p>
       </CardHeader>
       <CardContent>
-        <ImageCarousel images={post.images} title={post.title} />
-        <p className="mb-4">{post.content}</p>
+        <ImageCarousel
+          images={post.eventImages.map((img) => img.imageUrl)}
+          title={post.title}
+        />
+        <p className="mb-4">{post.body}</p>
         <div className="mb-4 flex items-center gap-2">
           <Button
             variant="ghost"
@@ -327,7 +260,7 @@ function PostCard({ post }) {
       <CardFooter>
         <form onSubmit={handleAddCommentOrReply} className="relative w-full">
           {replyTo && (
-            <div className="bg-primary/10 px-2 text-sm rounded-t-md">
+            <div className="rounded-t-md bg-primary/10 px-2 text-sm">
               Replying to <strong>{replyTo.user}</strong>
               <Button
                 variant="link"
@@ -346,9 +279,7 @@ function PostCard({ post }) {
                     replyTo ? "Write a reply..." : "Add a comment..."
                   }
                   value={newComment}
-                  onChange={(e) => {
-                    setNewComment(e.target.value);
-                  }}
+                  onChange={(e) => setNewComment(e.target.value)}
                   className="w-full flex-grow resize-none rounded-none rounded-b-md focus-visible:ring-offset-0"
                   required
                 />
@@ -382,7 +313,13 @@ function PostCard({ post }) {
   );
 }
 
-function Comment({ comment, onReply }) {
+function Comment({
+  comment,
+  onReply,
+}: {
+  comment: any;
+  onReply: (comment: any) => void;
+}) {
   return (
     <div className="mt-6">
       <div className="flex items-start gap-3 text-sm">
@@ -403,7 +340,7 @@ function Comment({ comment, onReply }) {
         </div>
       </div>
       {comment.replies.length > 0 &&
-        comment.replies.map((reply, index) => (
+        comment.replies.map((reply: any, index: number) => (
           <div key={index} className="ml-10 mt-2">
             <div className="flex items-start gap-3 text-sm">
               <Avatar>
@@ -421,21 +358,45 @@ function Comment({ comment, onReply }) {
 }
 
 export default function Component({ eventId }: { eventId: string }) {
+  const [posts, setPosts] = useState<EventPostType[]>([]);
   const [visiblePosts, setVisiblePosts] = useState(3);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const response = await EventPost.getPostsByEventId(eventId);
+        if (response.isSuccess && response.data) {
+          setPosts(response.data);
+        } else {
+          setPosts([]);
+          setError(response.message || "Failed to fetch posts");
+        }
+      } catch (err) {
+        setError("Failed to fetch posts");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchPosts();
+  }, [eventId]);
 
   const loadMorePosts = () => {
-    setVisiblePosts((prevVisible) =>
-      Math.min(prevVisible + 3, postsData.length),
-    );
+    setVisiblePosts((prevVisible) => Math.min(prevVisible + 3, posts.length));
   };
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
-    <div className="mx-auto max-w-4xl mt-4">
-      {postsData.slice(0, visiblePosts).map((post) => (
+    <div className="mx-auto mt-4 max-w-4xl">
+      {posts.slice(0, visiblePosts).map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
 
-      {visiblePosts < postsData.length && (
+      {visiblePosts < posts.length && (
         <div className="mt-6 text-center">
           <Button onClick={loadMorePosts} variant="outline">
             Load More <ChevronDownIcon className="ml-2 h-4 w-4" />

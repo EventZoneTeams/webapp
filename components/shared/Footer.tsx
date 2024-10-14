@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-5">
           <div className="absolute col-span-1 md:col-span-2">
             <h2 className="mb-2 text-2xl font-bold">EventZone</h2>
-            <p className="text-sm">BRING YOUR DREAM TO REALITY</p>
+            <p className="text-sm">TURNING DREAMS INTO REALITY</p>
           </div>
           {/* <div>
             <h3 className="mb-4 text-lg font-semibold">EventZone Themes</h3>

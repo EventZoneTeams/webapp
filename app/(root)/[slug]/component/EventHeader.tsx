@@ -12,22 +12,45 @@ import {
   ChevronUpIcon,
   UserIcon,
 } from "lucide-react";
-import { format } from "date-fns";
+import { format, isSameDay, isSameMonth, isSameYear } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import DisplayContent from "@/components/minimal-tiptap/display-content";
+import GetTicket from "./GetTicket";
 
 export default function EventHeader({
   event,
-  isFollowing,
-  onToggleFollow,
+  // isFollowing,
+  // onToggleFollow,
 }: {
   event: Event;
-  isFollowing: boolean;
-  onToggleFollow: () => void;
+  // isFollowing: boolean;
+  // onToggleFollow: () => void;
 }) {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const description = event?.description || "";
+
+  const startDate = new Date(event.eventStartDate);
+  const endDate = new Date(event.eventEndDate);
+
+  let formattedDate;
+
+  if (isSameDay(startDate, endDate)) {
+    // Same day
+    formattedDate = format(startDate, "MMMM do, yyyy");
+  } else if (
+    isSameMonth(startDate, endDate) &&
+    isSameYear(startDate, endDate)
+  ) {
+    // Same month and year, different days
+    formattedDate = `${format(startDate, "MMMM do")} - ${format(endDate, "do, yyyy")}`;
+  } else if (isSameYear(startDate, endDate)) {
+    // Same year, different months
+    formattedDate = `${format(startDate, "MMMM do")} - ${format(endDate, "MMMM do, yyyy")}`;
+  } else {
+    // Different year
+    formattedDate = `${format(startDate, "MMMM do, yyyy")} - ${format(endDate, "MMMM do, yyyy")}`;
+  }
 
   return (
     <div className="mb-8 overflow-hidden rounded-lg bg-card/20 shadow-lg">
@@ -46,10 +69,12 @@ export default function EventHeader({
           <div className="flex flex-wrap gap-4 text-sm text-white drop-shadow">
             <div className="flex items-center">
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {format(event?.eventEndDate!, "PPP")}
+              {formattedDate}
             </div>
             <div className="flex items-center">
               <ClockIcon className="mr-2 h-4 w-4" />
+              {format(event?.eventStartDate!, "p")}
+              {" - "}
               {format(event?.eventEndDate!, "p")}
             </div>
           </div>
@@ -75,24 +100,32 @@ export default function EventHeader({
             </div>
           </div>
           <Button
-            variant={isFollowing ? "outline" : "default"}
-            onClick={onToggleFollow}
+            variant={
+              // isFollowing ? "outline" :
+              "default"
+            }
+            // onClick={onToggleFollow}
             className="px-6"
           >
-            {isFollowing ? "Unfollow" : "Follow"}
+            {
+              // isFollowing ? "Unfollow" :
+              "Follow"
+            }
           </Button>
         </div>
-        <div className="mb-6 flex items-center space-x-4 cursor-default">
+        <div className="mb-6 flex cursor-default items-center space-x-4">
           <Badge variant="secondary" className="px-3 py-1">
             <MapPinIcon className="mr-2 h-4 w-4" />
             {event?.location.display}
           </Badge>
           <Badge variant="secondary" className="px-3 py-1">
             <UserIcon className="mr-2 h-4 w-4" />
-            {event.attendees} Attendees
+            {/* {event.attendees}  */}
+            230 Attendees
           </Badge>
         </div>
         <div className="space-y-4">
+          <GetTicket event={event} />
           <h2 className="text-xl font-semibold">About Event</h2>
           <div
             className={`relative ${showFullDescription ? "" : "line-clamp-4 overflow-hidden"}`}

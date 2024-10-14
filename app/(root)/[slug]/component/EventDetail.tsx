@@ -20,7 +20,7 @@ export default async function EventDetail({
   return (
     <div className="space-y-6">
       <EventHeader event={event} />
-      <EventTabs event={event} products={products} />
+      <EventTabs event={event} />
     </div>
   );
 }

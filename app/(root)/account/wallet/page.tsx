@@ -128,16 +128,15 @@ export default function WalletPage() {
               <TabsContent value="deposits">
                 <TransactionList
                   transactions={transactions.filter(
-                    (t) => t.transactionType === 'DEPOSIT'
+                    (t) => t.transactionType === "DEPOSIT",
                   )}
                   handleCompleteTransaction={handleCompleteTransaction}
                 />
               </TabsContent>
               <TabsContent value="withdrawals">
                 <TransactionList
-                  transactions={transactions.filter(
-                    (t) => t.transactionType === 'WITHDRAWAL'
-                  )}
+                  transactions={withdrawalRequests}
+                  // {transactions.filter((t) => t.transactionType === 'WITHDRAWAL')}
                   handleCompleteTransaction={handleCompleteTransaction}
                 />
               </TabsContent>
@@ -146,7 +145,7 @@ export default function WalletPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
 
 // ... (TransactionList component remains the same)
@@ -202,7 +201,7 @@ function TransactionList({
                 >
                   {transaction.status}
                 </span>
-                {transaction.status === "PENDING" && (
+                {/* {transaction.status === "PENDING" && (
                   <Button
                     size="sm"
                     variant="outline"
@@ -211,7 +210,7 @@ function TransactionList({
                     <Clock className="mr-2 h-4 w-4" />
                     Complete
                   </Button>
-                )}
+                )} */}
               </div>
             </div>
           ))}

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { CalendarIcon, MapPinIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -36,7 +35,7 @@ const EventCard = ({
     )}
   >
     <Image
-      src={event.thumbnailUrl || "/placeholder.svg?height=400&width=600"}
+      src={event?.thumbnailUrl!}
       alt={event.name}
       layout="fill"
       objectFit="cover"
@@ -70,16 +69,22 @@ const EventCard = ({
         {new Intl.DateTimeFormat("en-US", { month: "long" }).format(
           new Date(event.eventStartDate),
         )}{" "}
-        {new Date(event.eventStartDate).getDate()}
-        {new Date(event.eventStartDate).getMonth() ===
+        {new Date(event.eventStartDate).getDate() ===
+          new Date(event.eventEndDate).getDate() &&
+        new Date(event.eventStartDate).getMonth() ===
           new Date(event.eventEndDate).getMonth() &&
         new Date(event.eventStartDate).getFullYear() ===
           new Date(event.eventEndDate).getFullYear()
-          ? `-${new Date(event.eventEndDate).getDate()}`
-          : new Date(event.eventStartDate).getFullYear() ===
-              new Date(event.eventEndDate).getFullYear()
-            ? ` - ${new Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date(event.eventEndDate))} ${new Date(event.eventEndDate).getDate()}`
-            : `, ${new Date(event.eventStartDate).getFullYear()} - ${new Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date(event.eventEndDate))} ${new Date(event.eventEndDate).getDate()}, ${new Date(event.eventEndDate).getFullYear()}`}
+          ? `${new Date(event.eventStartDate).getDate()}th`
+          : new Date(event.eventStartDate).getMonth() ===
+                new Date(event.eventEndDate).getMonth() &&
+              new Date(event.eventStartDate).getFullYear() ===
+                new Date(event.eventEndDate).getFullYear()
+            ? `${new Date(event.eventStartDate).getDate()} - ${new Date(event.eventEndDate).getDate()}`
+            : new Date(event.eventStartDate).getFullYear() ===
+                new Date(event.eventEndDate).getFullYear()
+              ? `${new Date(event.eventStartDate).getDate()} - ${new Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date(event.eventEndDate))} ${new Date(event.eventEndDate).getDate()}`
+              : `, ${new Date(event.eventStartDate).getFullYear()} - ${new Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date(event.eventEndDate))} ${new Date(event.eventEndDate).getDate()}, ${new Date(event.eventEndDate).getFullYear()}`}
         {new Date(event.eventStartDate).getFullYear() !==
           new Date().getFullYear() &&
         new Date(event.eventStartDate).getFullYear() ===
@@ -246,29 +251,35 @@ export default function DiscoverPage() {
     fetchEvents();
   }, [params]);
 
-  const featuredEvents = events;
+  const featuredEvents = events.filter((event) => event.status === "PUBLISHED");
+
   const upcomingEvents = events;
+  // .filter((event) => event.status === "PUBLISHED");
+
   const trendingEvents = events;
+  // .filter((event) => event.status === "PUBLISHED");
+
   const specialEvents = events;
+  // .filter((event) => event.status === "PUBLISHED");
 
   return (
     <div className="container mx-auto px-4 py-8">
       {isLoading ? (
         <div>
           <EventCarouselSkeleton title="" itemSize="large" />
-          <EventCarouselSkeleton title="Upcoming Events" />
-          <EventCarouselSkeleton title="Trending Now" />
           <EventCarouselSkeleton title="Special Events" />
+          <EventCarouselSkeleton title="Trending Now" />
+          <EventCarouselSkeleton title="Upcoming Events" />
         </div>
       ) : (
         <>
           {/* Featured Events Carousel */}
           <EventCarousel title="" events={featuredEvents} itemSize="large" />
 
-          {/* Upcoming Events Carousel */}
+          {/* Special Events Carousel */}
           <EventCarousel
-            title="Upcoming Events"
-            events={upcomingEvents}
+            title="Special Events"
+            events={specialEvents}
             textSize="small"
           />
 
@@ -279,10 +290,10 @@ export default function DiscoverPage() {
             textSize="small"
           />
 
-          {/* Special Events Carousel */}
+          {/* Upcoming Events Carousel */}
           <EventCarousel
-            title="Special Events"
-            events={specialEvents}
+            title="Upcoming Events"
+            events={upcomingEvents}
             textSize="small"
           />
 

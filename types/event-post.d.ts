@@ -4,21 +4,24 @@ export interface CreateEventPostRequest {
   eventId: string;
   title: string;
   body?: string;
-  imageUrl: string[];
+  imageUrls: string[];
 }
 
 export interface EventPost {
   id: string;
-  eventId: string;
-//   event: Event; Chưa cần
-  title: string;
-  body?: string;
+  // postComments: any[];
   createdAt: string;
-  imageUrl: PostImage[];
+  isDeleted: boolean;
+  eventImages: PostImage[];
+  eventId: string;
+  title: string;
+  body: string;
+  imageUrls: string | null;
 }
 
 export interface PostImage {
   id: string;
   imageUrl: string;
   name: string;
+  isDeleted: boolean;
 }

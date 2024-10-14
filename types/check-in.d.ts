@@ -5,15 +5,24 @@ interface Ticket {
   attendeeNote: string;
 }
 
+interface Product {
+  id: string;
+  name: string;
+  quantity: number;
+  price: number;
+  isReceived: boolean;
+}
+
 interface User {
   id: string;
+  avatar: string;
   fullName: string;
   email: string;
   phoneNumber: string | null;
 }
 
-interface UserOrder {
+export interface UserOrder {
   user: User;
   bookedTickets: Ticket[];
-  products: any[]; // Adjust the type based on the structure of products
+  products: Product[];
 }

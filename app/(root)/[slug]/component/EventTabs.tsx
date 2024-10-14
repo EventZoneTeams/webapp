@@ -87,8 +87,6 @@ export default function EventTabs({
                 />
               </div>
             </div>
-
-            <GetTicket event={event} />
           </div>
         </TabsContent>
       </Tabs>

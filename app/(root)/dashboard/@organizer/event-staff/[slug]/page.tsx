@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CheckCircle, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -50,150 +50,221 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Staff } from "@/lib/api/staff";
+import { UserOrder } from "@/types/check-in";
 
-interface Ticket {
-  id: string;
-  type: string;
-  checkedIn: boolean;
-}
-
-interface PurchasedProduct {
-  id: string;
-  name: string;
-  quantity: number;
-  checkedOut: boolean;
-}
-
-interface Attendee {
-  id: string;
-  name: string;
-  email: string;
-  avatarUrl: string;
-  tickets: Ticket[];
-  purchasedProducts: PurchasedProduct[];
-}
-
-// Mock data with 25 entries
-const mockAttendees: Attendee[] = Array.from({ length: 25 }, (_, index) => ({
-  id: `ATT${(index + 1).toString().padStart(3, "0")}`,
-  name: `Attendee ${index + 1}`,
-  email: `attendee${index + 1}@example.com`,
-  avatarUrl: `https://api.dicebear.com/6.x/initials/svg?seed=${encodeURIComponent(`Attendee ${index + 1}`)}`,
-  tickets: [
-    {
-      id: `TKT${(index + 1).toString().padStart(3, "0")}A`,
-      type: "General",
-      checkedIn: Math.random() > 0.5,
-    },
-    {
-      id: `TKT${(index + 1).toString().padStart(3, "0")}B`,
-      type: "Workshop",
-      checkedIn: Math.random() > 0.5,
-    },
-  ],
-  purchasedProducts: [
-    {
-      id: `ITM${(index + 1).toString().padStart(3, "0")}A`,
-      name: "T-Shirt",
-      quantity: Math.floor(Math.random() * 3) + 1,
-      checkedOut: Math.random() > 0.5,
-    },
-    {
-      id: `ITM${(index + 1).toString().padStart(3, "0")}B`,
-      name: "Mug",
-      quantity: Math.floor(Math.random() * 2) + 1,
-      checkedOut: Math.random() > 0.5,
-    },
-  ],
-}));
-
-export default function EventStaffPage({ params }: { params: { slug: string } }) {
-  const [attendees, setAttendees] = useState<Attendee[]>(mockAttendees);
+export default function EventStaffPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const [attendees, setAttendees] = useState<UserOrder[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedAttendee, setSelectedAttendee] = useState<Attendee | null>(
+  const [selectedAttendee, setSelectedAttendee] = useState<UserOrder | null>(
     null,
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage, setProductsPerPage] = useState(5);
+  const [attendeesPerPage, setAttendeesPerPage] = useState(5);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchAttendees = async () => {
+      try {
+        const response = await Staff.getUserListOrder(params.slug);
+        if (response.isSuccess && response.data) {
+          setAttendees(response.data);
+        } else {
+          setAttendees([]);
+          toast({
+            title: "Error",
+            description: response.message || "Failed to fetch attendees",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "An unexpected error occurred",
+          variant: "destructive",
+        });
+      }
+    };
+
+    fetchAttendees();
+  }, [params.slug, toast]);
 
   const filteredAttendees = attendees.filter(
     (attendee) =>
-      attendee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      attendee.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      attendee.id.toLowerCase().includes(searchTerm.toLowerCase()),
+      attendee.user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      attendee.user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      attendee.user.id.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const totalPages = Math.ceil(filteredAttendees.length / productsPerPage);
+  const totalPages = Math.ceil(filteredAttendees.length / attendeesPerPage);
   const paginatedAttendees = filteredAttendees.slice(
-    (currentPage - 1) * productsPerPage,
-    currentPage * productsPerPage,
+    (currentPage - 1) * attendeesPerPage,
+    currentPage * attendeesPerPage,
   );
 
-  const handleTicketCheckInOut = (
+  const handleTicketCheckInOut = async (
     attendeeId: string,
     ticketId: string,
     checkIn: boolean,
   ) => {
-    setAttendees(
-      attendees.map((attendee) => {
-        if (attendee.id === attendeeId) {
-          const updatedTickets = attendee.tickets.map((ticket) =>
-            ticket.id === ticketId ? { ...ticket, checkedIn: checkIn } : ticket,
-          );
-          return { ...attendee, tickets: updatedTickets };
-        }
-        return attendee;
-      }),
-    );
-    setSelectedAttendee((prev) => {
-      if (prev && prev.id === attendeeId) {
-        const updatedTickets = prev.tickets.map((ticket) =>
-          ticket.id === ticketId ? { ...ticket, checkedIn: checkIn } : ticket,
+    // Immediately update the UI
+    setSelectedAttendee((prevAttendee) => {
+      if (!prevAttendee) return null;
+      return {
+        ...prevAttendee,
+        bookedTickets: prevAttendee.bookedTickets.map((ticket) =>
+          ticket.id === ticketId ? { ...ticket, isCheckedIn: checkIn } : ticket,
+        ),
+      };
+    });
+
+    try {
+      const response = await Staff.checkInTicket(ticketId);
+      if (response.isSuccess) {
+        toast({
+          title: checkIn ? "Ticket Checked In" : "Ticket Check-In Reversed",
+          description: "Operation successful",
+        });
+        // Update the attendees list
+        setAttendees((prevAttendees) =>
+          prevAttendees.map((attendee) =>
+            attendee.user.id === attendeeId
+              ? {
+                  ...attendee,
+                  bookedTickets: attendee.bookedTickets.map((ticket) =>
+                    ticket.id === ticketId
+                      ? { ...ticket, isCheckedIn: checkIn }
+                      : ticket,
+                  ),
+                }
+              : attendee,
+          ),
         );
-        return { ...prev, tickets: updatedTickets };
+      } else {
+        // Revert the UI change if the API call fails
+        setSelectedAttendee((prevAttendee) => {
+          if (!prevAttendee) return null;
+          return {
+            ...prevAttendee,
+            bookedTickets: prevAttendee.bookedTickets.map((ticket) =>
+              ticket.id === ticketId
+                ? { ...ticket, isCheckedIn: !checkIn }
+                : ticket,
+            ),
+          };
+        });
+        toast({
+          title: "Error",
+          description: response.message || "Failed to update ticket status",
+          variant: "destructive",
+        });
       }
-      return prev;
-    });
-    toast({
-      title: checkIn ? "Ticket Checked In" : "Ticket Check-In Reversed",
-      description: checkIn
-        ? "The ticket has been successfully checked in."
-        : "The ticket check-in has been reversed.",
-    });
+    } catch (error) {
+      // Revert the UI change if an error occurs
+      setSelectedAttendee((prevAttendee) => {
+        if (!prevAttendee) return null;
+        return {
+          ...prevAttendee,
+          bookedTickets: prevAttendee.bookedTickets.map((ticket) =>
+            ticket.id === ticketId
+              ? { ...ticket, isCheckedIn: !checkIn }
+              : ticket,
+          ),
+        };
+      });
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleProductCheckInOut = (
+  const handleProductCheckInOut = async (
     attendeeId: string,
     productId: string,
     checkOut: boolean,
   ) => {
-    setAttendees(
-      attendees.map((attendee) => {
-        if (attendee.id === attendeeId) {
-          const updatedProducts = attendee.purchasedProducts.map((product) =>
-            product.id === productId ? { ...product, checkedOut: checkOut } : product,
-          );
-          return { ...attendee, purchasedProducts: updatedProducts };
-        }
-        return attendee;
-      }),
-    );
-    setSelectedAttendee((prev) => {
-      if (prev && prev.id === attendeeId) {
-        const updatedProducts = prev.purchasedProducts.map((product) =>
-          product.id === productId ? { ...product, checkedOut: checkOut } : product,
+    // Immediately update the UI
+    setSelectedAttendee((prevAttendee) => {
+      if (!prevAttendee) return null;
+      return {
+        ...prevAttendee,
+        products: prevAttendee.products.map((product) =>
+          product.id === productId
+            ? { ...product, isReceived: checkOut }
+            : product,
+        ),
+      };
+    });
+
+    try {
+      const response = await Staff.checkOutOrder(productId);
+      if (response.isSuccess) {
+        toast({
+          title: checkOut
+            ? "Product Checked Out"
+            : "Product Check-Out Reversed",
+          description: "Operation successful",
+        });
+        // Update the attendees list
+        setAttendees((prevAttendees) =>
+          prevAttendees.map((attendee) =>
+            attendee.user.id === attendeeId
+              ? {
+                  ...attendee,
+                  products: attendee.products.map((product) =>
+                    product.id === productId
+                      ? { ...product, isReceived: checkOut }
+                      : product,
+                  ),
+                }
+              : attendee,
+          ),
         );
-        return { ...prev, purchasedProducts: updatedProducts };
+      } else {
+        // Revert the UI change if the API call fails
+        setSelectedAttendee((prevAttendee) => {
+          if (!prevAttendee) return null;
+          return {
+            ...prevAttendee,
+            products: prevAttendee.products.map((product) =>
+              product.id === productId
+                ? { ...product, isReceived: !checkOut }
+                : product,
+            ),
+          };
+        });
+        toast({
+          title: "Error",
+          description: response.message || "Failed to update product status",
+          variant: "destructive",
+        });
       }
-      return prev;
-    });
-    toast({
-      title: checkOut ? "Product Checked Out" : "Product Check-Out Reversed",
-      description: checkOut
-        ? "The product has been successfully checked out."
-        : "The product check-out has been reversed.",
-    });
+    } catch (error) {
+      // Revert the UI change if an error occurs
+      setSelectedAttendee((prevAttendee) => {
+        if (!prevAttendee) return null;
+        return {
+          ...prevAttendee,
+          products: prevAttendee.products.map((product) =>
+            product.id === productId
+              ? { ...product, isReceived: !checkOut }
+              : product,
+          ),
+        };
+      });
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -202,7 +273,7 @@ export default function EventStaffPage({ params }: { params: { slug: string } })
         <CardTitle>Event Attendee Management</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="products-center mb-6 flex gap-4">
+        <div className="mb-6 flex items-center gap-4">
           <div className="flex-1 space-y-2">
             <Label htmlFor="search">Search Attendees</Label>
             <Input
@@ -213,10 +284,10 @@ export default function EventStaffPage({ params }: { params: { slug: string } })
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="productsPerPage">Number per page</Label>
+            <Label htmlFor="attendeesPerPage">Number per page</Label>
             <Select
-              value={productsPerPage.toString()}
-              onValueChange={(value) => setProductsPerPage(Number(value))}
+              value={attendeesPerPage.toString()}
+              onValueChange={(value) => setAttendeesPerPage(Number(value))}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select" />
@@ -234,8 +305,8 @@ export default function EventStaffPage({ params }: { params: { slug: string } })
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>ID</TableHead>
               <TableHead>Avatar</TableHead>
+              <TableHead>ID</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Tickets</TableHead>
@@ -245,35 +316,29 @@ export default function EventStaffPage({ params }: { params: { slug: string } })
           <TableBody className="bg-primary/5">
             {paginatedAttendees.map((attendee) => (
               <TableRow
-                key={attendee.id}
+                key={attendee.user.id}
                 className="cursor-pointer hover:bg-muted/50"
+                onClick={() => setSelectedAttendee(attendee)}
               >
-                <TableCell onClick={() => setSelectedAttendee(attendee)}>
-                  {attendee.id}
-                </TableCell>
-                <TableCell onClick={() => setSelectedAttendee(attendee)}>
-                  <Avatar>
-                    <AvatarImage src={attendee.avatarUrl} alt={attendee.name} />
+                <TableCell>
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage
+                      src={attendee.user.avatar}
+                      alt={attendee.user.fullName}
+                    />
                     <AvatarFallback>
-                      {attendee.name
+                      {attendee.user.fullName
                         .split(" ")
                         .map((n) => n[0])
                         .join("")}
                     </AvatarFallback>
                   </Avatar>
                 </TableCell>
-                <TableCell onClick={() => setSelectedAttendee(attendee)}>
-                  {attendee.name}
-                </TableCell>
-                <TableCell onClick={() => setSelectedAttendee(attendee)}>
-                  {attendee.email}
-                </TableCell>
-                <TableCell onClick={() => setSelectedAttendee(attendee)}>
-                  {attendee.tickets.length}
-                </TableCell>
-                <TableCell onClick={() => setSelectedAttendee(attendee)}>
-                  {attendee.purchasedProducts.length}
-                </TableCell>
+                <TableCell>{attendee.user.id}</TableCell>
+                <TableCell>{attendee.user.fullName}</TableCell>
+                <TableCell>{attendee.user.email}</TableCell>
+                <TableCell>{attendee.bookedTickets.length}</TableCell>
+                <TableCell>{attendee.products.length}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -315,193 +380,259 @@ export default function EventStaffPage({ params }: { params: { slug: string } })
           open={!!selectedAttendee}
           onOpenChange={(open) => !open && setSelectedAttendee(null)}
         >
-          <DialogContent className="max-w-7xl">
+          <DialogContent className="flex max-h-[95vh] max-w-7xl flex-col overflow-hidden">
             <DialogHeader>
-              <DialogTitle className="products-center flex gap-2">
+              <DialogTitle className="flex items-center gap-2">
                 <Avatar>
                   <AvatarImage
-                    src={selectedAttendee?.avatarUrl}
-                    alt={selectedAttendee?.name}
+                    src={selectedAttendee?.user.avatar}
+                    alt={selectedAttendee?.user.fullName}
                   />
                   <AvatarFallback>
-                    {selectedAttendee?.name
+                    {selectedAttendee?.user.fullName
                       .split(" ")
                       .map((n) => n[0])
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
-                {selectedAttendee?.name} ({selectedAttendee?.id})
+                {selectedAttendee?.user.fullName} ({selectedAttendee?.user.id})
               </DialogTitle>
-              <DialogDescription>{selectedAttendee?.email}</DialogDescription>
+              <DialogDescription>
+                {selectedAttendee?.user.email}
+              </DialogDescription>
             </DialogHeader>
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <h4 className="mb-2 font-semibold">Purchased Tickets:</h4>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>ID</TableHead>
-                      <TableHead className="min-w-[100px]">Type</TableHead>
-                      <TableHead className="min-w-[148px]">Status</TableHead>
-                      <TableHead>Action</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {selectedAttendee?.tickets.map((ticket) => (
-                      <TableRow key={ticket.id}>
-                        <TableCell>{ticket.id}</TableCell>
-                        <TableCell>{ticket.type}</TableCell>
-                        <TableCell>
-                          {ticket.checkedIn ? (
-                            <span className="products-center flex text-green-500">
-                              <CheckCircle className="mr-1 h-4 w-4" /> Checked
-                              In
-                            </span>
-                          ) : (
-                            <span className="products-center flex text-yellow-500">
-                              <XCircle className="mr-1 h-4 w-4" /> Not Checked
-                              In
-                            </span>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {ticket.checkedIn ? (
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button variant="outline" size="sm">
-                                  Reverse Check-In
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>
-                                    Are you sure?
-                                  </AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    This action will reverse the check-in for
-                                    this ticket.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() =>
-                                      handleTicketCheckInOut(
-                                        selectedAttendee.id,
-                                        ticket.id,
-                                        false,
-                                      )
-                                    }
-                                  >
-                                    Confirm
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          ) : (
-                            <Button
-                              onClick={() =>
-                                handleTicketCheckInOut(
-                                  selectedAttendee.id,
-                                  ticket.id,
-                                  true,
-                                )
-                              }
-                              size="sm"
-                            >
-                              Check In
-                            </Button>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-              <div>
-                <h4 className="mb-2 font-semibold">Purchased Products:</h4>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>ID</TableHead>
-                      <TableHead className="min-w-[100px]">Product</TableHead>
-                      <TableHead>Quantity</TableHead>
-                      <TableHead className="min-w-[160px]">Status</TableHead>
-                      <TableHead>Action</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {selectedAttendee?.purchasedProducts.map((product) => (
-                      <TableRow key={product.id}>
-                        <TableCell>{product.id}</TableCell>
-                        <TableCell>{product.name}</TableCell>
-                        <TableCell>{product.quantity}</TableCell>
-                        <TableCell>
-                          {product.checkedOut ? (
-                            <span className="products-center flex text-green-500">
-                              <CheckCircle className="mr-1 h-4 w-4" /> Checked
-                              Out
-                            </span>
-                          ) : (
-                            <span className="products-center flex text-yellow-500">
-                              <XCircle className="mr-1 h-4 w-4" /> Not Checked
-                              Out
-                            </span>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {product.checkedOut ? (
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button variant="outline" size="sm">
-                                  Reverse Check-Out
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>
-                                    Are you sure?
-                                  </AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    This action will reverse the check-out for
-                                    this product.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() =>
-                                      handleProductCheckInOut(
-                                        selectedAttendee.id,
-                                        product.id,
-                                        false,
-                                      )
-                                    }
-                                  >
-                                    Confirm
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          ) : (
-                            <Button
-                              onClick={() =>
-                                handleProductCheckInOut(
-                                  selectedAttendee.id,
-                                  product.id,
-                                  true,
-                                )
-                              }
-                              size="sm"
-                            >
-                              Check Out
-                            </Button>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+            <div className="flex-grow overflow-hidden">
+              <div className="grid h-full grid-cols-1 gap-8">
+                {selectedAttendee?.bookedTickets &&
+                  selectedAttendee.bookedTickets.length > 0 && (
+                    <div
+                      className={`w-full ${
+                        selectedAttendee?.products &&
+                        selectedAttendee.products.length > 0
+                          ? "max-h-[30vh]"
+                          : "max-h-[80vh]"
+                      }`}
+                    >
+                      <h4 className="mb-2 font-semibold">Booked Tickets:</h4>
+                      <ScrollArea
+                        className="h-full rounded-md border"
+                        style={{ maxHeight: "100%" }}
+                      >
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead className="sticky top-0 bg-background">
+                                ID
+                              </TableHead>
+                              <TableHead className="sticky top-0 bg-background">
+                                Type
+                              </TableHead>
+                              <TableHead className="sticky top-0 bg-background">
+                                Status
+                              </TableHead>
+                              <TableHead className="sticky top-0 bg-background">
+                                Action
+                              </TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {selectedAttendee.bookedTickets.map((ticket) => (
+                              <TableRow key={ticket.id}>
+                                <TableCell>{ticket.id}</TableCell>
+                                <TableCell>{ticket.attendeeNote}</TableCell>
+                                <TableCell>
+                                  {ticket.isCheckedIn ? (
+                                    <span className="flex items-center text-green-500">
+                                      <CheckCircle className="mr-1 h-4 w-4" />{" "}
+                                      Checked In
+                                    </span>
+                                  ) : (
+                                    <span className="flex items-center text-yellow-500">
+                                      <XCircle className="mr-1 h-4 w-4" /> Not
+                                      Checked In
+                                    </span>
+                                  )}
+                                </TableCell>
+                                <TableCell>
+                                  {ticket.isCheckedIn ? (
+                                    <AlertDialog>
+                                      <AlertDialogTrigger asChild>
+                                        <Button variant="outline" size="sm">
+                                          Reverse Check-in
+                                        </Button>
+                                      </AlertDialogTrigger>
+                                      <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                          <AlertDialogTitle>
+                                            Are you sure?
+                                          </AlertDialogTitle>
+                                          <AlertDialogDescription>
+                                            This action will reverse the
+                                            check-in for this ticket.
+                                          </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                          <AlertDialogCancel>
+                                            Cancel
+                                          </AlertDialogCancel>
+                                          <AlertDialogAction
+                                            onClick={() =>
+                                              handleTicketCheckInOut(
+                                                selectedAttendee.user.id,
+                                                ticket.id,
+                                                false,
+                                              )
+                                            }
+                                          >
+                                            Confirm
+                                          </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                      </AlertDialogContent>
+                                    </AlertDialog>
+                                  ) : (
+                                    <Button
+                                      onClick={() =>
+                                        handleTicketCheckInOut(
+                                          selectedAttendee.user.id,
+                                          ticket.id,
+                                          true,
+                                        )
+                                      }
+                                      size="sm"
+                                    >
+                                      Check-in
+                                    </Button>
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </ScrollArea>
+                    </div>
+                  )}
+                {selectedAttendee?.products &&
+                  selectedAttendee.products.length > 0 && (
+                    <div
+                      className={`w-full ${
+                        selectedAttendee?.bookedTickets &&
+                        selectedAttendee.bookedTickets.length > 0
+                          ? "max-h-[35vh]"
+                          : "max-h-[80vh]"
+                      }`}
+                    >
+                      <h4 className="mb-2 font-semibold">
+                        Purchased Products:
+                      </h4>
+                      <ScrollArea
+                        className="h-full rounded-md border"
+                        style={{ maxHeight: "100%" }}
+                      >
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead className="sticky top-0 bg-background">
+                                ID
+                              </TableHead>
+                              <TableHead className="sticky top-0 bg-background">
+                                Product
+                              </TableHead>
+                              <TableHead className="sticky top-0 bg-background">
+                                Quantity
+                              </TableHead>
+                              <TableHead className="sticky top-0 bg-background">
+                                Status
+                              </TableHead>
+                              <TableHead className="sticky top-0 bg-background">
+                                Action
+                              </TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {selectedAttendee.products.map((product) => (
+                              <TableRow key={product.id}>
+                                <TableCell>{product.id}</TableCell>
+                                <TableCell>{product.name}</TableCell>
+                                <TableCell>{product.quantity}</TableCell>
+                                <TableCell>
+                                  {product.isReceived ? (
+                                    <span className="flex items-center text-green-500">
+                                      <CheckCircle className="mr-1 h-4 w-4" />{" "}
+                                      Checked Out
+                                    </span>
+                                  ) : (
+                                    <span className="flex items-center text-yellow-500">
+                                      <XCircle className="mr-1 h-4 w-4" /> Not
+                                      Checked Out
+                                    </span>
+                                  )}
+                                </TableCell>
+                                <TableCell>
+                                  {product.isReceived ? (
+                                    <AlertDialog>
+                                      <AlertDialogTrigger asChild>
+                                        <Button variant="outline" size="sm">
+                                          Reverse Check-out
+                                        </Button>
+                                      </AlertDialogTrigger>
+                                      <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                          <AlertDialogTitle>
+                                            Are you sure?
+                                          </AlertDialogTitle>
+                                          <AlertDialogDescription>
+                                            This action will reverse the
+                                            check-out status for this product.
+                                          </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                          <AlertDialogCancel>
+                                            Cancel
+                                          </AlertDialogCancel>
+                                          <AlertDialogAction
+                                            onClick={() =>
+                                              handleProductCheckInOut(
+                                                selectedAttendee.user.id,
+                                                product.id,
+                                                false,
+                                              )
+                                            }
+                                          >
+                                            Confirm
+                                          </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                      </AlertDialogContent>
+                                    </AlertDialog>
+                                  ) : (
+                                    <Button
+                                      onClick={() =>
+                                        handleProductCheckInOut(
+                                          selectedAttendee.user.id,
+                                          product.id,
+                                          true,
+                                        )
+                                      }
+                                      size="sm"
+                                    >
+                                      Check-out
+                                    </Button>
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </ScrollArea>
+                    </div>
+                  )}
+                {(!selectedAttendee?.bookedTickets ||
+                  selectedAttendee.bookedTickets.length === 0) &&
+                  (!selectedAttendee?.products ||
+                    selectedAttendee.products.length === 0) && (
+                    <div className="col-span-full text-center text-gray-500">
+                      No tickets or products found for this attendee.
+                    </div>
+                  )}
               </div>
             </div>
           </DialogContent>
