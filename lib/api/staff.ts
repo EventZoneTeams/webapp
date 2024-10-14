@@ -2,8 +2,26 @@ import { axiosInstance } from "@/lib/api";
 import { ApiResponse } from "@/types/api";
 import { AddStaffRequest } from "@/types/api/staff";
 import { User } from "@/types/user";
+import { Event as EventType } from "@/types/event";
 
 export namespace Staff {
+  export const getEventStaff = async (): Promise<ApiResponse<EventType[]>> => {
+    try {
+      const response = (
+        await axiosInstance.get<ApiResponse<EventType[]>>(
+          `EventStaff/get-staff-events`,
+        )
+      ).data;
+      return response;
+    } catch (error) {
+      return {
+        isSuccess: false,
+        message: "Failed to get events",
+        data: [],
+      };
+    }
+  };
+
   export const getStaffFromEvent = async (
     eventId: string,
   ): Promise<ApiResponse<User[]>> => {

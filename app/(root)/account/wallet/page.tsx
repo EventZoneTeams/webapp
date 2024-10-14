@@ -1,86 +1,117 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { History, ArrowUpRight, ArrowDownRight, Clock } from "lucide-react";
-import { Transaction, Wallet as WalletType } from "@/types/wallet";
-import { Wallet } from "@/lib/api/wallet";
-import { cn } from "@/lib/utils";
-import PersonalBalance from "../components/PersonalBalance";
+import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+import { History, ArrowUpRight, ArrowDownRight, Clock, Wallet as WalletIcon } from 'lucide-react'
+import { Transaction, Wallet as WalletType } from '@/types/wallet'
+import { Wallet } from '@/lib/api/wallet'
+import { cn } from '@/lib/utils'
+import PersonalBalance from '../components/PersonalBalance'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import WithdrawalForm from '../components/WithdrawalForm';
 
 export default function WalletPage() {
-  const [wallets, setWallets] = useState<WalletType[]>([]);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const router = useRouter();
+  const [wallets, setWallets] = useState<WalletType[]>([])
+  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [withdrawalRequests, setWithdrawalRequests] = useState<any[]>([])
+  const [isWithdrawalDialogOpen, setIsWithdrawalDialogOpen] = useState(false)
+  const router = useRouter()
 
   const fetchUserWallets = useCallback(async () => {
     try {
-      const response = await Wallet.getUserWallets();
+      const response = await Wallet.getUserWallets()
       if (response.isSuccess) {
-        setWallets(response.data || []);
+        setWallets(response.data || [])
       } else {
-        toast.error(response.message);
+        toast.error(response.message)
       }
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(error.message)
     }
-  }, []);
+  }, [])
 
   const fetchWalletTransactions = useCallback(async () => {
     try {
       const response = await Wallet.getWalletTransactions({
-        walletTypeEnums: "ALL",
-      });
+        walletTypeEnums: 'ALL',
+      })
       if (response.isSuccess) {
         const sortedTransactions = (response.data || []).sort(
           (a, b) =>
             new Date(b.transactionDate).getTime() -
-            new Date(a.transactionDate).getTime(),
-        );
-        setTransactions(sortedTransactions);
+            new Date(a.transactionDate).getTime()
+        )
+        setTransactions(sortedTransactions)
       } else {
-        toast.error(response.message);
+        toast.error(response.message)
       }
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(error.message)
     }
-  }, []);
+  }, [])
+
+  const fetchWithdrawalRequests = useCallback(async () => {
+    try {
+      const response = await Wallet.getWithdrawalRequests()
+      if (response.isSuccess) {
+        setWithdrawalRequests(response.data || [])
+      } else {
+        toast.error(response.message)
+      }
+    } catch (error: any) {
+      toast.error(error.message)
+    }
+  }, [])
 
   const handleCompleteTransaction = useCallback(
     async (transactionId: number) => {
       try {
-        const response = await Wallet.completePendingTransaction(transactionId);
+        const response = await Wallet.completePendingTransaction(transactionId)
         if (response.isSuccess) {
-          if (typeof response.data === "string" && response.data) {
-            router.push(response.data);
+          if (typeof response.data === 'string' && response.data) {
+            router.push(response.data)
           }
-          // Refresh the transaction list after completing a transaction
-          fetchWalletTransactions();
+          fetchWalletTransactions()
         } else {
-          toast.error(response.message);
+          toast.error(response.message)
         }
       } catch (error: any) {
-        toast.error(error.message || "Something went wrong");
+        toast.error(error.message || 'Something went wrong')
       }
     },
-    [router, fetchWalletTransactions],
-  );
+    [router, fetchWalletTransactions]
+  )
 
   useEffect(() => {
-    fetchUserWallets();
-    fetchWalletTransactions();
-  }, [fetchUserWallets, fetchWalletTransactions]);
+    fetchUserWallets()
+    fetchWalletTransactions()
+    fetchWithdrawalRequests()
+  }, [fetchUserWallets, fetchWalletTransactions, fetchWithdrawalRequests])
+
+  const handleWithdrawalSuccess = () => {
+    setIsWithdrawalDialogOpen(false)
+    fetchUserWallets()
+    fetchWalletTransactions()
+    fetchWithdrawalRequests()
+  }
 
   return (
     <div className="mx-auto">
@@ -113,7 +144,7 @@ export default function WalletPage() {
               <TabsContent value="deposits">
                 <TransactionList
                   transactions={transactions.filter(
-                    (t) => t.transactionType === "DEPOSIT",
+                    (t) => t.transactionType === 'DEPOSIT'
                   )}
                   handleCompleteTransaction={handleCompleteTransaction}
                 />
@@ -121,7 +152,7 @@ export default function WalletPage() {
               <TabsContent value="withdrawals">
                 <TransactionList
                   transactions={transactions.filter(
-                    (t) => t.transactionType === "WITHDRAWAL",
+                    (t) => t.transactionType === 'WITHDRAWAL'
                   )}
                   handleCompleteTransaction={handleCompleteTransaction}
                 />
@@ -131,8 +162,10 @@ export default function WalletPage() {
         </Card>
       </div>
     </div>
-  );
+  )
 }
+
+// ... (TransactionList component remains the same)
 
 function TransactionList({
   transactions,

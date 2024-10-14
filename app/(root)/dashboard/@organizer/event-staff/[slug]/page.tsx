@@ -57,7 +57,7 @@ interface Ticket {
   checkedIn: boolean;
 }
 
-interface PurchasedItem {
+interface PurchasedProduct {
   id: string;
   name: string;
   quantity: number;
@@ -70,7 +70,7 @@ interface Attendee {
   email: string;
   avatarUrl: string;
   tickets: Ticket[];
-  purchasedItems: PurchasedItem[];
+  purchasedProducts: PurchasedProduct[];
 }
 
 // Mock data with 25 entries
@@ -91,7 +91,7 @@ const mockAttendees: Attendee[] = Array.from({ length: 25 }, (_, index) => ({
       checkedIn: Math.random() > 0.5,
     },
   ],
-  purchasedItems: [
+  purchasedProducts: [
     {
       id: `ITM${(index + 1).toString().padStart(3, "0")}A`,
       name: "T-Shirt",
@@ -107,14 +107,14 @@ const mockAttendees: Attendee[] = Array.from({ length: 25 }, (_, index) => ({
   ],
 }));
 
-export default function EventAttendeeManagement() {
+export default function EventStaffPage({ params }: { params: { slug: string } }) {
   const [attendees, setAttendees] = useState<Attendee[]>(mockAttendees);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedAttendee, setSelectedAttendee] = useState<Attendee | null>(
     null,
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [productsPerPage, setProductsPerPage] = useState(5);
   const { toast } = useToast();
 
   const filteredAttendees = attendees.filter(
@@ -124,10 +124,10 @@ export default function EventAttendeeManagement() {
       attendee.id.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const totalPages = Math.ceil(filteredAttendees.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredAttendees.length / productsPerPage);
   const paginatedAttendees = filteredAttendees.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    (currentPage - 1) * productsPerPage,
+    currentPage * productsPerPage,
   );
 
   const handleTicketCheckInOut = (
@@ -163,36 +163,36 @@ export default function EventAttendeeManagement() {
     });
   };
 
-  const handleItemCheckInOut = (
+  const handleProductCheckInOut = (
     attendeeId: string,
-    itemId: string,
+    productId: string,
     checkOut: boolean,
   ) => {
     setAttendees(
       attendees.map((attendee) => {
         if (attendee.id === attendeeId) {
-          const updatedItems = attendee.purchasedItems.map((item) =>
-            item.id === itemId ? { ...item, checkedOut: checkOut } : item,
+          const updatedProducts = attendee.purchasedProducts.map((product) =>
+            product.id === productId ? { ...product, checkedOut: checkOut } : product,
           );
-          return { ...attendee, purchasedItems: updatedItems };
+          return { ...attendee, purchasedProducts: updatedProducts };
         }
         return attendee;
       }),
     );
     setSelectedAttendee((prev) => {
       if (prev && prev.id === attendeeId) {
-        const updatedItems = prev.purchasedItems.map((item) =>
-          item.id === itemId ? { ...item, checkedOut: checkOut } : item,
+        const updatedProducts = prev.purchasedProducts.map((product) =>
+          product.id === productId ? { ...product, checkedOut: checkOut } : product,
         );
-        return { ...prev, purchasedItems: updatedItems };
+        return { ...prev, purchasedProducts: updatedProducts };
       }
       return prev;
     });
     toast({
-      title: checkOut ? "Item Checked Out" : "Item Check-Out Reversed",
+      title: checkOut ? "Product Checked Out" : "Product Check-Out Reversed",
       description: checkOut
-        ? "The item has been successfully checked out."
-        : "The item check-out has been reversed.",
+        ? "The product has been successfully checked out."
+        : "The product check-out has been reversed.",
     });
   };
 
@@ -202,7 +202,7 @@ export default function EventAttendeeManagement() {
         <CardTitle>Event Attendee Management</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="mb-6 flex items-center gap-4">
+        <div className="products-center mb-6 flex gap-4">
           <div className="flex-1 space-y-2">
             <Label htmlFor="search">Search Attendees</Label>
             <Input
@@ -213,10 +213,10 @@ export default function EventAttendeeManagement() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="itemsPerPage">Number per page</Label>
+            <Label htmlFor="productsPerPage">Number per page</Label>
             <Select
-              value={itemsPerPage.toString()}
-              onValueChange={(value) => setItemsPerPage(Number(value))}
+              value={productsPerPage.toString()}
+              onValueChange={(value) => setProductsPerPage(Number(value))}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select" />
@@ -239,7 +239,7 @@ export default function EventAttendeeManagement() {
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Tickets</TableHead>
-              <TableHead>Items</TableHead>
+              <TableHead>Products</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="bg-primary/5">
@@ -272,7 +272,7 @@ export default function EventAttendeeManagement() {
                   {attendee.tickets.length}
                 </TableCell>
                 <TableCell onClick={() => setSelectedAttendee(attendee)}>
-                  {attendee.purchasedItems.length}
+                  {attendee.purchasedProducts.length}
                 </TableCell>
               </TableRow>
             ))}
@@ -317,7 +317,7 @@ export default function EventAttendeeManagement() {
         >
           <DialogContent className="max-w-7xl">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
+              <DialogTitle className="products-center flex gap-2">
                 <Avatar>
                   <AvatarImage
                     src={selectedAttendee?.avatarUrl}
@@ -336,7 +336,7 @@ export default function EventAttendeeManagement() {
             </DialogHeader>
             <div className="grid grid-cols-2 gap-6">
               <div>
-                <h4 className="mb-2 font-semibold">Tickets:</h4>
+                <h4 className="mb-2 font-semibold">Purchased Tickets:</h4>
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -353,12 +353,12 @@ export default function EventAttendeeManagement() {
                         <TableCell>{ticket.type}</TableCell>
                         <TableCell>
                           {ticket.checkedIn ? (
-                            <span className="flex items-center text-green-500">
+                            <span className="products-center flex text-green-500">
                               <CheckCircle className="mr-1 h-4 w-4" /> Checked
                               In
                             </span>
                           ) : (
-                            <span className="flex items-center text-yellow-500">
+                            <span className="products-center flex text-yellow-500">
                               <XCircle className="mr-1 h-4 w-4" /> Not Checked
                               In
                             </span>
@@ -419,38 +419,38 @@ export default function EventAttendeeManagement() {
                 </Table>
               </div>
               <div>
-                <h4 className="mb-2 font-semibold">Purchased Items:</h4>
+                <h4 className="mb-2 font-semibold">Purchased Products:</h4>
                 <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead>ID</TableHead>
-                      <TableHead className="min-w-[100px]">Item</TableHead>
+                      <TableHead className="min-w-[100px]">Product</TableHead>
                       <TableHead>Quantity</TableHead>
                       <TableHead className="min-w-[160px]">Status</TableHead>
                       <TableHead>Action</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {selectedAttendee?.purchasedItems.map((item) => (
-                      <TableRow key={item.id}>
-                        <TableCell>{item.id}</TableCell>
-                        <TableCell>{item.name}</TableCell>
-                        <TableCell>{item.quantity}</TableCell>
+                    {selectedAttendee?.purchasedProducts.map((product) => (
+                      <TableRow key={product.id}>
+                        <TableCell>{product.id}</TableCell>
+                        <TableCell>{product.name}</TableCell>
+                        <TableCell>{product.quantity}</TableCell>
                         <TableCell>
-                          {item.checkedOut ? (
-                            <span className="flex items-center text-green-500">
+                          {product.checkedOut ? (
+                            <span className="products-center flex text-green-500">
                               <CheckCircle className="mr-1 h-4 w-4" /> Checked
                               Out
                             </span>
                           ) : (
-                            <span className="flex items-center text-yellow-500">
+                            <span className="products-center flex text-yellow-500">
                               <XCircle className="mr-1 h-4 w-4" /> Not Checked
                               Out
                             </span>
                           )}
                         </TableCell>
                         <TableCell>
-                          {item.checkedOut ? (
+                          {product.checkedOut ? (
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <Button variant="outline" size="sm">
@@ -464,16 +464,16 @@ export default function EventAttendeeManagement() {
                                   </AlertDialogTitle>
                                   <AlertDialogDescription>
                                     This action will reverse the check-out for
-                                    this item.
+                                    this product.
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
                                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                                   <AlertDialogAction
                                     onClick={() =>
-                                      handleItemCheckInOut(
+                                      handleProductCheckInOut(
                                         selectedAttendee.id,
-                                        item.id,
+                                        product.id,
                                         false,
                                       )
                                     }
@@ -486,9 +486,9 @@ export default function EventAttendeeManagement() {
                           ) : (
                             <Button
                               onClick={() =>
-                                handleItemCheckInOut(
+                                handleProductCheckInOut(
                                   selectedAttendee.id,
-                                  item.id,
+                                  product.id,
                                   true,
                                 )
                               }

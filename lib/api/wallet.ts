@@ -4,6 +4,7 @@ import {
   Transaction,
   Wallet as WalletType,
   WalletType as WalletTypeEnum,
+  WithdrawalRequest,
 } from "@/types/wallet";
 
 export namespace Wallet {
@@ -173,6 +174,78 @@ export namespace Wallet {
       return {
         isSuccess: false,
         message: error.message || "Failed to complete transaction",
+        data: "",
+      };
+    }
+  }
+
+  // Get withdrawal requests
+  export async function getWithdrawalRequests(): Promise<
+    ApiResponse<WithdrawalRequest[]>
+  > {
+    try {
+      const response = (
+        await axiosInstance.get<ApiResponse<WithdrawalRequest[]>>(
+          "/WithdrawnRequest/GetListByUserId",
+        )
+      ).data;
+
+      if (response.isSuccess) {
+        return {
+          isSuccess: true,
+          message: "Success",
+          data: response.data,
+        };
+      } else {
+        return {
+          isSuccess: false,
+          message: response.message,
+          data: [],
+        };
+      }
+    } catch (error: any) {
+      return {
+        isSuccess: false,
+        message: error.message || "Failed to fetch withdrawal requests",
+        data: [],
+      };
+    }
+  }
+
+  // Create withdrawal request
+  export type CreateWithdrawalRequestData = {
+    amount: number;
+    bankNote: string;
+  };
+
+  export async function createWithdrawalRequest(
+    data: CreateWithdrawalRequestData,
+  ): Promise<ApiResponse<string>> {
+    try {
+      const response = (
+        await axiosInstance.post<ApiResponse<string>>(
+          "/WithdrawnRequest/CreateRequest",
+          data,
+        )
+      ).data;
+
+      if (response.isSuccess) {
+        return {
+          isSuccess: true,
+          message: "Withdrawal request created successfully",
+          data: response.data,
+        };
+      } else {
+        return {
+          isSuccess: false,
+          message: response.message,
+          data: "",
+        };
+      }
+    } catch (error: any) {
+      return {
+        isSuccess: false,
+        message: error.message || "Failed to create withdrawal request",
         data: "",
       };
     }
