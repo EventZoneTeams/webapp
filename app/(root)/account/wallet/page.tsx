@@ -18,21 +18,11 @@ import {
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import WithdrawalForm from '../components/WithdrawalForm';
 
 export default function WalletPage() {
   const [wallets, setWallets] = useState<WalletType[]>([])
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [withdrawalRequests, setWithdrawalRequests] = useState<any[]>([])
-  const [isWithdrawalDialogOpen, setIsWithdrawalDialogOpen] = useState(false)
   const router = useRouter()
 
   const fetchUserWallets = useCallback(async () => {
@@ -106,12 +96,6 @@ export default function WalletPage() {
     fetchWithdrawalRequests()
   }, [fetchUserWallets, fetchWalletTransactions, fetchWithdrawalRequests])
 
-  const handleWithdrawalSuccess = () => {
-    setIsWithdrawalDialogOpen(false)
-    fetchUserWallets()
-    fetchWalletTransactions()
-    fetchWithdrawalRequests()
-  }
 
   return (
     <div className="mx-auto">
