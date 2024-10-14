@@ -25,3 +25,15 @@ export type RefreshTokenResponse = {
   accessToken: string;
   refreshToken: string;
 };
+
+export type GetAllUserParams = {
+  PageIndex?: number;
+  PageSize?: number;
+  SortBy?: string;
+  SortDirection?: string;
+  Role?: string;
+  isDeleted?: boolean;
+  Gender?: string;
+  SearchName?: string;
+  SearchEmail?: string;
+};

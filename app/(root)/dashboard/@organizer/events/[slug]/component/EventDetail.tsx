@@ -1,13 +1,23 @@
 import { Event } from "@/lib/api/event";
 import { format } from "date-fns";
-import { MapPinIcon, MoreHorizontal, Plus } from "lucide-react";
+import {
+  CalendarIcon,
+  MapPinIcon,
+  UsersIcon,
+  TicketIcon,
+  PackageIcon,
+  SettingsIcon,
+} from "lucide-react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import EventTicket from "./EventTicket";
 import EventProducts from "./EventProduct";
 import EventSetting from "@/app/(root)/dashboard/@organizer/events/[slug]/component/EventSetting";
-import { Badge } from "@/components/ui/badge";
+import EventStaff from "@/app/(root)/dashboard/@organizer/events/[slug]/component/EventStaff";
 
 export default async function EventDetail({
   params,
@@ -15,169 +25,146 @@ export default async function EventDetail({
   params: { slug: string };
 }) {
   const event = (await Event.getById(params.slug)).data;
-  return event ? (
-    <div className="my-6">
+
+  if (!event) {
+    return (
+      <div className="flex h-[calc(100vh-4rem)] items-center justify-center">
+        <h2 className="text-2xl font-semibold">Event not found</h2>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto my-8 px-4">
       {event.isDeleted && (
-        <div className="my-2">
-          <Badge variant="destructive">Event has been disabled</Badge>
-        </div>
+        <Badge variant="destructive" className="mb-4">
+          Event has been disabled
+        </Badge>
       )}
-      <div className="flex w-full gap-6">
-        <div className="space-y-4">
-          <Image
-            width={400}
-            height={400}
-            alt={event?.name!}
-            src={event?.thumbnailUrl!}
-            className="aspect-square size-[400px] rounded-xl object-cover"
-          />
-
-          <div className="space-y-2">
-            <p>
-              <span className="text-sm text-primary/50">Hosted by</span>
-            </p>
-            <div className="flex items-center gap-2">
-              <Avatar className="size-8">
-                <AvatarImage src={event?.user.imageUrl!} />
-                <AvatarFallback>
-                  {event?.user.fullName.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <span className="text-base font-semibold text-primary">
-                {event?.user.fullName}
-              </span>
-            </div>
-          </div>
+      <div className="grid gap-8 md:grid-cols-3">
+        <div className="md:col-span-1">
+          <Card className="border-none bg-transparent">
+            <CardContent className="p-6">
+              <Image
+                width={400}
+                height={400}
+                alt={event.name}
+                src={event.thumbnailUrl}
+                className="aspect-square w-full rounded-lg object-cover"
+              />
+              <div className="mt-6 space-y-4">
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={event.user.imageUrl} />
+                    <AvatarFallback>
+                      {event.user.fullName.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Hosted by</p>
+                    <p className="font-medium">{event.user.fullName}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CalendarIcon className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <p className="text-sm">
+                      {format(event.eventStartDate, "PPP")}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {format(event.eventStartDate, "p")} -{" "}
+                      {format(event.eventEndDate, "p")}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPinIcon className="h-5 w-5 text-muted-foreground" />
+                  <p className="text-sm">{event.location.display}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-
-        <div className="w-1/2 space-y-6">
-          <h1 className="text-3xl font-bold">{event?.name}</h1>
-          <Tabs defaultValue="overview">
-            <TabsList className="rounded-md bg-background/50 p-2 text-gray-300">
-              <TabsTrigger
-                value="overview"
-                className="border-transparent text-white data-[state=active]:border-b-2 data-[state=active]:border-white data-[state=active]:pb-2"
-              >
-                Overview
-              </TabsTrigger>
-              <TabsTrigger
-                value="guests"
-                className="border-transparent text-white data-[state=active]:border-b-2 data-[state=active]:border-white data-[state=active]:pb-2"
-              >
-                Guests
-              </TabsTrigger>
-              <TabsTrigger
-                value="registration"
-                className="border-transparent text-white data-[state=active]:border-b-2 data-[state=active]:border-white data-[state=active]:pb-2"
-              >
-                Registration
-              </TabsTrigger>
-              <TabsTrigger
-                value="products"
-                className="border-transparent text-white data-[state=active]:border-b-2 data-[state=active]:border-white data-[state=active]:pb-2"
-              >
-                Products
-              </TabsTrigger>
-              <TabsTrigger
-                value="tickets"
-                className="border-transparent text-white data-[state=active]:border-b-2 data-[state=active]:border-white data-[state=active]:pb-2"
-              >
-                Tickets
-              </TabsTrigger>
-              <TabsTrigger
-                value="more"
-                className="border-transparent text-white data-[state=active]:border-b-2 data-[state=active]:border-white data-[state=active]:pb-2"
-              >
-                More
-              </TabsTrigger>
-            </TabsList>
-
-            {/* Tabs Content */}
-            <TabsContent value="overview">
-              <div className="rounded-xl bg-background/50 p-4 backdrop-blur-xl">
-                <p className="w-full rounded-t-xl bg-background/50 p-2 text-center">
-                  Time
-                </p>
-                <div className="flex gap-4">
-                  <div className="flex-1 space-y-2">
-                    <p className="text-sm text-primary/50">From</p>
-                    <p className="text-3xl font-semibold">
-                      {format(event?.eventStartDate!, "pp")}
-                    </p>
-                    <p className="text-sm text-primary/50">
-                      {format(event?.eventEndDate!, "PP")}
+        <div className="md:col-span-2">
+          <Card className="border-none bg-transparent">
+            <CardHeader>
+              <CardTitle className="text-3xl font-bold">{event.name}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="overview" className="w-full">
+                <TabsList className="grid w-full grid-cols-3 bg-white/5 lg:grid-cols-7">
+                  <TabsTrigger value="overview" className="">
+                    Overview
+                  </TabsTrigger>
+                  <TabsTrigger value="guests">
+                    <UsersIcon className="mr-2 h-4 w-4" />
+                    Guests
+                  </TabsTrigger>
+                  <TabsTrigger value="registration">Registration</TabsTrigger>
+                  <TabsTrigger value="products">
+                    <PackageIcon className="mr-2 h-4 w-4" />
+                    Products
+                  </TabsTrigger>
+                  <TabsTrigger value="tickets">
+                    <TicketIcon className="mr-2 h-4 w-4" />
+                    Tickets
+                  </TabsTrigger>
+                  <TabsTrigger value="staff">
+                    <UsersIcon className="mr-2 h-4 w-4" />
+                    Staff
+                  </TabsTrigger>
+                  <TabsTrigger value="settings">
+                    <SettingsIcon className="mr-2 h-4 w-4" />
+                    Settings
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="overview" className="mt-6">
+                  <div className="space-y-6">
+                    <div className="rounded-lg bg-white/5 p-4">
+                      <h3 className="mb-2 font-semibold">About Event</h3>
+                      <div
+                        dangerouslySetInnerHTML={{ __html: event.description }}
+                      ></div>
+                    </div>
+                  </div>
+                </TabsContent>
+                <TabsContent value="guests" className="mt-6">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Guest List</h3>
+                    {/* Add guest list component here */}
+                    <p className="text-muted-foreground">
+                      No guests registered yet.
                     </p>
                   </div>
-
-                  <div className="h-full w-[1px] bg-primary/50"></div>
-
-                  <div className="flex-1 space-y-2">
-                    <p className="text-sm text-primary/50">To</p>
-                    <p className="text-3xl font-semibold">
-                      {format(event?.eventEndDate!, "pp")}
-                    </p>
-                    <p className="text-sm text-primary/50">
-                      {format(event?.eventEndDate!, "PP")}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6 rounded-xl bg-background/50 backdrop-blur-xl">
-                <p className="w-full rounded-t-xl bg-background/50 p-2 text-center">
-                  Address
-                </p>
-                <div className="flex gap-4 p-4">
-                  <div className="flex flex-1 items-center gap-2">
-                    <MapPinIcon size={20} className="text-primary/50" />
-                    <p className="text-base font-normal">
-                      {event?.location.display}
+                </TabsContent>
+                <TabsContent value="registration" className="mt-6">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">
+                      Registration Details
+                    </h3>
+                    {/* Add registration details component here */}
+                    <p className="text-muted-foreground">
+                      Registration information not available.
                     </p>
                   </div>
-                </div>
-              </div>
-              <div className="mt-6 space-y-6">
-                <p className="border-b-[1px] border-primary/20 pb-2 text-sm font-semibold text-primary/50">
-                  About Event
-                </p>
-                <div
-                  dangerouslySetInnerHTML={{ __html: event?.description! }}
-                ></div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="guests">
-              <div className="space-y-6">
-                <p className="text-sm text-primary/50">List of Guests:</p>
-                {/* Guests content here */}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="registration">
-              <div className="space-y-6">
-                <p className="text-sm text-primary/50">Registration Details:</p>
-                {/* Registration content here */}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="products">
-              <EventProducts eventId={event.id} />
-            </TabsContent>
-
-            <TabsContent value="tickets">
-              <EventTicket eventId={event.id} />
-            </TabsContent>
-
-            <TabsContent value="more">
-              <div className="space-y-6">
-                <EventSetting event={event} />
-              </div>
-            </TabsContent>
-          </Tabs>
+                </TabsContent>
+                <TabsContent value="products" className="mt-6">
+                  <EventProducts eventId={event.id} />
+                </TabsContent>
+                <TabsContent value="tickets" className="mt-6">
+                  <EventTicket eventId={event.id} />
+                </TabsContent>
+                <TabsContent value="staff" className="mt-6">
+                  <EventStaff eventId={event.id} />
+                </TabsContent>
+                <TabsContent value="settings" className="mt-6">
+                  <EventSetting event={event} />
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
-  ) : (
-    <div>Event not found</div>
   );
 }
