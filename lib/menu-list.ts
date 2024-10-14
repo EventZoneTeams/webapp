@@ -7,8 +7,10 @@ import {
   SquarePen,
   LayoutGrid,
   LucideIcon,
+  Ticket,
   PartyPopperIcon,
   PlusSquareIcon,
+  UserRoundPen,
   ListIcon,
   UsersIcon,
 } from "lucide-react";
@@ -117,7 +119,7 @@ export function getMenuList(pathname: string, type: DashboardType): Group[] {
           ],
         },
         {
-          groupLabel: "Events",
+          groupLabel: "",
           menus: [
             {
               href: "/dashboard/events",
@@ -144,21 +146,22 @@ export function getMenuList(pathname: string, type: DashboardType): Group[] {
           ],
         },
         {
-          groupLabel: "Settings",
+          groupLabel: "",
           menus: [
             {
-              href: "/users",
-              label: "Users",
-              active: pathname.includes("/users"),
-              icon: Users,
-              submenus: [],
-            },
-            {
-              href: "/account",
-              label: "Account",
-              active: pathname.includes("/account"),
-              icon: Settings,
-              submenus: [],
+              href: "/dashboard/event-staff",
+              label: "Staff",
+              active: pathname === "",
+              icon: UserRoundPen,
+              submenus: [
+                {
+                  href: "/dashboard/event-staff",
+                  label: "Events",
+                  active:
+                    pathname.startsWith("/dashboard/event-staff"),
+                  icon: Ticket,
+                },
+              ],
             },
           ],
         },

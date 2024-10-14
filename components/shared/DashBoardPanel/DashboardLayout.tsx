@@ -1,12 +1,12 @@
 "use client";
 
 import { ContentLayout } from "@/components/shared/DashBoardPanel/ContentLayout";
-import { Footer } from "@/components/shared/DashBoardPanel/Footer";
 import { Sidebar } from "@/components/shared/DashBoardPanel/Sidebar";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { useStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
 import { DashboardType } from "@/types/sidebar";
+import Footer from "../Footer";
 export default function DashBoardLayout({
   children,
   type,

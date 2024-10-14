@@ -14,13 +14,17 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  {
-    name: "Home",
-    href: "/",
-  },
+  // {
+  //   name: "Home",
+  //   href: "/",
+  // },
   {
     name: "Discover",
     href: "/discover",
+  },
+  {
+    name: "Post",
+    href: "/post",
   },
 ];
 
