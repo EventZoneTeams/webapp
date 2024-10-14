@@ -14,7 +14,7 @@ export default function DisplayContent({ content }: { content: string }) {
   }
   return (
     <div>
-      <EditorContent editor={editor} />
+      <EditorContent disabled editor={editor} />
     </div>
   );
 }

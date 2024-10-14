@@ -9,27 +9,35 @@ import EventLocation from "./EventLocation";
 import GetTicket from "./GetTicket";
 export default function EventTabs({
   event,
-  products,
 }: {
   event: Event;
-  products: EventProduct[] | null;
 }) {
   return (
     <div className="w-full space-y-6">
-      <Tabs defaultValue="overview">
+      <Tabs defaultValue="posts">
         <TabsList className="rounded-md bg-background/50 p-2 text-gray-300">
-          <TabsTrigger value="overview" className="text-white">
-            Overview
-          </TabsTrigger>
           <TabsTrigger value="posts" className="text-white">
             Posts
           </TabsTrigger>
           <TabsTrigger value="products" className="text-white">
             Products
           </TabsTrigger>
+          <TabsTrigger value="other" className="text-white">
+            Other
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview">
+        <TabsContent value="posts">
+          <div className="space-y-6">
+            <PostCard eventId={event.id} />
+          </div>
+        </TabsContent>
+
+        <TabsContent value="products">
+          <EventProducts eventId={event.id} />
+        </TabsContent>
+
+        <TabsContent value="other">
           <div className="space-y-6">
             <div className="rounded-xl bg-background/50 backdrop-blur-xl">
               <p className="w-full rounded-t-xl bg-background/50 p-2 text-center">
@@ -82,16 +90,6 @@ export default function EventTabs({
 
             <GetTicket event={event} />
           </div>
-        </TabsContent>
-
-        <TabsContent value="posts">
-          <div className="space-y-6">
-            <PostCard eventId={event.id} />
-          </div>
-        </TabsContent>
-
-        <TabsContent value="products">
-          <EventProducts eventId={event.id} />
         </TabsContent>
       </Tabs>
     </div>

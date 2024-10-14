@@ -2,7 +2,6 @@ import EventHeader from "./EventHeader";
 import EventTabs from "./EventTabs";
 import { EventProduct as EventProductAPI } from "@/lib/api/event-product";
 import { Event as EventAPI } from "@/lib/api/event"; // Import event API
-import DisplayContent from "@/components/minimal-tiptap/display-content";
 export default async function EventDetail({
   params,
 }: {
