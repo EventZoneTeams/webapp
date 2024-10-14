@@ -8,7 +8,7 @@ export default function EventCard({ event }: { event: Event }) {
   return (
     <div className="group flex w-96 gap-4 rounded p-2 backdrop-blur-3xl hover:cursor-pointer hover:bg-black/5">
       <Image
-        src={event.thumbnailUrl}
+        src={event.thumbnailUrl === "djit me AI" ? "" : event.thumbnailUrl}
         width={200}
         height={200}
         alt={event.name}

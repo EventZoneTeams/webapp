@@ -6,8 +6,9 @@ import MapGL, { Marker } from "@goongmaps/goong-map-react";
 import { Viewport } from "@/types/map";
 import Image from "next/image";
 import MARKER_ICON from "@/public/assets/icons/map_marker_icon.png";
+import { config } from "@/constances/environment";
 
-const GOONG_API_MAP_KEY = process.env.NEXT_PUBLIC_GOONG_API_MAP_KEY;
+const GOONG_API_MAP_KEY = config.NEXT_PUBLIC_GOONG_API_MAP_KEY;
 const MAP_STYLE = "https://tiles.goong.io/assets/goong_map_web.json";
 
 interface Props {
