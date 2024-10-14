@@ -1,14 +1,65 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Event } from "@/lib/api/event";
+import { FeedBack } from "@/lib/api/feedback";
+import { Event as EventType } from "@/types/event";
 import { format } from "date-fns";
 import { MapPinIcon } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { toast } from "sonner";
 
-export default async function EventDetails(props: { slug: string }) {
-  const event = (await Event.getById(props.slug)).data;
-  return event ? (
+export default function EventDetails(props: { slug: string }) {
+  const [event, setEvent] = React.useState<EventType | null>(null);
+  const [isLoading, startTransition] = React.useTransition();
+  const router = useRouter();
+
+  useEffect(() => {
+    startTransition(() => {
+      Event.getById(props.slug).then((response) => {
+        if (response.isSuccess) {
+          setEvent(response.data);
+        }
+      });
+    });
+  }, []);
+
+  const handleApprove = async () => {
+    FeedBack.feedback({
+      eventId: event?.id!,
+      content: "Event approved",
+      feedbackOption: 1,
+    }).then((response) => {
+      if (response.isSuccess) {
+        toast.success("Event approved");
+        router.push("/dashboard/manage-events");
+      } else {
+        toast.error("Failed to approve event");
+      }
+    });
+  };
+
+  const handleReject = async () => {
+    FeedBack.feedback({
+      eventId: event?.id!,
+      content: "Event rejected",
+      feedbackOption: 0,
+    }).then((response) => {
+      if (response.isSuccess) {
+        toast.success("Event rejected");
+        router.push("/dashboard/manage-events");
+      } else {
+        toast.error("Failed to reject event");
+      }
+    });
+  };
+
+  return isLoading ? (
+    <div>Loading...</div>
+  ) : event ? (
     <div className="my-6 flex w-full gap-6">
       <div className="space-y-4">
         <Image
@@ -96,10 +147,12 @@ export default async function EventDetails(props: { slug: string }) {
         </div>
 
         <div className="flex gap-4">
-          <Button className="w-full" variant={"outline"}>
+          <Button className="w-full" variant={"outline"} onClick={handleReject}>
             Reject
           </Button>
-          <Button className="w-full">Approved</Button>
+          <Button className="w-full" onClick={handleApprove}>
+            Approved
+          </Button>
         </div>
       </div>
     </div>
