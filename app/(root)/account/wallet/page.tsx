@@ -148,8 +148,6 @@ export default function WalletPage() {
   );
 }
 
-// ... (TransactionList component remains the same)
-
 function TransactionList({
   transactions,
   handleCompleteTransaction,

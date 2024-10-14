@@ -1,3 +1,4 @@
+import { config } from "@/constances/environment";
 import { ApiResponse } from "@/types/api";
 import {
   GetAutoCompleteRequest,
@@ -8,7 +9,7 @@ import {
 import { Prediction } from "@/types/map";
 import axios from "axios";
 
-const GOONG_API_KEY = process.env.NEXT_PUBLIC_GOONG_API_KEY;
+const GOONG_API_KEY = config.NEXT_PUBLIC_GOONG_API_KEY;
 const GOONG_BASE_URL = "https://rsapi.goong.io";
 
 export namespace Map {

@@ -67,4 +67,32 @@ export namespace EventPost {
       };
     }
   }
+
+  export async function getPosts(): Promise<ApiResponse<EventPostType[]>> {
+    try {
+      const response = (
+        await axiosInstance.get<ApiResponse<EventPostType[]>>(`/event-posts`)
+      ).data;
+
+      if (response.isSuccess) {
+        return {
+          isSuccess: true,
+          message: response.message,
+          data: response.data,
+        };
+      } else {
+        return {
+          isSuccess: false,
+          message: response.message,
+          data: [],
+        };
+      }
+    } catch (error: any) {
+      return {
+        isSuccess: false,
+        message: error.message,
+        data: [],
+      };
+    }
+  }
 }

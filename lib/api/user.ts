@@ -164,4 +164,19 @@ export namespace User {
       };
     }
   }
+
+  export async function getMyTicket(): Promise<ApiResponse<any>> {
+    try {
+      const response = (
+        await axiosInstance.get<ApiResponse<any>>("/users/me/booked-tickets")
+      ).data;
+      return response;
+    } catch (error) {
+      return {
+        isSuccess: false,
+        message: "Failed to get my ticket",
+        data: null,
+      };
+    }
+  }
 }

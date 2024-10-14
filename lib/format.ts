@@ -1,3 +1,4 @@
+import { config } from "@/constances/environment";
 import { User } from "@/types/user";
 
 export const VnDong = new Intl.NumberFormat("vi-VN", {
@@ -9,7 +10,7 @@ export const getUserAvatar = (user: User) => {
   if (user.imageUrl && user.imageUrl !== "") {
     return user.imageUrl;
   } else {
-    const dicebearUrl = process.env.NEXT_PUBLIC_DICEBEAR_API;
+    const dicebearUrl = config.NEXT_PUBLIC_DICEBEAR_API;
     const params = new URLSearchParams({
       seed: user.fullName,
     });

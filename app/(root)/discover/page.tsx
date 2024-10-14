@@ -108,7 +108,7 @@ const EventCard = ({
   </Card>
 );
 
-const EventCarousel = ({
+export const EventCarousel = ({
   title,
   events,
   itemSize = "small",
@@ -263,7 +263,7 @@ export default function DiscoverPage() {
   // .filter((event) => event.status === "PUBLISHED");
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="mx-auto">
       {isLoading ? (
         <div>
           <EventCarouselSkeleton title="" itemSize="large" />

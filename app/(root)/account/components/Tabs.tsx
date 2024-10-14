@@ -15,6 +15,7 @@ interface Tab {
 const tabs: Tab[] = [
   { label: "Wallet", href: "/account/wallet" },
   { label: "Orders", href: "/account/orders" },
+  { label: "Tickets", href: "/account/tickets" },
 ];
 
 export default function Tabs() {
@@ -23,9 +24,11 @@ export default function Tabs() {
     <ShadcnTabs defaultValue={pathname}>
       <TabsList className="bg-primary/5">
         {tabs.map((tab) => (
-          <TabsTrigger key={tab.href} value={tab.href} className="w-24 rounded">
-            <Link href={tab.href}>{tab.label}</Link>
-          </TabsTrigger>
+          <Link href={tab.href} key={tab.href}>
+            <TabsTrigger value={tab.href} className="w-24 rounded">
+              {tab.label}
+            </TabsTrigger>
+          </Link>
         ))}
       </TabsList>
     </ShadcnTabs>
