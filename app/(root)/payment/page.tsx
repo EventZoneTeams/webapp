@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Sparkles, AlertCircle, Clock, XCircle } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { VnDong } from "@/lib/format";
 
 type PaymentStatus = string | "PAID" | "PENDING" | "PROGRESS" | "CANCELLED";
 
@@ -12,6 +13,7 @@ interface PaymentDetails {
   code: string;
   id: string;
   cancel: string;
+  amount: string;
   status: PaymentStatus;
   orderCode: string;
 }
@@ -114,6 +116,12 @@ export default function PaymentPage() {
               <span className="text-gray-400">Order Code</span>
               <span className="font-medium">
                 {parseInt(paymentDetails.orderCode).toLocaleString()}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">Amount</span>
+              <span className="font-medium">
+                {VnDong.format(Number(paymentDetails.amount))}
               </span>
             </div>
             <div className="flex justify-between">

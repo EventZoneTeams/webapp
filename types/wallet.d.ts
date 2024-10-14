@@ -18,3 +18,8 @@ export type Transaction = {
   transactionDate: Date;
   status: TransactionStatus;
 };
+
+export type WithdrawalRequest = {
+  bankNote: string;
+  amount: number;
+};
