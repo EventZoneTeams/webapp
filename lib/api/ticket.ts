@@ -19,7 +19,7 @@ export namespace Ticket {
       if (response.isSuccess) {
         return {
           isSuccess: true,
-          message: "Success",
+          message: response.message,
           data: null,
         };
       } else {
@@ -48,7 +48,7 @@ export namespace Ticket {
       if (response.isSuccess) {
         return {
           isSuccess: true,
-          message: "Success",
+          message: response.message,
           data: response.data,
         };
       } else {
@@ -81,7 +81,7 @@ export namespace Ticket {
       if (response.isSuccess) {
         return {
           isSuccess: true,
-          message: "Success",
+          message: response.message,
           data: response.data,
         };
       } else {

@@ -16,7 +16,7 @@ export namespace Attendee {
       return {
         data: null,
         isSuccess: true,
-        message: "Success",
+        message: response.message,
       };
     } catch (error: any) {
       return {

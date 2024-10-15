@@ -49,7 +49,7 @@ export namespace Map {
 
         return {
           isSuccess: true,
-          message: "Success",
+          message: response.message,
           data: response.predictions,
         };
       } else {
@@ -79,7 +79,7 @@ export namespace Map {
 
         return {
           isSuccess: true,
-          message: "Success",
+          message: response.message,
           data: response.result,
         };
       } else {
