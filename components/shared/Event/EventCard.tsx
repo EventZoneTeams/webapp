@@ -12,7 +12,7 @@ export default function EventCard({ event }: { event: Event }) {
         width={200}
         height={200}
         alt={event.name}
-        className="size-24 rounded group-hover:opacity-80"
+        className="size-24 rounded group-hover:opacity-80 object-cover"
       />
       <div className="flex flex-col">
         <div className="flex-1">

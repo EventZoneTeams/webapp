@@ -106,18 +106,18 @@ export function getMenuList(pathname: string, type: DashboardType): Group[] {
       ];
     case "organizer":
       return [
-        {
-          groupLabel: "",
-          menus: [
-            {
-              href: "/dashboard",
-              label: "Dashboard",
-              active: pathname === "/dashboard",
-              icon: LayoutGrid,
-              submenus: [],
-            },
-          ],
-        },
+        // {
+        //   groupLabel: "",
+        //   menus: [
+        //     {
+        //       href: "/dashboard",
+        //       label: "Dashboard",
+        //       active: pathname === "/dashboard",
+        //       icon: LayoutGrid,
+        //       submenus: [],
+        //     },
+        //   ],
+        // },
         {
           groupLabel: "",
           menus: [
