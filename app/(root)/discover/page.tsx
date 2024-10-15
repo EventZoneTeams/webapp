@@ -123,13 +123,16 @@ export default function DiscoverPage() {
 
   const featuredEvents = events.filter((event) => event.status === "PUBLISHED");
 
+  const specialEvents = events;
+  // .filter((event) => event.status === "PUBLISHED");
+  
+  const trendingEvents = events;
+  // .filter((event) => event.status === "PUBLISHED");
+  
   const upcomingEvents = events;
   // .filter((event) => event.status === "PUBLISHED");
 
-  const trendingEvents = events;
-  // .filter((event) => event.status === "PUBLISHED");
-
-  const specialEvents = events;
+  const otherEvents = events;
   // .filter((event) => event.status === "PUBLISHED");
 
   return (
@@ -140,6 +143,7 @@ export default function DiscoverPage() {
           <EventCarouselSkeleton title="Special Events" />
           <EventCarouselSkeleton title="Trending Now" />
           <EventCarouselSkeleton title="Upcoming Events" />
+          <EventCarouselSkeleton title="Other Events" />
         </div>
       ) : (
         <>
@@ -164,6 +168,13 @@ export default function DiscoverPage() {
           <EventCarousel
             title="Upcoming Events"
             events={upcomingEvents}
+            textSize="small"
+          />
+
+          {/* Other Events Carousel */}
+          <EventCarousel
+            title="Other Events"
+            events={otherEvents}
             textSize="small"
           />
 

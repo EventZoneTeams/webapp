@@ -141,7 +141,7 @@ export default function PaymentPage() {
         <CardFooter>
           <Button
             className="w-full bg-sky-500 text-white hover:bg-sky-600"
-            onClick={() => (window.location.href = "/profile")}
+            onClick={() => (window.location.href = "/account/wallet")}
           >
             Back to your profile
           </Button>

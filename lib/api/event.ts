@@ -14,7 +14,7 @@ export namespace Event {
       if (response.isSuccess) {
         return {
           isSuccess: true,
-          message: "Success",
+          message: response.message,
           data: null,
         };
       } else {
@@ -66,7 +66,7 @@ export namespace Event {
       if (response.isSuccess) {
         return {
           isSuccess: true,
-          message: "Success",
+          message: response.message,
           data: response.data,
           paging,
         };
@@ -95,7 +95,7 @@ export namespace Event {
       if (response.isSuccess) {
         return {
           isSuccess: true,
-          message: "Success",
+          message: response.message,
           data: response.data,
         };
       } else {
@@ -124,7 +124,7 @@ export namespace Event {
       if (response.isSuccess) {
         return {
           isSuccess: true,
-          message: "Success",
+          message: response.message,
           data: response.data,
         };
       } else {

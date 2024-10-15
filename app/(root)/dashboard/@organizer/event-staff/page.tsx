@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { Event as EventType } from "@/types/event";
 import EventCard from "@/components/shared/Event/EventCard";
 import { Link } from "next-view-transitions";
-import Filter from "@/components/shared/Event/Filter";
 import { useAuthStore } from "@/stores/authStore";
 import { Staff } from "@/lib/api/staff";
 
