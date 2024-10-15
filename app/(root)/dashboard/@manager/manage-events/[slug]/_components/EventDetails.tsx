@@ -31,7 +31,7 @@ export default function EventDetails(props: { slug: string }) {
     FeedBack.feedback({
       eventId: event?.id!,
       content: "Event approved",
-      feedbackOption: 1,
+      feedbackOption: 0,
     }).then((response) => {
       if (response.isSuccess) {
         toast.success("Event approved");
@@ -46,7 +46,7 @@ export default function EventDetails(props: { slug: string }) {
     FeedBack.feedback({
       eventId: event?.id!,
       content: "Event rejected",
-      feedbackOption: 0,
+      feedbackOption: 1,
     }).then((response) => {
       if (response.isSuccess) {
         toast.success("Event rejected");
