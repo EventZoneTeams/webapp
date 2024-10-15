@@ -1,6 +1,10 @@
 import { axiosInstance } from "@/lib/api";
 import { ApiResponse } from "@/types/api";
-import { CreateTicketRequest, Ticket as TicketType } from "@/types/ticket";
+import {
+  BookedTicket,
+  CreateTicketRequest,
+  Ticket as TicketType,
+} from "@/types/ticket";
 
 export namespace Ticket {
   // Create a new ticket
@@ -92,6 +96,26 @@ export namespace Ticket {
         isSuccess: false,
         message: error.message,
         data: [],
+      };
+    }
+  }
+
+  //Get my tickets
+  export async function getMyTicket(): Promise<
+    ApiResponse<BookedTicket[] | null>
+  > {
+    try {
+      const response = (
+        await axiosInstance.get<ApiResponse<BookedTicket[]>>(
+          "/users/me/booked-tickets",
+        )
+      ).data;
+      return response;
+    } catch (error) {
+      return {
+        isSuccess: false,
+        message: "Failed to get my ticket",
+        data: null,
       };
     }
   }
