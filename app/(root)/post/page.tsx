@@ -442,7 +442,7 @@ export default function Component() {
 
   return (
     <div>
-      <div className="mx-auto mt-4 max-w-4xl">
+      <div className="mx-auto mt-4">
       {/* Special Events Carousel */}
       <EventCarousel
         title="Recommended Events"
