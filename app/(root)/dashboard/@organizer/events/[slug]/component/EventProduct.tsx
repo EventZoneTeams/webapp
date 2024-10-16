@@ -614,14 +614,14 @@ export default function EventProducts({ eventId }: { eventId: string }) {
       try {
         const response = await EventProductAPI.getProductsByEventId(eventId);
         if (response.isSuccess && response.data) {
-          const filteredProducts = response.data.map(
-            (product: EventProduct) => ({
+          const filteredProducts = response.data
+            .filter((product) => !product.isDeleted)
+            .map((product) => ({
               ...product,
               productImages: product.productImages.filter(
                 (image) => !image.isDeleted,
               ),
-            }),
-          );
+            }));
           setProducts(filteredProducts);
         }
       } catch (error) {
