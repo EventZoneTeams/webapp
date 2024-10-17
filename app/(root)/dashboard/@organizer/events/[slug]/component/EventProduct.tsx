@@ -390,9 +390,7 @@ function UpdateEventProductDialog({
           <div className="grid gap-2">
             <Label>Add New Images</Label>
             <ImageUpload
-              onImagesSelected={(files) =>
-                setNewImages([...newImages, ...files])
-              }
+              onImagesSelected={setNewImages}
               existingImages={newImages}
             />
             {newImages.length > 0 && (
@@ -432,6 +430,7 @@ function UpdateEventProductDialog({
     </DialogContent>
   );
 }
+
 
 function ProductItem({
   product,
