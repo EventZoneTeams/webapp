@@ -103,7 +103,9 @@ export default function DiscoverPage() {
       try {
         const response = await Event.get(params);
         if (response.isSuccess && response.data) {
-          const sortedList = response.data.sort(
+          const sortedList = response.data
+          .filter((event) => event.isDeleted === false)
+          .sort(
             (a, b) =>
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           );
