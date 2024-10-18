@@ -415,7 +415,9 @@ export default function Component() {
       try {
         const response = await Event.get(params);
         if (response.isSuccess && response.data) {
-          const sortedList = response.data.sort(
+          const sortedList = response.data
+          .filter((event) => event.isDeleted === false)
+          .sort(
             (a, b) =>
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           );
@@ -442,7 +444,7 @@ export default function Component() {
 
   return (
     <div>
-      <div className="mx-auto mt-4 max-w-4xl">
+      <div className="mx-auto mt-4">
       {/* Special Events Carousel */}
       <EventCarousel
         title="Recommended Events"

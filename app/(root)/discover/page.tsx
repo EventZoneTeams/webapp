@@ -1,11 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import {
   Carousel,
   CarouselContent,
@@ -28,7 +25,8 @@ const EventCardSkeleton = ({
   <Card
     className={cn(
       "group relative overflow-hidden transition-all hover:shadow-lg",
-      size === "large" ? "h-[400px]" : "h-[250px]",
+      "aspect-video w-full",
+      size === "large" ? "max-w-2xl" : "max-w-sm",
     )}
   >
     <Skeleton className="h-full w-full animate-pulse" />
@@ -105,7 +103,9 @@ export default function DiscoverPage() {
       try {
         const response = await Event.get(params);
         if (response.isSuccess && response.data) {
-          const sortedList = response.data.sort(
+          const sortedList = response.data
+          .filter((event) => event.isDeleted === false)
+          .sort(
             (a, b) =>
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           );
@@ -123,14 +123,13 @@ export default function DiscoverPage() {
 
   const featuredEvents = events.filter((event) => event.status === "PUBLISHED");
 
-  const upcomingEvents = events;
-  // .filter((event) => event.status === "PUBLISHED");
+  const specialEvents = events.filter((event) => event.status === "PUBLISHED");
 
-  const trendingEvents = events;
-  // .filter((event) => event.status === "PUBLISHED");
+  const trendingEvents = events.filter((event) => event.status === "PUBLISHED");
 
-  const specialEvents = events;
-  // .filter((event) => event.status === "PUBLISHED");
+  const upcomingEvents = events.filter((event) => event.status === "PUBLISHED");
+
+  const otherEvents = events.filter((event) => event.status === "PUBLISHED");
 
   return (
     <div className="mx-auto">
@@ -140,6 +139,7 @@ export default function DiscoverPage() {
           <EventCarouselSkeleton title="Special Events" />
           <EventCarouselSkeleton title="Trending Now" />
           <EventCarouselSkeleton title="Upcoming Events" />
+          <EventCarouselSkeleton title="Other Events" />
         </div>
       ) : (
         <>
@@ -164,6 +164,13 @@ export default function DiscoverPage() {
           <EventCarousel
             title="Upcoming Events"
             events={upcomingEvents}
+            textSize="small"
+          />
+
+          {/* Other Events Carousel */}
+          <EventCarousel
+            title="Other Events"
+            events={otherEvents}
             textSize="small"
           />
 

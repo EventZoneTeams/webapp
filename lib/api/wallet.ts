@@ -18,7 +18,7 @@ export namespace Wallet {
       if (response.isSuccess) {
         return {
           isSuccess: true,
-          message: "Success",
+          message: response.message,
           data: response.data,
         };
       } else {
@@ -55,7 +55,7 @@ export namespace Wallet {
       if (response.isSuccess) {
         return {
           isSuccess: true,
-          message: "Success",
+          message: response.message,
           data: response.data,
         };
       } else {
@@ -193,7 +193,7 @@ export namespace Wallet {
       if (response.isSuccess) {
         return {
           isSuccess: true,
-          message: "Success",
+          message: response.message,
           data: response.data,
         };
       } else {

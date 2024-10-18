@@ -17,7 +17,8 @@ export default function EventCard({
     <Card
       className={cn(
         "group relative overflow-hidden transition-all hover:shadow-lg",
-        size === "large" ? "h-[400px]" : "h-[250px]",
+        "aspect-video w-full",
+        size === "large" ? "max-w-2xl" : "max-w-sm",
       )}
     >
       <Image
