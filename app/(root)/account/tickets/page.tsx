@@ -56,7 +56,7 @@ export default function UserTickets() {
       {Object.entries(groupedTickets).map(([eventId, eventTickets]) => (
         <div key={eventId} className="mb-12">
           <h2 className="mb-4 text-2xl font-semibold">
-            {eventTickets[0].event || "Event"}
+            {eventTickets[0].eventName || "Event"}
           </h2>
           <div className="flex flex-col gap-4">
             {eventTickets.map((ticket) => (
@@ -67,7 +67,7 @@ export default function UserTickets() {
                 <div className="p-6 text-primary/50">
                   <div className="text-sm">{ticket.id}</div>
                   <h3 className="mb-2 text-xl font-bold text-white">
-                    {ticket.eventTicket.name}
+                    {ticket.eventName}
                   </h3>
                   <div className="mb-2 flex items-center">
                     <CalendarIcon className="mr-2 h-5 w-5" />
@@ -83,7 +83,7 @@ export default function UserTickets() {
                   </div>
                   <div className="mb-4 flex items-center">
                     <MapPinIcon className="mr-2 h-5 w-5" />
-                    <span>{ticket.event || "Venue TBA"}</span>
+                    <span>{ticket.event.locationDisplay || "Venue TBA"}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-lg font-semibold">
