@@ -1,6 +1,5 @@
 // ticket.d.ts
-
-import { Event } from "./event";
+import { Event } from "@/types/event";
 
 export interface CreateTicketRequest {
   eventId: string; // ID of the event this ticket belongs to
