@@ -1,5 +1,4 @@
 // ticket.d.ts
-
 import { Event } from "@/types/event";
 
 export interface CreateTicketRequest {
@@ -29,7 +28,7 @@ export interface BookedTicket {
   createdAt: string;
   isDeleted: boolean;
   eventName: string;
-  event: Event | null;
+  event: Event;
   eventTicket: Ticket;
   eventTicketId: string;
   eventId: string;
