@@ -1,10 +1,23 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CalendarIcon, ClockIcon, MapPinIcon, QrCode } from "lucide-react";
+import {
+  CalendarIcon,
+  ClockIcon,
+  MapPinIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "lucide-react";
 import { BookedTicket } from "@/types/ticket";
 import { Ticket } from "@/lib/api/ticket";
 import { VnDong } from "@/lib/format";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import Link from "next/link";
 
 export default function UserTickets() {
   const [tickets, setTickets] = useState<BookedTicket[]>([]);
@@ -53,58 +66,47 @@ export default function UserTickets() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {Object.entries(groupedTickets).map(([eventId, eventTickets]) => (
-        <div key={eventId} className="mb-12">
-          <h2 className="mb-4 text-2xl font-semibold">
-            {eventTickets[0].event || "Event"}
-          </h2>
-          <div className="flex flex-col gap-4">
-            {eventTickets.map((ticket) => (
-              <div
-                key={ticket.id}
-                className="overflow-hidden rounded-lg bg-white/5 shadow-lg"
-              >
-                <div className="p-6 text-primary/50">
-                  <div className="text-sm">{ticket.id}</div>
-                  <h3 className="mb-2 text-xl font-bold text-white">
-                    {ticket.eventTicket.name}
-                  </h3>
-                  <div className="mb-2 flex items-center">
-                    <CalendarIcon className="mr-2 h-5 w-5" />
-                    <span>
-                      {new Date(ticket.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <div className="mb-2 flex items-center">
-                    <ClockIcon className="mr-2 h-5 w-5" />
-                    <span>
-                      {new Date(ticket.createdAt).toLocaleTimeString()}
-                    </span>
-                  </div>
-                  <div className="mb-4 flex items-center">
-                    <MapPinIcon className="mr-2 h-5 w-5" />
-                    <span>{ticket.event || "Venue TBA"}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-semibold">
-                      {VnDong.format(ticket.paidPrice)}
-                    </span>
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-medium ${
-                        ticket.isCheckedIn
-                          ? "bg-green-200/20 text-green-500"
-                          : "bg-yellow-200/20 text-yellow-500"
-                      }`}
-                    >
-                      {ticket.isCheckedIn ? "Checked In" : "Not Checked In"}
-                    </span>
-                  </div>
-                </div>
+      <Accordion type="single" collapsible className="w-full">
+        {Object.entries(groupedTickets).map(([eventId, eventTickets]) => (
+          <AccordionItem key={eventId} value={eventId}>
+            <AccordionTrigger className="text-2xl font-semibold">
+              {eventTickets[0].eventName || "Event"}
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="mt-4 flex flex-col gap-4">
+                {eventTickets.map((ticket) => (
+                  <Link key={ticket.id} href={`/account/tickets/${ticket.id}`}>
+                    <div className="overflow-hidden rounded-lg bg-white/5 shadow-lg transition-shadow hover:cursor-pointer hover:bg-white/10">
+                      <div className="p-6 text-primary/50">
+                        <div className="mb-2 text-sm">{ticket.id}</div>
+                        <h3 className="mb-2 text-xl font-bold text-white">
+                          {ticket.eventTicket.name}
+                        </h3>
+                        <div className="flex items-center justify-between">
+                          <span className="text-lg font-semibold">
+                            {VnDong.format(ticket.paidPrice)}
+                          </span>
+                          <span
+                            className={`rounded-full px-3 py-1 text-xs font-medium ${
+                              ticket.isCheckedIn
+                                ? "bg-green-200/20 text-green-500"
+                                : "bg-yellow-200/20 text-yellow-500"
+                            }`}
+                          >
+                            {ticket.isCheckedIn
+                              ? "Checked In"
+                              : "Not Checked In"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      ))}
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
     </div>
   );
 }

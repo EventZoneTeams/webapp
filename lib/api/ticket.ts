@@ -119,4 +119,23 @@ export namespace Ticket {
       };
     }
   }
+
+  export async function getBookedTicketById(
+    id: string,
+  ): Promise<ApiResponse<BookedTicket>> {
+    try {
+      const response = (
+        await axiosInstance.get<ApiResponse<BookedTicket>>(
+          `/booked-tickets/${id}`,
+        )
+      ).data;
+      return response;
+    } catch (error) {
+      return {
+        isSuccess: false,
+        message: "Failed to get booked ticket by id",
+        data: null,
+      };
+    }
+  }
 }
