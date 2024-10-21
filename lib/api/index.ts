@@ -2,7 +2,7 @@ import { getAccessToken, getRefreshToken, setTokens } from "@/lib/api/token";
 import { User } from "@/lib/api/user";
 import { ApiResponse } from "@/types/api";
 import axios, { AxiosError, AxiosInstance } from "axios";
-export const BASE_URL = "https://api.eventzone.id.vn/api/v1";
+export const BASE_URL = "https://eventzone-api.uydev.id.vn/api/v1";
 
 export const axiosInstance: AxiosInstance = axios.create({
   baseURL: BASE_URL,
