@@ -112,7 +112,7 @@ export default function AddEventForm() {
           <div className="flex gap-8">
             <div className="w-1/2">
               <ImageCropper
-                ratio="1:1"
+                ratio="16:9"
                 setFinalImage={setImage}
                 className="rounded-xl bg-background/50 outline-none"
               />
