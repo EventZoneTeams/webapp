@@ -50,8 +50,8 @@ export function UserNav() {
   }, [user, trigger]);
 
   const handleSignOut = () => {
-    UserApi.signOut();
     router.push("/sign-in");
+    UserApi.signOut();
   };
   return (
     <>
@@ -102,7 +102,7 @@ export function UserNav() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer" asChild>
-              <Link href="/dashboard/events" className="flex items-center">
+              <Link href="/dashboard" className="flex items-center">
                 <LayoutGrid className="mr-3 h-4 w-4 text-muted-foreground" />
                 Dashboard
               </Link>

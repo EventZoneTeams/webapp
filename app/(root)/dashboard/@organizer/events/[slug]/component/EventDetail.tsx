@@ -7,6 +7,7 @@ import {
   TicketIcon,
   PackageIcon,
   SettingsIcon,
+  StarIcon,
 } from "lucide-react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,6 +19,7 @@ import EventTicket from "./EventTicket";
 import EventProducts from "./EventProduct";
 import EventSetting from "@/app/(root)/dashboard/@organizer/events/[slug]/component/EventSetting";
 import EventStaff from "@/app/(root)/dashboard/@organizer/events/[slug]/component/EventStaff";
+import EventPost from "@/app/(root)/dashboard/@organizer/events/[slug]/component/EventPost";
 
 export default async function EventDetail({
   params,
@@ -78,8 +80,11 @@ export default async function EventDetail({
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <MapPinIcon className="h-5 w-5 text-muted-foreground" />
+                  {/* <MapPinIcon className="h-5 w-5 text-muted-foreground" /> */}
                   <p className="text-sm">{event.location.display}</p>
+                </div>
+                <div>
+                  <EventSetting event={event} />
                 </div>
               </div>
             </CardContent>
@@ -100,7 +105,7 @@ export default async function EventDetail({
                     <UsersIcon className="mr-2 h-4 w-4" />
                     Guests
                   </TabsTrigger>
-                  <TabsTrigger value="registration">Registration</TabsTrigger>
+                  {/* <TabsTrigger value="registration">Registration</TabsTrigger> */}
                   <TabsTrigger value="products">
                     <PackageIcon className="mr-2 h-4 w-4" />
                     Products
@@ -116,6 +121,10 @@ export default async function EventDetail({
                   <TabsTrigger value="settings">
                     <SettingsIcon className="mr-2 h-4 w-4" />
                     Settings
+                  </TabsTrigger>
+                  <TabsTrigger value="posts">
+                    <StarIcon className="mr-2 h-4 w-4" />
+                    Posts
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="overview" className="mt-6">
@@ -159,6 +168,9 @@ export default async function EventDetail({
                 </TabsContent>
                 <TabsContent value="settings" className="mt-6">
                   <EventSetting event={event} />
+                </TabsContent>
+                <TabsContent value="posts" className="mt-6">
+                  <EventPost event={event} />
                 </TabsContent>
               </Tabs>
             </CardContent>

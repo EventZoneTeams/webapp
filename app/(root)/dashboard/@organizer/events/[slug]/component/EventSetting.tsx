@@ -41,13 +41,16 @@ export default function EventSetting(props: EventSettingProps) {
 
   return (
     <div className="space-y-4">
-      <p className="text-primary/50">Event Settings</p>
       {props.event.isDeleted ? (
         <div>{/* more content */}</div>
       ) : (
         <AlertDialog open={isOpen}>
           <AlertDialogTrigger asChild>
-            <Button variant={"destructive"} onClick={() => setIsOpen(true)}>
+            <Button
+              variant={"outline"}
+              onClick={() => setIsOpen(true)}
+              className="border-red-500 bg-red-200 text-red-500 hover:bg-red-500 hover:text-white"
+            >
               Disabled Event
             </Button>
           </AlertDialogTrigger>
